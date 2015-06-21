@@ -242,7 +242,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                 items: [
                                                     {
                                                         xtype: 'label',
-                                                        text: 'Valorar plantões',
+                                                        text: 'Valor plantões',
                                                         style: {
                                                             color: 'blue;',
                                                             fontSize: '14px;'
@@ -284,7 +284,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                     }, {
                                                         width: 120,
                                                         align: 'right',
-                                                        text: 'Valor Unitário',
+                                                        text: 'Valor Unitário (R$)',
                                                         dataIndex: 'shiftvalue',
                                                         editor: {
                                                             xtype: 'textfield',
@@ -300,7 +300,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                     }, {
                                                         width: 140,
                                                         align: 'right',
-                                                        text: 'Valor Total',
+                                                        text: 'Valor Total (R$)',
                                                         renderer: function (value, metaData, record) {
                                                             var totalshiftvalue = parseFloat(record.get('shiftvalue')) * parseFloat(record.get('shiftamount'));
                                                             metaData.style = 'padding-top: 12px; font-size: 14px; font-family: Monda; color: #C02942;';

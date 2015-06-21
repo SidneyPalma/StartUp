@@ -1,0 +1,31 @@
+{
+  "_comment": "https://packagist.org",
+  "_comment": "http://www.php-fig.org/psr/psr-4/",
+  "_comment": "https://laracasts.com/lessons/psr-4-autoloading",
+  "_comment": "https://getcomposer.org/doc/articles/scripts.md",
+
+  "files": [
+
+  ],
+
+  "require": {
+    "php-console/php-console": "3.*"
+  },
+
+  "autoload": {
+
+    "classmap": [
+
+    ],
+
+    "psr-4": {
+      "Smart\\": "../Smart/framework"
+    }
+
+  },
+
+  "scripts": {
+
+  }
+
+}

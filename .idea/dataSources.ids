@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - @localhost" uuid="6fbb57f2-64d2-435e-8256-52a95ef834ac">
+    <database-info product="MySQL" version="5.6.21" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="optimal"/>
+    <table name="action" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="directive" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="menuaction_action" table="menuaction" schema="" catalog="optimal" columns="actionid"/>
+    </table>
+    <table name="additive" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contractid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="datesign" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="periodof" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="periodto" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="note" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="additivenumber" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1" def="JzAn"/>
+      <column name="filedata" sqlType="LONGBLOB" precision="2147483647" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="fileinfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="additivestatus" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" def="J1An" remarks="UCA9IFBlbmRlbnRlCkEgPSBBdGl2bwpJID0gSW5hdGl2bw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="additive_contract" columns="contractid" ref-table="contract" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="additiveshift_additive" table="additiveshift" schema="" catalog="optimal" columns="additiveid"/>
+      <exported-key name="additivetable_additive" table="additivetable" schema="" catalog="optimal" columns="additiveid"/>
+      <index name="additive_un" unique="true" columns="contractid,additivenumber"/>
+      <index name="additive_contract_idx" unique="false" columns="contractid"/>
+    </table>
+    <table name="additiveshift" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="additiveid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="contractorsubunitid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="shifttypeid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="amountsun" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amountmon" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amounttue" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amountwed" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amountthu" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amountfri" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="amountsat" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="additiveshift_additive" columns="additiveid" ref-table="additive" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="additiveshift_contractorsubunit" columns="contractorsubunitid" ref-table="contractorsubunit" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="additiveshift_shifttype" columns="shifttypeid" ref-table="shifttype" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="additiveshift_additive_idx" unique="false" columns="additiveid"/>
+      <index name="additiveshift_contractorsubunit_idx" unique="false" columns="contractorsubunitid"/>
+      <index name="additiveshift_shifttype_idx" unique="false" columns="shifttypeid"/>
+    </table>
+    <table name="additivetable" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="additiveid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="shifttype" sqlType="VARCHAR" precision="3" scale="0" nullable="false" jdbcType="12"/>
+      <column name="shiftvalue" sqlType="DECIMAL" precision="18" scale="2" nullable="false" jdbcType="3" def="MC4wMA=="/>
+      <column name="shiftamount" sqlType="DECIMAL" precision="18" scale="2" nullable="false" jdbcType="3" def="MC4wMA=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="additivetable_additive" columns="additiveid" ref-table="additive" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="additivetable_additive_idx" unique="false" columns="additiveid"/>
+    </table>
+    <table name="assetsglobal" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="contract" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contractnumber" sqlType="CHAR" precision="7" scale="0" nullable="false" jdbcType="1"/>
+      <column name="legalentityid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="contractorid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="filedata" sqlType="LONGBLOB" precision="2147483647" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="fileinfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="contractdate" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="contract_contractor" columns="contractorid" ref-table="contractor" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="contract_legalentity" columns="legalentityid" ref-table="legalentity" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="additive_contract" table="additive" schema="" catalog="optimal" columns="contractid"/>
+      <exported-key name="contractdata_contract" table="contractdata" schema="" catalog="optimal" columns="contractid"/>
+      <index name="contract_nq" unique="true" columns="contractnumber"/>
+      <index name="contract_contractor_idx" unique="false" columns="contractorid"/>
+      <index name="contract_legalentity_idx" unique="false" columns="legalentityid"/>
+    </table>
+    <table name="contractdata" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contractid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="description" sqlType="VARCHAR" precision="8" scale="0" nullable="false" jdbcType="12"/>
+      <column name="observation" sqlType="TEXT" precision="65535" scale="0" nullable="false" jdbcType="-1"/>
+      <column name="filedata" sqlType="LONGBLOB" precision="2147483647" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="fileinfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="contractdata_contract" columns="contractid" ref-table="contract" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="contractdata_contract_idx" unique="false" columns="contractid"/>
+    </table>
+    <table name="contractor" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="cnpjnumber" sqlType="VARCHAR" precision="14" scale="0" nullable="false" jdbcType="12"/>
+      <column name="countyregistration" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12"/>
+      <column name="maincontact" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="contractor_person" columns="id" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="contract_contractor" table="contract" schema="" catalog="optimal" columns="contractorid"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+    </table>
+    <table name="contractorsubunit" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contractorunitid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="subunit" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1" remarks="U3ViVW5pZGFkZSByZXNlcnZhZGEgw6AgZXN0YSBVbmlkYWRl"/>
+      <column name="reserved" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="contractorsubunit_contractorunit" columns="contractorunitid" ref-table="contractorunit" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="additiveshift_contractorsubunit" table="additiveshift" schema="" catalog="optimal" columns="contractorsubunitid"/>
+      <index name="contractorsubunit_contractorunit_idx" unique="false" columns="contractorunitid"/>
+    </table>
+    <table name="contractorunit" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="cnpjnumber" sqlType="VARCHAR" precision="14" scale="0" nullable="false" jdbcType="12"/>
+      <column name="countyregistration" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12"/>
+      <column name="maincontact" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="contractorunit_person" columns="id" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="contractorsubunit_contractorunit" table="contractorsubunit" schema="" catalog="optimal" columns="contractorunitid"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+    </table>
+    <table name="enumtype" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="observation" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="reserved" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicxJw==" remarks="UmVzZXJ2YWRvIHBhcmEgdXNvIHBlbG8gc2lzdGVtYQ=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="enumtypelist_enumtype" table="enumtypelist" schema="" catalog="optimal" columns="enumtypeid"/>
+      <index name="name_UNIQUE" unique="true" columns="name"/>
+    </table>
+    <table name="enumtypelist" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="enumtypeid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="code" sqlType="VARCHAR" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="observation" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="enumtypelist_enumtype" columns="enumtypeid" ref-table="enumtype" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="enumtypelist_enumtype_uq" unique="true" columns="code,enumtypeid"/>
+      <index name="enumtypelist_enumtype_idx" unique="false" columns="enumtypeid"/>
+    </table>
+    <table name="errorslog" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="code" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="message" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="username" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="classname" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="logdate" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="holiday" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12" remarks="VW1hIGJyZXZlIGRlc2NyacOnw6NvIGRvIGZlcmlhZG8="/>
+      <column name="holidaytype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" remarks="RiA9IEZpeG8KViA9IFZhcmnDoXZlbA=="/>
+      <column name="holidaydate" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91" remarks="UGFyYSBmZXJpYWRvcyBmaXhvcywgY29uc2lkZXJhIGRpYSBlIG3DqnM="/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicxJw==" remarks="QSA9IEF0aXZvCkkgPSBJbmF0aXZv"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="language" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="regionlanguage_language" table="regionlanguage" schema="" catalog="optimal" columns="idlanguage"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+    </table>
+    <table name="legalentity" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="cnpjnumber" sqlType="VARCHAR" precision="14" scale="0" nullable="false" jdbcType="12"/>
+      <column name="countyregistration" sqlType="VARCHAR" precision="11" scale="0" nullable="false" jdbcType="12"/>
+      <column name="maincontact" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="legalentity_person" columns="id" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="contract_legalentity" table="contract" schema="" catalog="optimal" columns="legalentityid"/>
+    </table>
+    <table name="menu" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="parentid" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="router" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="glyph" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="orderby" sqlType="DECIMAL" precision="12" scale="2" nullable="true" jdbcType="3" def="MC4wMA=="/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="menu_menu" columns="parentid" ref-table="menu" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="menu_menu" table="menu" schema="" catalog="optimal" columns="parentid"/>
+      <exported-key name="menuaction_menu" table="menuaction" schema="" catalog="optimal" columns="menuid"/>
+      <exported-key name="modulemenu_menu" table="modulemenu" schema="" catalog="optimal" columns="menuid"/>
+      <index name="menu_menu_idx" unique="false" columns="parentid"/>
+    </table>
+    <table name="menuaction" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="menuid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="actionid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="menuaction_action" columns="actionid" ref-table="action" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="menuaction_menu" columns="menuid" ref-table="menu" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="usersaction_menuaction" table="usersaction" schema="" catalog="optimal" columns="menuactionid"/>
+      <index name="menuaction_action_idx" unique="false" columns="actionid"/>
+      <index name="menuaction_menu_idx" unique="false" columns="menuid"/>
+    </table>
+    <table name="module" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="glyph" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="modulemenu_module" table="modulemenu" schema="" catalog="optimal" columns="moduleid"/>
+    </table>
+    <table name="modulemenu" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="moduleid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="menuid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="modulemenu_menu" columns="menuid" ref-table="menu" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="modulemenu_module" columns="moduleid" ref-table="module" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="usersmenu_modulemenu" table="usersmenu" schema="" catalog="optimal" columns="modulemenuid"/>
+      <index name="modulemenu_menu_idx" unique="false" columns="menuid"/>
+      <index name="modulemenu_module_idx" unique="false" columns="moduleid"/>
+    </table>
+    <table name="naturalperson" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="sheetcode" sqlType="VARCHAR" precision="15" scale="0" nullable="false" jdbcType="12" remarks="TWF0cmljdWxhClPDsyBOw7ptZXJvLCBvcmlnZW0gZGUgdW1hIEZpY2hhIGRlIFByZWVuY2hpbWVudG8oSW5mb3JtYWRvKQ=="/>
+      <column name="birthdate" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="gender" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" remarks="R2VuZXJvCk0gPSBNYXNjdWxpbm8KRiA9IEZlbWluaW5v"/>
+      <column name="namemother" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="namefather" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="status" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" def="J0En" remarks="QSA9IEF0aXZvCkYgPSBGYWxlY2lkbwpTID0gU3VzcGVuc28="/>
+      <column name="nationality" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="placebirth" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="admissiondate" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="voter" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="voterzone" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="votersection" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="voterissuingdate" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="pispasep" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="cpfnumber" sqlType="VARCHAR" precision="11" scale="0" nullable="true" jdbcType="12" remarks="TsO6bWVybyBkbyBDUEY="/>
+      <column name="identnumber" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" remarks="Ukc="/>
+      <column name="identissuing" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" remarks="Ukcgb3Jnw6NvIGVtaXNzb3I="/>
+      <column name="identissuingdate" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91" remarks="UkcgZGF0YSBlbWlzc8Ojbw=="/>
+      <column name="identissuingstate" sqlType="CHAR" precision="2" scale="0" nullable="true" jdbcType="1" remarks="UkcgZXN0YWRvIGVtaXNzb3I="/>
+      <column name="crmnumber" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="crmissuingstate" sqlType="CHAR" precision="2" scale="0" nullable="true" jdbcType="1"/>
+      <column name="racecolor" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
+      <column name="registrationid" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="TWF0csOtY3VsYQ=="/>
+      <column name="associationdate" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91" remarks="RGF0YSBBc3NvY2lhw6fDo28gw6AgQ29vcGVyYXRpdmE="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="naturalperson_person" columns="id" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="naturalperso_racecolor_idx" unique="false" columns="racecolor"/>
+    </table>
+    <table name="person" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="parentid" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" remarks="T2JzLjoKVW5pdCAtPiBwYXJlbnRpZChDb250cmFjdGluZ0VudGl0eSk="/>
+      <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="shortname" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="typeperson" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" def="J04n" remarks="VGlwb3MgZGUgUGVzc29hCk4gPSBOYXR1cmFsIFBlcnNvbgpMID0gTGVnYWwgRW50aXR5CkMgPSBDb250cmFjdGluZyBFbnRpdHkKVSA9IFVuaXQ="/>
+      <column name="mainmail" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="address" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="addressneighborhood" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="addresscomplement" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="addresszipcode" sqlType="VARCHAR" precision="8" scale="0" nullable="false" jdbcType="12"/>
+      <column name="addressnumber" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="addresslocality" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addressfederationunit" sqlType="CHAR" precision="2" scale="0" nullable="true" jdbcType="1"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicxJw==" remarks="U3RhdHVzCjAgPSBJbmF0aXZvCjEgPSBBdGl2bw=="/>
+      <column name="cnesnumber" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="filedata" sqlType="LONGBLOB" precision="2147483647" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="fileinfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="person_parentid" columns="parentid" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="contractor_person" table="contractor" schema="" catalog="optimal" columns="id"/>
+      <exported-key name="contractorunit_person" table="contractorunit" schema="" catalog="optimal" columns="id"/>
+      <exported-key name="legalentity_person" table="legalentity" schema="" catalog="optimal" columns="id"/>
+      <exported-key name="naturalperson_person" table="naturalperson" schema="" catalog="optimal" columns="id"/>
+      <exported-key name="person_parentid" table="person" schema="" catalog="optimal" columns="parentid"/>
+      <exported-key name="personbank_person" table="personbank" schema="" catalog="optimal" columns="personid"/>
+      <exported-key name="personphone_person" table="personphone" schema="" catalog="optimal" columns="personid"/>
+      <index name="person_parentid_idx" unique="false" columns="parentid"/>
+    </table>
+    <table name="personbank" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="personid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="bank" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="agency" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="accountnumber" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="accounttype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" remarks="Q29udGEgQ29ycmVudGUKQ29udGEgUG91cGFuw6dhCkNvbnRhIFNhbMOhcmlv"/>
+      <column name="isdefault" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="personbank_person" columns="personid" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="personbank_bank_idx" unique="false" columns="bank"/>
+      <index name="personbank_person_idx" unique="false" columns="personid"/>
+    </table>
+    <table name="personphone" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="personid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="phonetype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="linetype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ddd" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
+      <column name="phonenumber" sqlType="VARCHAR" precision="30" scale="0" nullable="false" jdbcType="12"/>
+      <column name="phoneoperator" sqlType="CHAR" precision="3" scale="0" nullable="false" jdbcType="1"/>
+      <column name="isdefault" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="personphone_person" columns="personid" ref-table="person" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="personphone_person_idx" unique="false" columns="personid"/>
+    </table>
+    <table name="region" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="description" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="regionlanguage_region" table="regionlanguage" schema="" catalog="optimal" columns="idregion"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+    </table>
+    <table name="regionlanguage" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idregion" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idlanguage" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="regionlanguage_language" columns="idlanguage" ref-table="language" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="regionlanguage_region" columns="idregion" ref-table="region" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="id_idx" unique="false" columns="idregion"/>
+      <index name="regionlanguage_language_idx" unique="false" columns="idlanguage"/>
+    </table>
+    <table name="shifttype" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="shift" sqlType="VARCHAR" precision="3" scale="0" nullable="false" jdbcType="12"/>
+      <column name="dutytype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" def="J0kn" remarks="VGlwbyBkZSBQbGFudMOjbwpJID0gSW50ZWdyYWwKRiA9IEZyYcOnw6Nv"/>
+      <column name="hours" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MTI="/>
+      <column name="validityof" sqlType="TIME" precision="8" scale="0" nullable="false" jdbcType="92"/>
+      <column name="validityto" sqlType="TIME" precision="8" scale="0" nullable="false" jdbcType="92"/>
+      <column name="observation" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="additiveshift_shifttype" table="additiveshift" schema="" catalog="optimal" columns="shifttypeid"/>
+    </table>
+    <table name="units" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="shortname" sqlType="VARCHAR" precision="20" scale="0" nullable="false" jdbcType="12"/>
+      <column name="address" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addressneighborhood" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addresscomplement" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addresszipcode" sqlType="VARCHAR" precision="8" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addressnumber" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7"/>
+      <column name="cnesnumber" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="unitnumber" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="unitsphone" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="unitsid" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="phonenumber" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="contactname" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="phonetype" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1" def="J00n"/>
+      <primary-key name="PRIMARY" columns="id"/>
+    </table>
+    <table name="users" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="username" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="password" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12"/>
+      <column name="filedata" sqlType="LONGBLOB" precision="2147483647" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="fileinfo" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="isactive" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <column name="fullname" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="mainmail" sqlType="VARCHAR" precision="80" scale="0" nullable="false" jdbcType="12"/>
+      <column name="birthdate" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="notifyuser" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7" def="YicwJw=="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="usersaction_users" table="usersaction" schema="" catalog="optimal" columns="usersid"/>
+      <exported-key name="usersmenu_users" table="usersmenu" schema="" catalog="optimal" columns="usersid"/>
+      <index name="username_UNIQUE" unique="true" columns="username"/>
+    </table>
+    <table name="usersaction" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="usersid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="menuactionid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="expireto" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="usersaction_menuaction" columns="menuactionid" ref-table="menuaction" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="usersaction_users" columns="usersid" ref-table="users" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="usersaction_menuaction_idx" unique="false" columns="menuactionid"/>
+      <index name="usersaction_users_idx" unique="false" columns="usersid"/>
+    </table>
+    <table name="usersmenu" schema="" catalog="optimal" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="usersid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="modulemenuid" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="expireto" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="usersmenu_modulemenu" columns="modulemenuid" ref-table="modulemenu" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="usersmenu_users" columns="usersid" ref-table="users" ref-schema="" ref-catalog="optimal" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="usersmenu_modulemenu_idx" unique="false" columns="modulemenuid"/>
+      <index name="usersmenu_users_idx" unique="false" columns="usersid"/>
+    </table>
+    <procedure name="getAdditiveList" schema="" catalog="optimal" type="2">
+      <prototype>
+        <parameter name="id" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="1"/>
+        <parameter name="" sqlType="TEXT CHARSET LATIN1" precision="65535" scale="0" nullable="true" jdbcType="1111" type="5" index="0"/>
+      </prototype>
+    </procedure>
+    <procedure name="getEnum" schema="" catalog="optimal" type="2">
+      <prototype>
+        <parameter name="type" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="code" sqlType="VARCHAR" precision="5" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12" type="5" index="0"/>
+      </prototype>
+    </procedure>
+  </data-source>
+</component>

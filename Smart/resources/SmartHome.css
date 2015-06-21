@@ -1,0 +1,161 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+@import url(http://fonts.googleapis.com/css?family=PT+Sans);
+
+.username .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/username.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.password .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/password.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.birthdate .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda'; 
+    background: url(images/default/birthdate.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.mainmail .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/mainmail.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.invite .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/invite.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.wallpaper00 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood00.jpg) repeat bottom right !important;
+}
+
+.wallpaper01 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood01.jpg) repeat bottom right !important;
+}
+
+.wallpaper02 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood02.jpg) repeat bottom right !important;
+}
+
+.wallpaper03 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood03.jpg) repeat bottom right !important;
+}
+
+.wallpaper04 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood04.jpg) repeat bottom right !important;
+}
+
+.wallpaper05 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood05.jpg) repeat bottom right !important;
+}
+
+.wallpaper06 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood06.jpg) repeat bottom right !important;
+}
+
+.wallpaper07 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood07.jpg) repeat bottom right !important;
+}
+
+.wallpaper08 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood08.jpg) repeat bottom right !important;
+}
+
+.wallpaper09 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood09.jpg) repeat bottom right !important;
+}
+
+.wallpaper10 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood10.jpg) repeat bottom right !important;
+}
+
+.wallpaper11 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood11.jpg) repeat bottom right !important;
+}
+
+.wallpaper12 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood12.jpg) repeat bottom right !important;
+}
+
+.wallpaper13 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood13.jpg) repeat bottom right !important;
+}
+
+.wallpaper14 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood14.jpg) repeat bottom right !important;
+}
+
+.wallpaper15 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood15.jpg) repeat bottom right !important;
+}
+
+.wallpaper16 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood16.jpg) repeat bottom right !important;
+}
+
+.wallpaper17 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood17.jpg) repeat bottom right !important;
+}
+
+.wallpaper18 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood18.jpg) repeat bottom right !important;
+}
+
+.wallpaper19 > .x-panel-body {
+    background: url(images/smart/wallpaper/wood19.jpg) repeat bottom right !important;
+}
+
+.theme-smart-login .x-form-trigger-wrap-default.x-form-trigger-wrap-invalid {
+    border-color: #cf4c35;
+}
+.theme-smart-login .x-form-trigger-wrap-default {
+    border-width: 0px;
+    border-style: none;
+    border-color: #cecece;
+}
+
+.theme-smart-login .content {
+    color: white;
+    font-family: 'PT Sans', sans-serif;
+    background: rgba(53,152,220,0.3);
+}
+
+.theme-smart-login .login-title {
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 32px !important;
+}
+
+.theme-smart-login .message {
+    color: white;
+    font-family: 'PT Sans', sans-serif;
+}
+
+.theme-smart-login .login-footer {
+    font-size: 16px;
+    text-align: left;
+    vertical-align: bottom;
+}

@@ -1,0 +1,33 @@
+{
+    "_comment": "http://www.php-fig.org/psr/psr-4/",
+    "_comment": "https://laracasts.com/lessons/psr-4-autoloading",
+    "_comment": "https://getcomposer.org/doc/articles/scripts.md",
+
+    "require" : {
+        "itbz/fpdf": "dev-master",
+        "phpoffice/phpexcel": "dev-master",
+        "phpmailer/phpmailer": "dev-master"
+    },
+
+    "autoload": {
+
+        "files": [
+            "vendor/phpmailer/phpmailer/class.phpmailer.php"
+        ],
+
+        "classmap": [
+
+        ],
+
+        "psr-4": {
+            "AppAnest\\":"business",
+            "Smart\\": "smart/framework"
+        }
+
+    },
+
+    "scripts": {
+
+    }
+
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html manifest="">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="UTF-8">
+
+        <title>AppAnest</title>
+
+        <style type="text/css">
+            body {
+                background-size: 5px 5px;
+                background-color:#980021;
+                background-image: linear-gradient(to right, rgba(255,255,255,.3) 1px, transparent 1px);
+            }
+
+            div.loading {
+                line-height: 62px;
+                text-align:center;
+                display: table-cell;
+
+                width:400px;
+                height: 62px;
+                position:absolute;
+                z-index: 5;
+                top:50%;
+                left:50%;
+                margin-top:-35px;
+                margin-left:-200px;
+                padding: 1px;
+                background-color: #DCF0BA;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                font-size: 28px;
+                font-family: "Lucida Console", "Comic Sans MS", cursive, sans-serif;
+                color: black;
+                vertical-align: middle;
+                border: solid 1px #980021;
+            }
+        </style>
+
+        <!-- The line below must be kept intact for Sencha Cmd to build your application -->
+        <script id="microloader" type="text/javascript" src="bootstrap.js"></script>
+
+    </head>
+    <body>
+
+        <div id="appanest-dock-ear" class="appanest-dock calls-animateds appanest-ear-hide">
+            <i id="dock-hide-show" class="icon-up-big"> </i>
+        </div>
+
+        <div id="appanest-tool-ear" class="appanest-tool calls-animateds appanest-ear-hide">
+            <i id="tool-hide-show" class="icon-left-big"> </i>
+        </div>
+
+        <div class="loading" id="loading">Iniciando Aplicação</div>
+
+        <div class="appanest-logo bottom-logo"></div>
+
+    </body>
+</html>

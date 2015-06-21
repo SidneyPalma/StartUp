@@ -1,0 +1,3 @@
+cls
+
+sencha app build

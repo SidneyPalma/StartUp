@@ -21,7 +21,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
     layout: {
         type: 'fit'
     },
-
+    
     initComponent: function () {
         var me = this;
         me.buildItems();

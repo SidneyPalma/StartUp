@@ -263,7 +263,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                         dataIndex: 'shifttypedescription',
                                                         renderer: function (value, metaData, record) {
                                                             metaData.style = 'padding-top: 12px; font-size: 14px; font-family: Monda; background: #e6e6e6;';
-                                                            return value;
+                                                            return '<div class="shift-label">'+value+'</div>';
                                                         }
                                                     }, {
                                                         width: 100,
@@ -284,7 +284,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                     }, {
                                                         width: 120,
                                                         align: 'right',
-                                                        text: 'Valor Unitário (R$)',
+                                                        text: 'Valor Unitário',
                                                         dataIndex: 'shiftvalue',
                                                         editor: {
                                                             xtype: 'textfield',
@@ -300,7 +300,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                     }, {
                                                         width: 140,
                                                         align: 'right',
-                                                        text: 'Valor Total (R$)',
+                                                        text: 'Valor Total',
                                                         renderer: function (value, metaData, record) {
                                                             var totalshiftvalue = parseFloat(record.get('shiftvalue')) * parseFloat(record.get('shiftamount'));
                                                             metaData.style = 'padding-top: 12px; font-size: 14px; font-family: Monda; color: #C02942;';

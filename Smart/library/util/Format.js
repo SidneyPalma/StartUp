@@ -149,8 +149,8 @@ Ext.define( 'Smart.util.Format', {
             if (!Ext.isString(value)) {
                 return null;
             }
-//            var aDate = value.split("-"),
-//                nDate = new Date(aDate[0], aDate[1]-1,aDate[2]);
+            //var aDate = value.split("-"),
+            //    nDate = new Date(aDate[0], aDate[1]-1,aDate[2]);
             var nDate = Smart.Format.stringToDate(value);
             return Ext.Date.format(nDate, format);
         };

@@ -12,6 +12,11 @@ Ext.define( 'Ext.overrides.form.field.Base', {
         var me = this;
         me.callParent(arguments);
         me.setUseMondaFont(me.useMondaFont);
+
+        if (me.getXType()== 'displayfield') {
+            return false;
+        }
+
         me.setReadOnlyColor(me.readOnlyColor || me.readOnly);
     },
 

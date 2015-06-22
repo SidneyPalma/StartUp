@@ -527,7 +527,7 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                                                                         shiftdescription = record.get('shiftdescription');
 
                                                                     metaData.style = 'font-size: 10px; font-family: Monda; background: #e6e6e6;';
-                                                                    return  '<div style="position: absolute; padding: 5px 10px 4px 10px;"><b>'+ shiftdescription +'</b><br/>'+ validityof + ' - ' + validityto +'</div>' +
+                                                                    return  '<div class="shift-label"><b>'+ shiftdescription +'</b><br/>'+ validityof + ' - ' + validityto +'</div>' +
                                                                             Ext.String.format('<div style="width: 100%;" class="data"><span class="additive-status-l">{0}h</span></div>',hours);
                                                                 }
                                                             }, {

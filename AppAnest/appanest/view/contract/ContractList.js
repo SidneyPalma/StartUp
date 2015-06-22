@@ -145,7 +145,19 @@ Ext.define( 'AppAnest.view.contract.ContractList', {
                                                         contractor = rec.get('contractor'),
                                                         cnpjnumber = Smart.maskRenderer('99.999.999/9999-99', false)(rec.get('cnpjnumber')),
                                                         html =  '<div class="line">' +
-                                                                '<div style="width:100%;" class="data">' + contractor + '<br/>' + cnpjnumber + '<br/>' + legalentity + '</div>' +
+                                                                    '<div style="width:100%;" class="data">' + contractor + '<br/>' + cnpjnumber + '<br/>' + legalentity + '</div>' +
+                                                                '</div>';
+
+                                                    meta.style = rec.get('isactive') == true ? 'background: #faf2f2;' : 'background: #E8DDCB;';
+
+                                                    return html;
+                                                }
+                                            }, {
+                                                width: 80,
+                                                dataIndex: 'periodto',
+                                                renderer: function (value, meta, rec) {
+                                                    var html =  '<div class="line">' +
+                                                                    '<div style="width:100%;" class="data">Expira em:<br/> <b>' + Ext.util.Format.date(Ext.Date.parse(value,"Y-m-d"),'d/m/Y') + '</b></div>' +
                                                                 '</div>';
 
                                                     meta.style = rec.get('isactive') == true ? 'background: #faf2f2;' : 'background: #E8DDCB;';

@@ -177,6 +177,15 @@
     font-family: Monda;
 }
 
+.additiveshift-edit .shift-label {
+    position: absolute;
+    padding: 5px 10px 4px 10px;
+}
+
+.x-grid-row-editor div.shift-label {
+    background: #FFFFCC !important;
+}
+
 .additiveshift-edit .x-box-item {
     top: 0px !important;
 }

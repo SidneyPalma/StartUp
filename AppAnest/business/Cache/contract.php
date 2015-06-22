@@ -15,6 +15,7 @@ class contract extends \Smart\Data\Cache {
         $sql = "
             select
                 c.*,
+                a.periodto,
                 getAdditiveList(c.id) as additivelist,
                 le.shortname as legalentity,
                 pc.shortname as contractor,
@@ -24,6 +25,7 @@ class contract extends \Smart\Data\Cache {
                 inner join person le on ( le.id = c.legalentityid )
                 inner join person pc on ( pc.id = c.contractorid )
                 inner join contractor ct on ( ct.id = pc.id )
+                inner join additive a on ( a.contractid = c.id )
             where le.shortname like :query
                OR pc.shortname like :query
                OR c.contractnumber like :query";

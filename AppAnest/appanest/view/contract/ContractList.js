@@ -149,8 +149,7 @@ Ext.define( 'AppAnest.view.contract.ContractList', {
                                                                 '</div>';
 
                                                     meta.style = rec.get('isactive') == true ? 'background: #faf2f2;' : 'background: #E8DDCB;';
-
-
+                                                    
                                                     return html;
                                                 }
                                             }, {

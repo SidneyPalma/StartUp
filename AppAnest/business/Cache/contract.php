@@ -16,6 +16,7 @@ class contract extends \Smart\Data\Cache {
             select
                 c.*,
                 a.periodto,
+                a.description,
                 getAdditiveList(c.id) as additivelist,
                 le.shortname as legalentity,
                 pc.shortname as contractor,

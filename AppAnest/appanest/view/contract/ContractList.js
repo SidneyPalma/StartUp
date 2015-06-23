@@ -127,7 +127,7 @@ Ext.define( 'AppAnest.view.contract.ContractList', {
                                                 }
                                             }, {
                                                 dataIndex: 'additivelist',
-                                                width: 160,
+                                                width: 130,
                                                 renderer: function (value, meta, rec) {
                                                     var me = this;
                                                     meta.style =  rec.get('isactive') == true ? 'background: #faf2f2;' : 'background: #E8DDCB;';
@@ -143,9 +143,10 @@ Ext.define( 'AppAnest.view.contract.ContractList', {
                                                 renderer: function (value, meta, rec) {
                                                     var legalentity = rec.get('legalentity'),
                                                         contractor = rec.get('contractor'),
+                                                        description = rec.get('description'),
                                                         cnpjnumber = Smart.maskRenderer('99.999.999/9999-99', false)(rec.get('cnpjnumber')),
                                                         html =  '<div class="line">' +
-                                                                    '<div style="width:100%;" class="data">' + contractor + '<br/>' + cnpjnumber + '<br/>' + legalentity + '</div>' +
+                                                                    '<div style="width:100%;" class="data">' + contractor + '<br/>' + legalentity + '<br/>' + description + '</div>' +
                                                                 '</div>';
 
                                                     meta.style = rec.get('isactive') == true ? 'background: #faf2f2;' : 'background: #E8DDCB;';

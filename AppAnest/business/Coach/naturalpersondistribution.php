@@ -2,7 +2,7 @@
 
 namespace AppAnest\Coach;
 
-class naturalpersondistribution extends \Smart\Common\Coach {
+class naturalpersondistribution extends \AppAnest\Setup\Setup {
 
     /**
      * @var \AppAnest\Model\naturalpersondistribution $model

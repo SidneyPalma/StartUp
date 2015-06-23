@@ -31,6 +31,12 @@ Ext.define( 'AppAnest.model.contract.Contract', {
             name: 'cnpjnumber',
             type: 'auto'
         }, {
+            name: 'additivestatus',
+            type: 'auto'
+        }, {
+            name: 'additivestatusdescription',
+            type: 'auto'
+        }, {
             name: 'observation',
             type: 'auto'
         }, {

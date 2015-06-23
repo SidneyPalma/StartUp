@@ -58,10 +58,10 @@ Ext.define( 'AppAnest.view.contract.ContractView', {
                         height: 30,
                         region: 'north',
                         xtype: 'panel',
-                        html: [
-                            '<div style="height: 100%; background-color: #f7e741;">',
-                            '</div>'
-                        ]
+                        name: 'buttonstatus',
+                        listeners: {
+                            afterrender: 'showButtonStatus'
+                        }
                     }, {
                         region: 'center',
                         xtype: 'panel',

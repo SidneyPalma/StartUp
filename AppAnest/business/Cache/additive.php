@@ -21,7 +21,8 @@ class additive extends \Smart\Data\Cache {
                 c.contractdate,
                 c.isactive,
                 le.shortname as legalentity,
-                pc.shortname as contractor
+                pc.shortname as contractor,
+                getEnum('additivestatus',a.additivestatus) as additivestatusdescription
             from
                 additive a
                 inner join contract c on ( a.contractid = c.id )

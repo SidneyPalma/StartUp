@@ -47,6 +47,69 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
 
     url: 'business/Class/contract.php',
 
+    //div {
+    //    position: relative;
+    //    top: 50%;
+    //    transform: translateY(-50%);
+    //    /* etc */
+    //    -webkit-transform: translateY(-50%);
+    //    background: tomato;
+    //    padding: 20px;
+    //}
+
+    showButtonStatus: function (container) {
+        var me = this,
+            view = me.getView(),
+            additivestatus = view.xdata.get('additivestatus'),
+            html =  '<div style="padding: 2px 10px 0 10px; height: 100%; background: rgb(247, 231, 65);">' +
+                        '<div style="padding-top: 4px; float: left; font-size: 16px; font-family: Monda;">{0}</div>' +
+                        '<div id="btn{1}" style="float: right; width: 68px;"></div>' +
+                    '</div>';
+
+        if(additivestatus == 'P') {
+            container.update(Ext.String.format(html,view.xdata.get('additivestatusdescription'),view.xdata.get('id')));
+            Ext.widget('button',{
+                renderTo: 'btn' + view.xdata.get('id'),
+                glyph: 0xe83b,
+                scope: me,
+                showSmartTheme: 'green',
+                handler: 'setAdditiveStatus',
+                tooltip: 'Tornar ativo o aditivo atual!'
+            });
+        }
+
+    },
+
+    setAdditiveStatus: function (btn) {
+        var me = this,
+            view = me.getView(),
+            xdata = view.xdata,
+            store = Ext.getStore('additive');
+
+        xdata.set('additivestatus','A');
+
+        store.sync({
+            scope: me,
+            success: function ( batch, options ) {
+                xdata.commit();
+                view.down('form').loadRecord(xdata);
+                view.down('panel[name=buttonstatus]').update('');
+            },
+            failure: function ( batch, options ) {
+                var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+
+                if(resultSet) {
+                    Ext.Msg.show({
+                        title: 'Operação falhou!',
+                        msg: resultSet.getMessage(),
+                        buttons: Ext.Msg.CANCEL,
+                        icon: Ext.Msg.WARNING
+                    });
+                }
+            }
+        });
+    },
+
     onLoadStore: function ( store, records, successful, eOpts ) {
         var me = this,
             amount = 0,

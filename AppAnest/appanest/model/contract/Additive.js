@@ -8,9 +8,6 @@ Ext.define( 'AppAnest.model.contract.Additive', {
         }, {
             name: 'note',
             type: 'auto'
-        //}, {
-        //    name: 'dutyamount',
-        //    type: 'int'
         }, {
             name: 'additivenumber',
             type: 'auto'
@@ -35,9 +32,6 @@ Ext.define( 'AppAnest.model.contract.Additive', {
         }, {
             name: 'periodto',
             type: 'auto'
-        //}, {
-        //    name: 'dutyvalue',
-        //    type: 'auto'
         }, {
             name: 'filedata',
             type: 'auto'

@@ -65,7 +65,7 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
                         '<div style="padding-top: 4px; float: left; font-size: 16px; font-family: Monda;">{0}</div>' +
                         '<div id="btn{1}" style="float: right; width: 68px;"></div>' +
                     '</div>';
-
+console.info(additivestatus);
         if(additivestatus == 'P') {
             container.update(Ext.String.format(html,view.xdata.get('additivestatusdescription'),view.xdata.get('id')));
             Ext.widget('button',{
@@ -86,28 +86,39 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
             xdata = view.xdata,
             store = Ext.getStore('additive');
 
-        xdata.set('additivestatus','A');
+        Ext.Msg.show({
+            title: 'Confirmar mudança de Status!',
+            msg: 'Você tem certeza de que deseja mudar o status deste aditivo?',
+            buttons: Ext.Msg.YESNO,
+            icon: Ext.Msg.QUESTION,
+            fn: function (button) {
+                if(button == 'yes') {
+                    xdata.set('additivestatus','A');
 
-        store.sync({
-            scope: me,
-            success: function ( batch, options ) {
-                xdata.commit();
-                view.down('form').loadRecord(xdata);
-                view.down('panel[name=buttonstatus]').update('');
-            },
-            failure: function ( batch, options ) {
-                var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+                    store.sync({
+                        scope: me,
+                        success: function ( batch, options ) {
+                            xdata.commit();
+                            view.down('form').loadRecord(xdata);
+                            view.down('panel[name=buttonstatus]').update('');
+                        },
+                        failure: function ( batch, options ) {
+                            var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
 
-                if(resultSet) {
-                    Ext.Msg.show({
-                        title: 'Operação falhou!',
-                        msg: resultSet.getMessage(),
-                        buttons: Ext.Msg.CANCEL,
-                        icon: Ext.Msg.WARNING
+                            if(resultSet) {
+                                Ext.Msg.show({
+                                    title: 'Operação falhou!',
+                                    msg: resultSet.getMessage(),
+                                    buttons: Ext.Msg.CANCEL,
+                                    icon: Ext.Msg.WARNING
+                                });
+                            }
+                        }
                     });
                 }
             }
         });
+
     },
 
     onLoadStore: function ( store, records, successful, eOpts ) {

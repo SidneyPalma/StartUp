@@ -67,7 +67,7 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
                     '</div>';
 
         if(additivestatus == 'A') {
-            container.update(Ext.String.format(html,'rgba(255, 99, 71, .5)',view.xdata.get('additivestatusdescription'),view.xdata.get('id')));
+            container.update(Ext.String.format(html,'rgba(247, 231, 65, 1)',view.xdata.get('additivestatusdescription'),view.xdata.get('id')));
             Ext.widget('button', {
                 renderTo: 'btn' + view.xdata.get('id'),
                 glyph: 0xe840,
@@ -85,7 +85,7 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
                 renderTo: 'btn' + view.xdata.get('id'),
                 glyph: 0xe83c,
                 scope: me,
-                statusNew: 'P',
+                statusNew: 'A',
                 showSmartTheme: 'green',
                 handler: 'setAdditiveStatus',
                 tooltip: 'Tornar ativo o aditivo atual!'

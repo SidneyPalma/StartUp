@@ -112,9 +112,14 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
                     store.sync({
                         scope: me,
                         success: function ( batch, options ) {
+                            if(btn.statusNew == 'A') {
+                                xdata.set('additivestatusdescription','Ativo');
+                            }
                             xdata.commit();
                             view.down('form').loadRecord(xdata);
                             view.down('panel[name=buttonstatus]').update('');
+                            var buttonstatus = view.down('panel[name=buttonstatus]');
+                            me.showButtonStatus(buttonstatus);
                         },
                         failure: function ( batch, options ) {
                             var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;

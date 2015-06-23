@@ -65,7 +65,7 @@ Ext.define( 'AppAnest.view.contract.ContractController', {
                         '<div style="padding-top: 4px; float: left; font-size: 16px; font-family: Monda;">{0}</div>' +
                         '<div id="btn{1}" style="float: right; width: 68px;"></div>' +
                     '</div>';
-console.info(additivestatus);
+
         if(additivestatus == 'P') {
             container.update(Ext.String.format(html,view.xdata.get('additivestatusdescription'),view.xdata.get('id')));
             Ext.widget('button',{

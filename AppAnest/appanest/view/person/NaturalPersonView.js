@@ -8,8 +8,9 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
         'Ext.tab.*',
         'Smart.address.*',
         'AppAnest.person.*',
-        'Smart.form.field.ComboEnum',
-        'AppAnest.view.person.ContractorSearch'
+        'Smart.form.field.*',
+        'AppAnest.view.person.*',
+        'Ext.grid.plugin.RowEditing'
     ],
 
     controller: 'naturalperson',
@@ -215,8 +216,17 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 plugins: 'textmask',
                                                                 name: 'admissiondate'
                                                             }, {
-                                                                width: 195,
-                                                                xtype: 'container'
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                fieldLabel: 'Nacionalidade',
+                                                                name: 'nationality'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                fieldLabel: 'Local nascimento',
+                                                                name: 'placebirth'
                                                             }
                                                         ]
                                                     }, {
@@ -228,6 +238,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                         }
                                                     }, {
                                                         xtype: 'container',
+                                                        margin: '0 0 10 0',
                                                         layout: 'hbox',
                                                         defaultType: 'textfield',
                                                         items: [
@@ -236,52 +247,73 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 fieldLabel: 'Pai',
                                                                 name: 'namefather'
                                                             }, {
-                                                                width: 195,
-                                                                xtype: 'container'
-                                                            }
-                                                        ]
-                                                    }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        margin: '0 0 10 0',
-                                                        defaultType: 'textfield',
-                                                        items: [
-                                                            {
-                                                                flex: 1,
-                                                                fieldLabel: 'Mãe',
-                                                                name: 'namemother'
-                                                            }, {
-                                                                width: 195,
-                                                                xtype: 'container'
-                                                            }
-                                                        ]
-                                                    }, {
-                                                        xtype: 'label',
-                                                        text: 'Origem',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
-                                                        }
-                                                    }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        defaultType: 'textfield',
-                                                        items: [
-                                                            {
-                                                                flex: 1,
-                                                                fieldLabel: 'Nacionalidade',
-                                                                name: 'nationality'
-                                                            }, {
                                                                 xtype: 'splitter'
                                                             }, {
                                                                 flex: 1,
-                                                                fieldLabel: 'Local nascimento',
-                                                                name: 'placebirth'
-                                                            }, {
-                                                                width: 195,
-                                                                xtype: 'container'
+                                                                fieldLabel: 'Mãe',
+                                                                name: 'namemother'
                                                             }
                                                         ]
+                                                    }, {
+                                                        xtype: 'gridpanel',
+                                                        name: 'distribution',
+                                                        hideHeaders: false,
+                                                        title: 'Distribuição',
+                                                        store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
+                                                        columns: [
+                                                            {
+                                                                text: '<b>Turnos</b>',
+                                                                dataIndex: 'shiftdescription',
+                                                                flex: 1
+                                                            }, {
+                                                                text: '<b>SEMANA COMERCIAL</b>',
+                                                                columns: [
+                                                                    {
+                                                                        text: 'Segunda',
+                                                                        dataIndex: 'mon',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            pageSize: 0,
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
+                                                                    }, {
+                                                                        text: 'Terça',
+                                                                        dataIndex: 'tue',
+                                                                        width: 76
+                                                                    }, {
+                                                                        text: 'Quarta',
+                                                                        dataIndex: 'wed',
+                                                                        width: 76
+                                                                    }, {
+                                                                        text: 'Quinta',
+                                                                        dataIndex: 'thu',
+                                                                        width: 76
+                                                                    }, {
+                                                                        text: 'Sexta',
+                                                                        dataIndex: 'fri',
+                                                                        width: 76
+                                                                    }
+                                                                ]
+                                                            }, {
+                                                                text: '<b>FINAL DE SEMANA</b>',
+                                                                columns: [
+                                                                    {
+                                                                        text: '<span style="color: #990000;">Sábado</span>',
+                                                                        dataIndex: 'sat',
+                                                                        width: 76
+                                                                    }, {
+                                                                        text: '<span style="color: #990000;">Domingo</span>',
+                                                                        dataIndex: 'sun',
+                                                                        width: 76
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        selModel: 'rowmodel',
+                                                        plugins: {
+                                                            ptype: 'rowediting',
+                                                            clicksToEdit: 2
+                                                        }
                                                     }
                                                 ]
                                             }, {

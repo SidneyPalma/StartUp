@@ -238,7 +238,8 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
             portrait = form.down('portrait'),
             store = Ext.getStore('naturalperson'),
             storeBank = container.down('gridpanel[name=bank]').store,
-            storePhone = container.down('gridpanel[name=phone]').store;
+            storePhone = container.down('gridpanel[name=phone]').store,
+            storeDistribution = container.down('gridpanel[name=distribution]').store;
 
         if(!container.xdata) {
             container.down('textfield[name=shortname]').focus(false, 200);
@@ -261,6 +262,10 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
                     method: 'selectCode'
                 }).load();
                 storeBank.setParams({
+                    query: record.get('id'),
+                    method: 'selectCode'
+                }).load();
+                storeDistribution.setParams({
                     query: record.get('id'),
                     method: 'selectCode'
                 }).load();

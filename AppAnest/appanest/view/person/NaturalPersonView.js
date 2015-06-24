@@ -214,7 +214,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 fieldLabel: 'Ingressou em',
                                                                 xtype: 'datefield',
                                                                 plugins: 'textmask',
-                                                                name: 'admissiondate'
+                                                                name: 'associationdate'
                                                             }, {
                                                                 xtype: 'splitter'
                                                             }, {
@@ -259,6 +259,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                         name: 'distribution',
                                                         hideHeaders: false,
                                                         title: 'Distribuição',
+                                                        cls: 'distribution-edit',
                                                         store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
                                                         columns: [
                                                             {
@@ -270,28 +271,44 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 columns: [
                                                                     {
                                                                         text: 'Segunda',
-                                                                        dataIndex: 'mon',
+                                                                        dataIndex: 'mondescription',
                                                                         width: 76,
                                                                         editor: {
-                                                                            pageSize: 0,
+                                                                            updateField: 'mon',
                                                                             xtype: 'contractorunitsearch'
                                                                         }
                                                                     }, {
                                                                         text: 'Terça',
-                                                                        dataIndex: 'tue',
-                                                                        width: 76
+                                                                        dataIndex: 'tuedescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'tue',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }, {
                                                                         text: 'Quarta',
-                                                                        dataIndex: 'wed',
-                                                                        width: 76
+                                                                        dataIndex: 'weddescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'wed',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }, {
                                                                         text: 'Quinta',
-                                                                        dataIndex: 'thu',
-                                                                        width: 76
+                                                                        dataIndex: 'thudescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'thu',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }, {
                                                                         text: 'Sexta',
-                                                                        dataIndex: 'fri',
-                                                                        width: 76
+                                                                        dataIndex: 'fridescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'fri',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }
                                                                 ]
                                                             }, {
@@ -299,12 +316,20 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 columns: [
                                                                     {
                                                                         text: '<span style="color: #990000;">Sábado</span>',
-                                                                        dataIndex: 'sat',
-                                                                        width: 76
+                                                                        dataIndex: 'satdescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'sat',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }, {
                                                                         text: '<span style="color: #990000;">Domingo</span>',
-                                                                        dataIndex: 'sun',
-                                                                        width: 76
+                                                                        dataIndex: 'sundescription',
+                                                                        width: 76,
+                                                                        editor: {
+                                                                            updateField: 'sun',
+                                                                            xtype: 'contractorunitsearch'
+                                                                        }
                                                                     }
                                                                 ]
                                                             }
@@ -313,6 +338,11 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                         plugins: {
                                                             ptype: 'rowediting',
                                                             clicksToEdit: 2
+                                                        },
+                                                        listeners: {
+                                                            edit: 'onDistributionEdit',
+                                                            beforeedit: 'onDistributionBeforeEdit',
+                                                            itemdblclick: 'onDistributionItemDblClick'
                                                         }
                                                     }
                                                 ]
@@ -419,8 +449,14 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                 xtype: 'splitter'
                                                             }, {
                                                                 flex: 1,
-                                                                fieldLabel: 'PIS/Pasep',
+                                                                fieldLabel: 'PIS/PASEP/NIT',
                                                                 name: 'pispasep'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                fieldLabel: 'ISS(Inscr. Munic.)',
+                                                                name: 'countyregistration'
                                                             }
                                                         ]
                                                     }, {

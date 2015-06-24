@@ -4,12 +4,22 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     alias: 'widget.contractorunitsearch',
 
-    requires: [
-        'AppAnest.store.person.ContractorUnit',
-    ],
+    store: 'AppAnest.store.person.ContractorUnit',
 
+    valueField: 'shortname',
     displayField: 'shortname',
 
-    store: 'AppAnest.store.person.ContractorUnit'
+    pageSize: 0,
+
+    hideTrigger: true,
+    matchFieldWidth: false,
+
+    listConfig: {
+        width: 150
+    },
+
+    listeners: {
+        select: 'selectContractorUnit'
+    }
 
 });

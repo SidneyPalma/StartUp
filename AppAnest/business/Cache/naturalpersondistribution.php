@@ -32,10 +32,12 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.id,
                 :naturalpersonid as naturalpersonid,
                 npd.contractorunitid,
+                p.shortname as contractorunitdescription,
                 npd.shift,
                 npd.weekday
             from
                 naturalpersondistribution npd
+                left join person p on ( p.id = npd.contractorunitid )
             where npd.naturalpersonid = :naturalpersonid";
 
         try {
@@ -52,6 +54,9 @@ class naturalpersondistribution extends \Smart\Data\Cache {
 
             $index = 0;
 
+            $shiftOn = '<div style="color: rgb(131, 187, 56); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
+            $shiftOf = '<div style="color: rgb(210, 180, 140); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
+
             // Turno do dia
             foreach ($shiftRows as $recShift) {
 
@@ -65,21 +70,28 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 // Dia da semana
                 foreach ($weekdayRows as $recWeekday) {
                     $weekday = $recWeekday["weekday"];
-                    $rows[$index][$weekday] = null;
                     $rows[$index]["$weekday".'id'] = null;
+                    $rows[$index]["$weekday".'description'] = $shift == 'N' ? $shiftOf : null;
 
                     // Valor do Dia
                     foreach ($distributionRows as $recDistribution) {
                         $id = $recDistribution["id"];
                         $naturalpersonid = $recDistribution["naturalpersonid"];
                         $contractorunitid = $recDistribution["contractorunitid"];
+                        $contractorunitdescription = $recDistribution["contractorunitdescription"];
 
                         $rows[$index]["naturalpersonid"] = $naturalpersonid;
 
                         if($shift == $recDistribution["shift"] && $weekday == $recDistribution["weekday"]) {
                             $rows[$index]["$weekday".'id'] = $id;
                             $rows[$index][$weekday] = $contractorunitid;
+                            $rows[$index]["$weekday".'description'] = $contractorunitdescription;
+
+                            if($shift == 'N') {
+                                $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
+                            }
                         }
+
                     }
                 }
                 $index++;

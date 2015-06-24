@@ -46,6 +46,43 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
 
     url: 'business/Class/naturalperson.php',
 
+    selectContractorUnit: function(combo, record, eOpts) {
+        var me = this,
+            sm = me.getView().down('gridpanel[name=distribution]').getSelectionModel(),
+            rc = sm.getSelection()[0];
+
+        rc.set(combo.updateField,record.get('id'));
+    },
+
+    onDistributionItemDblClick: function (view, record, item, index, e, eOpts) {
+        if(record.get('shift') == 'N') {
+            console.info(record.data);
+        }
+    },
+
+    onDistributionBeforeEdit: function (editor, context, eOpts) {
+        return context.record.get('shift') != 'N';
+    },
+
+    onDistributionEdit: function (editor, context, eOpts) {
+        var me = this,
+            record = context.record,
+            store = editor.grid.store;
+
+        //Ext.Ajax.request({
+        //    url: 'business/Class/naturalpersondistribution.php',
+        //    params: {
+        //        action: 'update',
+        //        rows: Ext.encode(record.data)
+        //    },
+        //    success: function(response){
+        //        var result = Ext.decode(response.responseText);
+        //    },
+        //    failure: function(response){
+        //    }
+        //});
+    },
+
     getUserCardIndex: function (btn) {
         var me = this,
             listViews = me.lookupReference('listViews');

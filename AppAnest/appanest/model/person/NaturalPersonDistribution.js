@@ -14,55 +14,93 @@ Ext.define( 'AppAnest.model.person.NaturalPersonDistribution', {
             type: 'int'
         }, {
             name: 'shift',
-            type: 'auto'
+            type: 'auto',
+            critical: true
         }, {
             name: 'shiftdescription',
             type: 'auto'
         }, {
             name: 'weekday',
-            type: 'auto'
+            type: 'auto',
+            critical: true
         }, {
             name: 'sun',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'mon',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'tue',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'wed',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'thu',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'fri',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'sat',
-            type: 'int'
+            type: 'int',
+            critical: true
+
+        }, {
+            name: 'sundescription',
+            type: 'auto'
+        }, {
+            name: 'mondescription',
+            type: 'auto'
+        }, {
+            name: 'tuedescription',
+            type: 'auto'
+        }, {
+            name: 'weddescription',
+            type: 'auto'
+        }, {
+            name: 'thudescription',
+            type: 'auto'
+        }, {
+            name: 'fridescription',
+            type: 'auto'
+        }, {
+            name: 'satdescription',
+            type: 'auto'
         }, {
             name: 'sunid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'monid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'tueid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'wedid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'thuid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'friid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }, {
             name: 'satid',
-            type: 'int'
+            type: 'int',
+            critical: true
         }
     ]
 

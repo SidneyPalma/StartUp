@@ -186,75 +186,84 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 overflowY: 'auto',
                                                 glyph: 0xe9eb,
                                                 title: 'Complemento',
-                                                layout: 'anchor',
+                                                layout: 'border',
                                                 bodyStyle: 'padding-top: 10px',
                                                 items: [
                                                     {
-                                                        xtype: 'label',
-                                                        text: 'Cadastro',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
-                                                        }
-                                                    }, {
-                                                        xtype: 'container',
-                                                        margin: '0 0 10 0',
-                                                        layout: 'hbox',
-                                                        defaultType: 'textfield',
+                                                        region: 'north',
                                                         items: [
                                                             {
-                                                                flex: 1,
-                                                                maskRe: /[0-9\/]/,
-                                                                fieldLabel: 'Matricula',
-                                                                name: 'registrationid'
+                                                                xtype: 'label',
+                                                                text: 'Cadastro',
+                                                                style: {
+                                                                    color: 'blue;',
+                                                                    fontSize: '14px;'
+                                                                }
                                                             }, {
-                                                                xtype: 'splitter'
+                                                                xtype: 'container',
+                                                                margin: '0 0 10 0',
+                                                                layout: 'hbox',
+                                                                defaultType: 'textfield',
+                                                                items: [
+                                                                    {
+                                                                        flex: 1,
+                                                                        maskRe: /[0-9\/]/,
+                                                                        fieldLabel: 'Matricula',
+                                                                        name: 'registrationid',
+                                                                        listeners: {
+                                                                            change: 'onChangeRegistrationId'
+                                                                        }
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Ingressou em',
+                                                                        xtype: 'datefield',
+                                                                        plugins: 'textmask',
+                                                                        name: 'associationdate'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Nacionalidade',
+                                                                        name: 'nationality'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Local nascimento',
+                                                                        name: 'placebirth'
+                                                                    }
+                                                                ]
                                                             }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Ingressou em',
-                                                                xtype: 'datefield',
-                                                                plugins: 'textmask',
-                                                                name: 'associationdate'
+                                                                xtype: 'label',
+                                                                text: 'Filiação',
+                                                                style: {
+                                                                    color: 'blue;',
+                                                                    fontSize: '14px;'
+                                                                }
                                                             }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Nacionalidade',
-                                                                name: 'nationality'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Local nascimento',
-                                                                name: 'placebirth'
+                                                                xtype: 'container',
+                                                                margin: '0 0 10 0',
+                                                                layout: 'hbox',
+                                                                defaultType: 'textfield',
+                                                                items: [
+                                                                    {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Pai',
+                                                                        name: 'namefather'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Mãe',
+                                                                        name: 'namemother'
+                                                                    }
+                                                                ]
                                                             }
                                                         ]
                                                     }, {
-                                                        xtype: 'label',
-                                                        text: 'Filiação',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
-                                                        }
-                                                    }, {
-                                                        xtype: 'container',
-                                                        margin: '0 0 10 0',
-                                                        layout: 'hbox',
-                                                        defaultType: 'textfield',
-                                                        items: [
-                                                            {
-                                                                flex: 1,
-                                                                fieldLabel: 'Pai',
-                                                                name: 'namefather'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Mãe',
-                                                                name: 'namemother'
-                                                            }
-                                                        ]
-                                                    }, {
+                                                        region: 'center',
                                                         xtype: 'gridpanel',
                                                         name: 'distribution',
                                                         hideHeaders: false,
@@ -426,9 +435,10 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             }, {
                                                                 flex: 1,
                                                                 xtype: 'datefield',
-                                                                plugins: 'textmask',
+                                                                //plugins: 'textmask',
                                                                 fieldLabel: 'Data emissão',
                                                                 name: 'identissuingdate'
+                                                                //allowBlank: true
                                                             }
                                                         ]
                                                     }, {
@@ -493,9 +503,10 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             }, {
                                                                 flex: 1,
                                                                 xtype: 'datefield',
-                                                                plugins: 'textmask',
+                                                                //plugins: 'textmask',
                                                                 fieldLabel: 'Data emissão',
                                                                 name: 'voterissuingdate'
+                                                                //allowBlank: true
                                                             }
                                                         ]
                                                     }

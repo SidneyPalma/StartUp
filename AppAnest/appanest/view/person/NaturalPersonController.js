@@ -126,6 +126,13 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
         me.redirectTo('naturalpersonnew');
     },
 
+    onChangeRegistrationId: function ( field, newValue, oldValue, eOpts ) {
+        var form = field.up('form'),
+            registrationcode = form.down('textfield[name=registrationcode]');
+
+        registrationcode.setValue(newValue);
+    },
+
     getNaturalPersonNew: function() {
         var app = AppAnest.app.getController('App');
 

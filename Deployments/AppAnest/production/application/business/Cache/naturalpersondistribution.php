@@ -77,7 +77,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 $shiftRows = $list;
             }
 
-            $shiftOn = '<div style="color: rgb(131, 187, 56); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
+            $shiftOn = '<div style="color: rgba(255, 99, 71, 1); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
             $shiftOf = '<div style="color: rgba(87, 87, 87, .3); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
 
             // Turno do dia
@@ -110,7 +110,6 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                             $rows[$index][$weekday] = $contractorunitid;
                             $rows[$index]["$weekday".'description'] = $contractorunitdescription;
 
-//                            if($shift == 'N') {
                             if(($shift == 'N') && (!in_array($weekday, $fixed))) {
                                 $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
                             }

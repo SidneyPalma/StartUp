@@ -79,7 +79,15 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
     onDistributionBeforeEdit: function (editor, context, eOpts) {
         var me = this,
             fixed = [1,2,3,4,5],
-            shift = context.record.get('shift');
+            shift = context.record.get('shift'),
+            field = editor.getEditor().items;
+
+        if(shift == 'N') {
+            Ext.each(fixed, function(value, index) {
+                field.getAt(value).setValue('');
+                field.getAt(value).setDisabled(true);
+            });
+        }
 
         return (shift != 'N') || ((shift == 'N') && (fixed.indexOf(context.colIdx) == -1 ));
     },

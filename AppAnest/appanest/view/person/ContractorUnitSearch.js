@@ -11,6 +11,9 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     pageSize: 0,
 
+    lazyRender: true,
+    selectOnTab: true,
+
     hideTrigger: true,
     matchFieldWidth: false,
 
@@ -19,7 +22,8 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
     },
 
     listeners: {
-        select: 'selectContractorUnit'
+        select: 'selectContractorUnit',
+        change: 'changeContractorUnit'
     }
 
 });

@@ -342,7 +342,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                         listeners: {
                                                             edit: 'onDistributionEdit',
                                                             beforeedit: 'onDistributionBeforeEdit',
-                                                            itemdblclick: 'onDistributionItemDblClick'
+                                                            celldblclick: 'onDistributionCellDblClick'
                                                         }
                                                     }
                                                 ]

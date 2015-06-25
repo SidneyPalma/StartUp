@@ -54,9 +54,24 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
         rc.set(combo.updateField,record.get('id'));
     },
 
-    onDistributionItemDblClick: function (view, record, item, index, e, eOpts) {
-        if(record.get('shift') == 'N') {
-            console.info(record.data);
+    changeContractorUnit: function ( field, newValue, oldValue, eOpts ) {
+        var me = this,
+            sm = me.getView().down('gridpanel[name=distribution]').getSelectionModel(),
+            rc = sm.getSelection()[0];
+
+        if(newValue == null) {
+            rc.set(field.updateField,null);
+        }
+    },
+
+    onDistributionCellDblClick: function (table, td, cellIndex, record, tr, rowIndex, e, eOpts) {
+        var me = this,
+            shift = record.get('shift'),
+            grid = me.getView().down('gridpanel[name=distribution]');
+
+        if((shift == 'N' && (cellIndex != 0 ))) {
+            var weekday = grid.columns[cellIndex].dataIndex.substring(0, 3);
+            me.onDistributionEdit(null,{record: record}, {weekday: weekday});
         }
     },
 
@@ -66,21 +81,28 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
 
     onDistributionEdit: function (editor, context, eOpts) {
         var me = this,
-            record = context.record,
-            store = editor.grid.store;
+            record = context.record;
 
-        //Ext.Ajax.request({
-        //    url: 'business/Class/naturalpersondistribution.php',
-        //    params: {
-        //        action: 'update',
-        //        rows: Ext.encode(record.data)
-        //    },
-        //    success: function(response){
-        //        var result = Ext.decode(response.responseText);
-        //    },
-        //    failure: function(response){
-        //    }
-        //});
+        Ext.Ajax.request({
+            url: 'business/Class/naturalpersondistribution.php',
+            params: {
+                action: 'update',
+                weekday: eOpts.weekday || null,
+                rows: Ext.encode(record.data)
+            },
+            success: function(response){
+                var result = Ext.decode(response.responseText);
+                if(result.success == true) {
+                    record.set(result.rows[0]);
+                    record.commit();
+                } else {
+                    record.reject();
+                }
+            },
+            failure: function(response){
+                record.reject();
+            }
+        });
     },
 
     getUserCardIndex: function (btn) {

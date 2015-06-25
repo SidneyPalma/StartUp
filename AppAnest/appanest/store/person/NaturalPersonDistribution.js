@@ -1,3 +1,4 @@
+//@charset ISO-8859-1
 Ext.define( 'AppAnest.store.person.NaturalPersonDistribution', {
     extend: 'Smart.data.StoreBase',
 

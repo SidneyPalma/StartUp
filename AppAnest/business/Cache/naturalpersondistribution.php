@@ -40,7 +40,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 naturalpersondistribution npd
                 left join person p on ( p.id = npd.contractorunitid )
             where npd.naturalpersonid = :naturalpersonid
-
+/*
             union all
 
             select
@@ -53,7 +53,8 @@ class naturalpersondistribution extends \Smart\Data\Cache {
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'shift'";
+            where et.name = 'shift'
+            */";
 
         try {
             $pdo = $proxy->prepare($sqlDistribution);
@@ -113,6 +114,10 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                             if(($shift == 'N') && (!in_array($weekday, $fixed))) {
                                 $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
                             }
+
+//                            if($shift == 'N') {
+//                                $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? (in_array($weekday, $fixed) ? $contractorunitdescription : $shiftOn ) : $shiftOf;
+//                            }
                         }
 
                     }

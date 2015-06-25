@@ -16,6 +16,8 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
         $proxy = $store->getProxy();
         $submit = $model->getSubmit();
 
+        $fixed = array("sat", "sun");
+
         $data = array();
         $rows = $submit->getRow();
 
@@ -34,10 +36,22 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
 
         $results = self::getResultToJson();
 
+        $weekday = $submit->getRawValue('weekday');
+
         // Dia da semana = Noturno
-        if ( $shift == 'N' ) {
+        if (($shift == 'N') && (strlen($weekday) != 0)) {
             $list = array();
-            $list[]['weekday'] = $submit->getRawValue('weekday');
+            $list[]['weekday'] = $weekday;
+            $weekdayRows = $list;
+        }
+
+        if (($shift == 'N') && (strlen($weekday) == 0)) {
+            $list = array();
+            foreach ($weekdayRows as $recWeekday) {
+                if(in_array($recWeekday["weekday"], $fixed)) {
+                    $list[]['weekday'] = $recWeekday["weekday"];
+                }
+            }
             $weekdayRows = $list;
         }
 
@@ -58,7 +72,7 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
 
             $update = isset($id) ? strlen($id) !== 0 : false;
 
-            if ( $shift == 'N' ) {
+            if (($shift == 'N') && (!in_array($weekday, $fixed))) {
                 unset($data['id']);
                 unset($data['contractorunitid']);
                 $store->getModel()->getSubmit()->setRow($data);
@@ -74,7 +88,7 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
                 }
             }
 
-            if ( $shift == 'D' ) {
+            if (($shift == 'D')||(($shift == 'N') && (in_array($weekday, $fixed)))) {
                 if (strlen($contractorunitid) !== 0) {
                     if ($update == true) {
                         $results = $store->update();

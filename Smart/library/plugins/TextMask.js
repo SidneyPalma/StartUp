@@ -305,7 +305,7 @@ Ext.define( 'Smart.plugins.TextMask', {
                 data[me.getName()] = Ext.util.Format.date(Ext.Date.parse(val,me.format),me.submitFormat);
             }
         }
-
+        //console.info(data);
         return data;
     }
 

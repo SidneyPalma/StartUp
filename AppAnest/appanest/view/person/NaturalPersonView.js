@@ -435,10 +435,9 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             }, {
                                                                 flex: 1,
                                                                 xtype: 'datefield',
-                                                                //plugins: 'textmask',
+                                                                plugins: 'textmask',
                                                                 fieldLabel: 'Data emissão',
                                                                 name: 'identissuingdate'
-                                                                //allowBlank: true
                                                             }
                                                         ]
                                                     }, {
@@ -503,10 +502,9 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             }, {
                                                                 flex: 1,
                                                                 xtype: 'datefield',
-                                                                //plugins: 'textmask',
+                                                                plugins: 'textmask',
                                                                 fieldLabel: 'Data emissão',
                                                                 name: 'voterissuingdate'
-                                                                //allowBlank: true
                                                             }
                                                         ]
                                                     }

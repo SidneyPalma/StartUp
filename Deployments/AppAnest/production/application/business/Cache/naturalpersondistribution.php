@@ -8,6 +8,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
+        $fixed = array("sat", "sun");
         $proxy = $this->getStore()->getProxy();
 
         $sqlShift = "
@@ -93,7 +94,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 foreach ($weekdayRows as $recWeekday) {
                     $weekday = $recWeekday["weekday"];
                     $rows[$index]["$weekday".'id'] = null;
-                    $rows[$index]["$weekday".'description'] = $shift == 'N' ? $shiftOf : null;
+                    $rows[$index]["$weekday".'description'] = (($shift == 'N') && (!in_array($weekday, $fixed))) ? $shiftOf : null;
 
                     // Valor do Dia
                     foreach ($distributionRows as $recDistribution) {
@@ -109,7 +110,8 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                             $rows[$index][$weekday] = $contractorunitid;
                             $rows[$index]["$weekday".'description'] = $contractorunitdescription;
 
-                            if($shift == 'N') {
+//                            if($shift == 'N') {
+                            if(($shift == 'N') && (!in_array($weekday, $fixed))) {
                                 $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
                             }
                         }

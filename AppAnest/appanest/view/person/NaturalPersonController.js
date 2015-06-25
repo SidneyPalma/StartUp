@@ -66,17 +66,22 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
 
     onDistributionCellDblClick: function (table, td, cellIndex, record, tr, rowIndex, e, eOpts) {
         var me = this,
+            fixed = [1,2,3,4,5];
             shift = record.get('shift'),
             grid = me.getView().down('gridpanel[name=distribution]');
 
-        if((shift == 'N' && (cellIndex != 0 ))) {
+        if((shift == 'N' && (fixed.indexOf(cellIndex) != -1 ))) {
             var weekday = grid.columns[cellIndex].dataIndex.substring(0, 3);
             me.onDistributionEdit(null,{record: record}, {weekday: weekday});
         }
     },
 
     onDistributionBeforeEdit: function (editor, context, eOpts) {
-        return context.record.get('shift') != 'N';
+        var me = this,
+            fixed = [1,2,3,4,5],
+            shift = context.record.get('shift');
+
+        return (shift != 'N') || ((shift == 'N') && (fixed.indexOf(context.colIdx) == -1 ));
     },
 
     onDistributionEdit: function (editor, context, eOpts) {

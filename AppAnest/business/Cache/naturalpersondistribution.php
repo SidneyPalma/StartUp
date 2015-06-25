@@ -38,7 +38,21 @@ class naturalpersondistribution extends \Smart\Data\Cache {
             from
                 naturalpersondistribution npd
                 left join person p on ( p.id = npd.contractorunitid )
-            where npd.naturalpersonid = :naturalpersonid";
+            where npd.naturalpersonid = :naturalpersonid
+
+            union all
+
+            select
+                null as id,
+                :naturalpersonid as naturalpersonid,
+                null as contractorunitid,
+                null as contractorunitdescription,
+                etl.code as shift,
+                null as weekday
+            from
+                enumtype et
+                inner join enumtypelist etl on ( etl.enumtypeid = et.id )
+            where et.name = 'shift'";
 
         try {
             $pdo = $proxy->prepare($sqlDistribution);
@@ -50,12 +64,20 @@ class naturalpersondistribution extends \Smart\Data\Cache {
             $shiftRows = $proxy->query($sqlShift)->fetchAll();
             $weekdayRows = $proxy->query($sqlWeekDay)->fetchAll();
 
+            $index = 0;
             $rows = array();
 
-            $index = 0;
+            // filtrar Turno
+            if (isset($data['entry'])) {
+                $list = array();
+                $entry = $data['entry'];
+                $key = array_search($entry, array_column($shiftRows, 'shift'));
+                $list[0] = $shiftRows[$key];
+                $shiftRows = $list;
+            }
 
             $shiftOn = '<div style="color: rgb(131, 187, 56); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
-            $shiftOf = '<div style="color: rgb(210, 180, 140); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
+            $shiftOf = '<div style="color: rgba(87, 87, 87, .3); font-size: 16px; text-align: center;"><span style="cursor: pointer;"><i class="icon-ok-squared"></i></span></div>';
 
             // Turno do dia
             foreach ($shiftRows as $recShift) {
@@ -76,7 +98,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                     // Valor do Dia
                     foreach ($distributionRows as $recDistribution) {
                         $id = $recDistribution["id"];
-                        $naturalpersonid = $recDistribution["naturalpersonid"];
+                        $naturalpersonid = intval($query);
                         $contractorunitid = $recDistribution["contractorunitid"];
                         $contractorunitdescription = $recDistribution["contractorunitdescription"];
 

@@ -65,6 +65,14 @@
     font-family: Monda !important;
 }
 
+.distribution-edit .x-btn-default-toolbar-small {
+    background-color: #FB3C4A !important;
+}
+
+.distribution-edit .x-btn-default-toolbar-small .x-btn-inner-default-toolbar-small {
+    color: #ffffff !important;
+}
+
 .additivetable-edit .x-form-field {
     height: 30px;
     font-size: 14px;

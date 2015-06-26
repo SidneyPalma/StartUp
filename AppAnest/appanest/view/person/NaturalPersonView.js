@@ -272,7 +272,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                         store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
                                                         columns: [
                                                             {
-                                                                text: '<b>Turnos</b>',
+                                                                text: '<b style="color: #0016b0">Turnos</b>',
                                                                 dataIndex: 'shiftdescription',
                                                                 flex: 1,
                                                                 renderer: function (value,metaData,record) {
@@ -280,7 +280,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                     return value;
                                                                 }
                                                             }, {
-                                                                text: '<b>SEMANA COMERCIAL</b>',
+                                                                text: '<b style="color: #0016b0">DIAS DA SEMANA</b>',
                                                                 columns: [
                                                                     {
                                                                         text: 'Segunda',
@@ -325,10 +325,10 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                     }
                                                                 ]
                                                             }, {
-                                                                text: '<b>FINAL DE SEMANA</b>',
+                                                                text: '<b style="color: #0016b0">FINAL DE SEMANA</b>',
                                                                 columns: [
                                                                     {
-                                                                        text: '<span style="color: #990000;">Sábado</span>',
+                                                                        text: '<b>Sábado</b>',
                                                                         dataIndex: 'satdescription',
                                                                         width: 76,
                                                                         editor: {
@@ -336,7 +336,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                                             xtype: 'contractorunitsearch'
                                                                         }
                                                                     }, {
-                                                                        text: '<span style="color: #990000;">Domingo</span>',
+                                                                        text: '<b>Domingo</b>',
                                                                         dataIndex: 'sundescription',
                                                                         width: 76,
                                                                         editor: {

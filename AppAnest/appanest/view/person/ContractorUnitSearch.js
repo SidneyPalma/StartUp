@@ -23,12 +23,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     listeners: {
         select: 'selectContractorUnit',
-        change: 'changeContractorUnit',
-        keydown: function(e){
-            if (e.getKey() == e.ENTER){
-                e.stopEvent();
-            }
-        }
+        change: 'changeContractorUnit'
     }
 
 });

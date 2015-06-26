@@ -274,7 +274,11 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             {
                                                                 text: '<b>Turnos</b>',
                                                                 dataIndex: 'shiftdescription',
-                                                                flex: 1
+                                                                flex: 1,
+                                                                renderer: function (value,metaData,record) {
+                                                                    metaData.style = "background: rgba(245, 245, 245, 1);";
+                                                                    return value;
+                                                                }
                                                             }, {
                                                                 text: '<b>SEMANA COMERCIAL</b>',
                                                                 columns: [

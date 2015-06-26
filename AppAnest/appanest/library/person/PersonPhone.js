@@ -119,27 +119,65 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                     flex: 1,
                     text: 'Telefones',
                     renderer: function (value,metaData,record) {
-                        var ddd = record.get('ddd'),
+                        var me = this,
+                            ddd = record.get('ddd'),
                             phoneoperator = record.get('phoneoperator'),
                             phonenumber = Smart.maskRenderer('99999-9999',false)(record.get('phonenumber')),
                             linetypedescription = record.get('linetypedescription'),
                             phonetypedescription = record.get('phonetypedescription'),
                             phoneoperatordescription = record.get('phoneoperatordescription');
 
+                        Ext.deletepersonphone = function () {
+                            me.up('personphone').onDeletePhone(me, record);
+                        };
+
                         return  '<div style="float: left;"><a class="smart-medium-users-detail">('+ ddd +') '+ phonenumber + ' - ' + linetypedescription +'</a><br/>'+
                                 '<a class="smart-medium-users-detail">' + phoneoperator +' ' + phoneoperatordescription +' - ' + phonetypedescription +'</a></div>'+
-                                '<div style="float: right; width: 30px;"><span style="color: #FB3C4A; width: 20px; font-size: 28px;"><i class="icon-cancel"></i></span></div>';
+                                '<div onClick="Ext.deletepersonphone()" style="float: right; width: 30px; color: rgba(110, 123, 139, .5);"><span class="delete-item" style="font-size: 28px;"><i class="icon-cancel"></i></span></div>';
                     }
                 }, {
                     width: 70,
                     text: 'Principal',
                     align: 'center',
                     renderer: function (value, meta, rec) {
-                        return rec.get('isdefault') ? '<span style="color: #6E7B8B; width: 20px; font-size: 28px;"><i class="icon-ok-circled"></i></span>' : '';
+                        return rec.get('isdefault') ? '<span style="color: rgba(110, 123, 139, .5); width: 20px; font-size: 28px;"><i class="icon-ok-circled"></i></span>' : '';
                     }
                 }
             ]
         }
-    ]
+    ],
+
+    onDeletePhone: function (gridpanel, record) {
+        var me = this,
+            store = gridpanel.store;
+
+        Ext.Msg.show({
+            title:'Removendo número de telefone da lista!',
+            message: 'Confirma a remoção deste número de telefone?',
+            buttons: Ext.Msg.YESNO,
+            icon: Ext.Msg.QUESTION,
+            fn: function(btn) {
+                if (btn === 'yes') {
+                    store.remove(record);
+
+                    gridpanel.setLoading('Removendo registros...');
+
+                    store.sync({
+                        scope: me,
+                        success: function (batch, options) {
+                            var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+                            gridpanel.setLoading(false);
+
+                        },
+                        failure: function (batch, options) {
+                            var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+                            gridpanel.setLoading(false);
+                        }
+                    });
+                }
+            }
+        });
+
+    }
 
 });

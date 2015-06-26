@@ -126,8 +126,9 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                             phonetypedescription = record.get('phonetypedescription'),
                             phoneoperatordescription = record.get('phoneoperatordescription');
 
-                        return  '<a class="smart-medium-users-detail">('+ ddd +') '+ phonenumber + ' - ' + linetypedescription +'</a><br/>'+
-                        '<a class="smart-medium-users-detail">' + phoneoperator +' ' + phoneoperatordescription +' - ' + phonetypedescription +'</a>';
+                        return  '<div style="float: left;"><a class="smart-medium-users-detail">('+ ddd +') '+ phonenumber + ' - ' + linetypedescription +'</a><br/>'+
+                                '<a class="smart-medium-users-detail">' + phoneoperator +' ' + phoneoperatordescription +' - ' + phonetypedescription +'</a></div>'+
+                                '<div style="float: right; width: 30px;"><span style="color: #FB3C4A; width: 20px; font-size: 28px;"><i class="icon-cancel"></i></span></div>';
                     }
                 }, {
                     width: 70,

@@ -79,8 +79,8 @@ Ext.define( 'AppAnest.model.person.Person', {
         { type: 'presence', field: 'name' },
         { type: 'presence', field: 'shortname' },
         { type: 'presence', field: 'cnesnumber' },
-        { type: 'length', field: 'name', min: 5, max: 80 },
-        { type: 'length', field: 'shortname', min: 5, max: 60 }
+        { type: 'length', field: 'name', min: 3, max: 80 },
+        { type: 'length', field: 'shortname', min: 3, max: 60 }
     ]
 
 });

@@ -186,11 +186,21 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 overflowY: 'auto',
                                                 glyph: 0xe9eb,
                                                 title: 'Complemento',
-                                                layout: 'border',
-                                                bodyStyle: 'padding-top: 10px',
+                                                xtype: 'tabpanel',
+                                                deferredRender: false,
+                                                ui: 'navigation-items',
+                                                tabBar: {
+                                                    layout: {
+                                                        pack: 'center'
+                                                    }
+                                                },
                                                 items: [
                                                     {
-                                                        region: 'north',
+                                                        overflowY: 'auto',
+                                                        glyph: 0xed0e,
+                                                        title: 'Cadastro',
+                                                        layout: 'anchor',
+                                                        bodyStyle: 'padding-top: 10px',
                                                         items: [
                                                             {
                                                                 xtype: 'label',
@@ -263,262 +273,262 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                             }
                                                         ]
                                                     }, {
-                                                        region: 'center',
-                                                        xtype: 'gridpanel',
-                                                        name: 'distribution',
-                                                        hideHeaders: false,
-                                                        title: 'Distribuição',
-                                                        cls: 'distribution-edit',
-                                                        store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
-                                                        columns: [
+                                                        overflowY: 'auto',
+                                                        glyph: 0xe873,
+                                                        title: 'Documentação',
+                                                        layout: 'anchor',
+                                                        bodyStyle: 'padding-top: 10px',
+                                                        items: [
                                                             {
-                                                                text: '<b style="color: #0016b0">Turnos</b>',
-                                                                dataIndex: 'shiftdescription',
-                                                                flex: 1,
-                                                                renderer: function (value,metaData,record) {
-                                                                    metaData.style = "background: rgba(245, 245, 245, 1);";
-                                                                    return value;
+                                                                xtype: 'label',
+                                                                text: 'Conselho da categoria',
+                                                                style: {
+                                                                    color: 'blue;',
+                                                                    fontSize: '14px;'
                                                                 }
                                                             }, {
-                                                                text: '<b style="color: #0016b0">DIAS DA SEMANA</b>',
-                                                                columns: [
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
+                                                                margin: '0 0 10 0',
+                                                                defaultType: 'textfield',
+                                                                items: [
                                                                     {
-                                                                        text: 'Segunda',
-                                                                        dataIndex: 'mondescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'mon',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        flex: 1,
+                                                                        maskRe: /[0-9\/]/,
+                                                                        fieldLabel: 'CRM',
+                                                                        name: 'crmnumber'
                                                                     }, {
-                                                                        text: 'Terça',
-                                                                        dataIndex: 'tuedescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'tue',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        xtype: 'splitter'
                                                                     }, {
-                                                                        text: 'Quarta',
-                                                                        dataIndex: 'weddescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'wed',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        flex: 1,
+                                                                        fieldLabel: 'UF emissor',
+                                                                        name: 'crmissuingstate',
+                                                                        plugins: 'textmask',
+                                                                        money: false,
+                                                                        mask: 'LL'
                                                                     }, {
-                                                                        text: 'Quinta',
-                                                                        dataIndex: 'thudescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'thu',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        xtype: 'splitter'
                                                                     }, {
-                                                                        text: 'Sexta',
-                                                                        dataIndex: 'fridescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'fri',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        flex: 1,
+                                                                        maskRe: /[0-9\/]/,
+                                                                        fieldLabel: 'CNES',
+                                                                        name: 'cnesnumber'
                                                                     }
                                                                 ]
                                                             }, {
-                                                                text: '<b style="color: #0016b0">FINAL DE SEMANA</b>',
-                                                                columns: [
+                                                                xtype: 'label',
+                                                                text: 'Pessoa fisica',
+                                                                style: {
+                                                                    color: 'blue;',
+                                                                    fontSize: '14px;'
+                                                                }
+                                                            }, {
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
+                                                                defaultType: 'textfield',
+                                                                items: [
                                                                     {
-                                                                        text: '<b>Sábado</b>',
-                                                                        dataIndex: 'satdescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'sat',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        flex: 1,
+                                                                        maskRe: /[0-9\/]/,
+                                                                        fieldLabel: 'Registro geral',
+                                                                        name: 'identnumber'
                                                                     }, {
-                                                                        text: '<b>Domingo</b>',
-                                                                        dataIndex: 'sundescription',
-                                                                        width: 76,
-                                                                        editor: {
-                                                                            updateField: 'sun',
-                                                                            xtype: 'contractorunitsearch'
-                                                                        }
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Org. emissor',
+                                                                        name: 'identissuing'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'UF emissor',
+                                                                        name: 'identissuingstate',
+                                                                        plugins: 'textmask',
+                                                                        money: false,
+                                                                        mask: 'LL'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        xtype: 'datefield',
+                                                                        plugins: 'textmask',
+                                                                        fieldLabel: 'Data emissão',
+                                                                        name: 'identissuingdate'
+                                                                    }
+                                                                ]
+                                                            }, {
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
+                                                                margin: '0 0 10 0',
+                                                                defaultType: 'textfield',
+                                                                items: [
+                                                                    {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'CPF',
+                                                                        plugins: 'textmask',
+                                                                        money: false,
+                                                                        vtype: 'cpf',
+                                                                        name: 'cpfnumber',
+                                                                        mask: '999.999.999-99'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'PIS/PASEP/NIT',
+                                                                        name: 'pispasep'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'ISS(Inscr. Munic.)',
+                                                                        name: 'countyregistration'
+                                                                    }
+                                                                ]
+                                                            }, {
+                                                                xtype: 'label',
+                                                                text: 'Titulo de eleitor',
+                                                                style: {
+                                                                    color: 'blue;',
+                                                                    fontSize: '14px;'
+                                                                }
+                                                            }, {
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
+                                                                margin: '0 0 10 0',
+                                                                defaultType: 'textfield',
+                                                                items: [
+                                                                    {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Inscrição',
+                                                                        name: 'voter'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Zona',
+                                                                        name: 'voterzone'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        fieldLabel: 'Seção',
+                                                                        name: 'votersection'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        flex: 1,
+                                                                        xtype: 'datefield',
+                                                                        plugins: 'textmask',
+                                                                        fieldLabel: 'Data emissão',
+                                                                        name: 'voterissuingdate'
                                                                     }
                                                                 ]
                                                             }
-                                                        ],
-                                                        selModel: 'rowmodel',
-                                                        plugins: {
-                                                            ptype: 'rowediting',
-                                                            clicksToEdit: 2
-                                                        },
-                                                        listeners: {
-                                                            edit: 'onDistributionEdit',
-                                                            beforeedit: 'onDistributionBeforeEdit',
-                                                            celldblclick: 'onDistributionCellDblClick'
-                                                        }
+                                                        ]
+                                                    }, {
+                                                        xtype: 'personaddress'
+                                                    }, {
+                                                        xtype: 'personphone'
+                                                    }, {
+                                                        xtype: 'personbank'
                                                     }
                                                 ]
                                             }, {
-                                                overflowY: 'auto',
-                                                glyph: 0xe873,
-                                                title: 'Documentação',
-                                                layout: 'anchor',
-                                                bodyStyle: 'padding-top: 10px',
-                                                items: [
+                                                title: 'Distribuição',
+                                                glyph: 0xebb3,
+                                                xtype: 'gridpanel',
+                                                name: 'distribution',
+                                                hideHeaders: false,
+                                                cls: 'distribution-edit',
+                                                store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
+                                                columns: [
                                                     {
-                                                        xtype: 'label',
-                                                        text: 'Conselho da categoria',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
+                                                        text: '<b style="color: #0016b0">Turnos</b>',
+                                                        dataIndex: 'shiftdescription',
+                                                        flex: 1,
+                                                        renderer: function (value,metaData,record) {
+                                                            metaData.style = "background: rgba(245, 245, 245, 1);";
+                                                            return value;
                                                         }
                                                     }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        margin: '0 0 10 0',
-                                                        defaultType: 'textfield',
-                                                        items: [
+                                                        text: '<b style="color: #0016b0">DIAS DA SEMANA</b>',
+                                                        columns: [
                                                             {
-                                                                flex: 1,
-                                                                maskRe: /[0-9\/]/,
-                                                                fieldLabel: 'CRM',
-                                                                name: 'crmnumber'
+                                                                text: 'Segunda',
+                                                                dataIndex: 'mondescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'mon',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }, {
-                                                                xtype: 'splitter'
+                                                                text: 'Terça',
+                                                                dataIndex: 'tuedescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'tue',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'UF emissor',
-                                                                name: 'crmissuingstate',
-                                                                plugins: 'textmask',
-                                                                money: false,
-                                                                mask: 'LL'
+                                                                text: 'Quarta',
+                                                                dataIndex: 'weddescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'wed',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }, {
-                                                                xtype: 'splitter'
+                                                                text: 'Quinta',
+                                                                dataIndex: 'thudescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'thu',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }, {
-                                                                flex: 1,
-                                                                maskRe: /[0-9\/]/,
-                                                                fieldLabel: 'CNES',
-                                                                name: 'cnesnumber'
+                                                                text: 'Sexta',
+                                                                dataIndex: 'fridescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'fri',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }
                                                         ]
                                                     }, {
-                                                        xtype: 'label',
-                                                        text: 'Pessoa fisica',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
-                                                        }
-                                                    }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        defaultType: 'textfield',
-                                                        items: [
+                                                        text: '<b style="color: #0016b0">FINAL DE SEMANA</b>',
+                                                        columns: [
                                                             {
-                                                                flex: 1,
-                                                                maskRe: /[0-9\/]/,
-                                                                fieldLabel: 'Registro geral',
-                                                                name: 'identnumber'
+                                                                text: '<b>Sábado</b>',
+                                                                dataIndex: 'satdescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'sat',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Org. emissor',
-                                                                name: 'identissuing'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'UF emissor',
-                                                                name: 'identissuingstate',
-                                                                plugins: 'textmask',
-                                                                money: false,
-                                                                mask: 'LL'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                xtype: 'datefield',
-                                                                plugins: 'textmask',
-                                                                fieldLabel: 'Data emissão',
-                                                                name: 'identissuingdate'
-                                                            }
-                                                        ]
-                                                    }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        margin: '0 0 10 0',
-                                                        defaultType: 'textfield',
-                                                        items: [
-                                                            {
-                                                                flex: 1,
-                                                                fieldLabel: 'CPF',
-                                                                plugins: 'textmask',
-                                                                money: false,
-                                                                vtype: 'cpf',
-                                                                name: 'cpfnumber',
-                                                                mask: '999.999.999-99'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'PIS/PASEP/NIT',
-                                                                name: 'pispasep'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'ISS(Inscr. Munic.)',
-                                                                name: 'countyregistration'
-                                                            }
-                                                        ]
-                                                    }, {
-                                                        xtype: 'label',
-                                                        text: 'Titulo de eleitor',
-                                                        style: {
-                                                            color: 'blue;',
-                                                            fontSize: '14px;'
-                                                        }
-                                                    }, {
-                                                        xtype: 'container',
-                                                        layout: 'hbox',
-                                                        margin: '0 0 10 0',
-                                                        defaultType: 'textfield',
-                                                        items: [
-                                                            {
-                                                                flex: 1,
-                                                                fieldLabel: 'Inscrição',
-                                                                name: 'voter'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Zona',
-                                                                name: 'voterzone'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                fieldLabel: 'Seção',
-                                                                name: 'votersection'
-                                                            }, {
-                                                                xtype: 'splitter'
-                                                            }, {
-                                                                flex: 1,
-                                                                xtype: 'datefield',
-                                                                plugins: 'textmask',
-                                                                fieldLabel: 'Data emissão',
-                                                                name: 'voterissuingdate'
+                                                                text: '<b>Domingo</b>',
+                                                                dataIndex: 'sundescription',
+                                                                width: 76,
+                                                                editor: {
+                                                                    updateField: 'sun',
+                                                                    xtype: 'contractorunitsearch'
+                                                                }
                                                             }
                                                         ]
                                                     }
-                                                ]
-                                            }, {
-                                                xtype: 'personaddress'
-                                            }, {
-                                                xtype: 'personphone'
-                                            }, {
-                                                xtype: 'personbank'
+                                                ],
+                                                selModel: 'rowmodel',
+                                                plugins: {
+                                                    ptype: 'rowediting',
+                                                    clicksToEdit: 2
+                                                },
+                                                listeners: {
+                                                    edit: 'onDistributionEdit',
+                                                    beforeedit: 'onDistributionBeforeEdit',
+                                                    celldblclick: 'onDistributionCellDblClick'
+                                                }
                                             }
                                         ]
                                     }

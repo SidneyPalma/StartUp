@@ -1,7 +1,7 @@
 3.1.7 (Brainy Betty)
-3f746e39b2c9ed7ff8ab80bcb117bf3219ceb6c1
+c669f0640292c72d49ec7f91f430d3d943d8224b
 o:Sass::Tree::RootNode
-:@template"q$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
+:@template"Ë$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
 $theme-name:  'ext-theme-crisp' !default;
 $include-appanest-application: true;
 $include-appanest-controller-app: true;
@@ -1025,7 +1025,7 @@ $include-ext-view-table: true;
 $include-ext-view-tablelayout: true;
 $include-ext-view-view: true;
 $include-ext-window-messagebox: true;
-$include-ext-window-toast: false;
+$include-ext-window-toast: true;
 $include-ext-window-window: true;
 $include-extthemeneptune-component: true;
 $include-extthemeneptune-container-buttongroup: false;
@@ -1338,6 +1338,7 @@ $relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/resizer/Resizer';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/selection/CheckboxModel';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/tree/ViewDropZone';
+@import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/window/Toast';
 /* including package ext-theme-neptune */
 $ext-theme-neptune-resource-path: 'images' !default;
 $relative-image-path-for-uis: $ext-theme-neptune-resource-path;
@@ -1353,7 +1354,7 @@ $relative-image-path-for-uis: $ext-theme-neptune-resource-path;
 $AppAnest-resource-path: 'images' !default;
 $relative-image-path-for-uis: $AppAnest-resource-path;
 @import '../../../../../../AppAnest/sass/src/view/person/NaturalPersonView';
-:@has_childrenT:@options{ :@children[Ho:Sass::Tree::VariableNode;@:@guarded0;	[ :
+:@has_childrenT:@options{ :@children[Io:Sass::Tree::VariableNode;@:@guarded0;	[ :
 @expro:Sass::Script::String	;@:
 @type:string:@value"ZC:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources:
 @linei;i:
@@ -2389,7 +2390,7 @@ $relative-image-path-for-uis: $AppAnest-resource-path;
 ;@;0;	[ ;o;;@;T;iþ;iþ;"!include-ext-view-tablelayouto;
 ;@;0;	[ ;o;;@;T;iÿ;iÿ;"include-ext-view-viewo;
 ;@;0;	[ ;o;;@;T;i ;i ;""include-ext-window-messageboxo;
-;@;0;	[ ;o;;@;F;i;i;"include-ext-window-toasto;
+;@;0;	[ ;o;;@;T;i;i;"include-ext-window-toasto;
 ;@;0;	[ ;o;;@;T;i;i;"include-ext-window-windowo;
 ;@;0;	[ ;o;;@;T;i;i;"&include-extthemeneptune-componento;
 ;@;0;	[ ;o;;@;F;i;i;"2include-extthemeneptune-container-buttongroupo;
@@ -2695,17 +2696,18 @@ $relative-image-path-for-uis: $AppAnest-resource-path;
 ;0;@;	[ ;"]../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/layout/container/Form;i6o;
 ;0;@;	[ ;"W../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/resizer/Resizer;i7o;
 ;0;@;	[ ;"_../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/selection/CheckboxModel;i8o;
-;0;@;	[ ;"Y../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/tree/ViewDropZone;i9o;;@;	[ ;0;"./* including package ext-theme-neptune */;i:;[ ;0o;
-;@;"!default;	[ ;o;	;@;;;"images;i;;i;;"$ext-theme-neptune-resource-patho;
-;@;0;	[ ;o;	;"$ext_theme_neptune_resource_path;@;i<;"$ext-theme-neptune-resource-path;i<;" relative-image-path-for-uiso;
-;0;@;	[ ;"V../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/dd/StatusProxy;i=o;
-;0;@;	[ ;"S../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/panel/Panel;i>o;
-;0;@;	[ ;"U../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/button/Button;i?o;
-;0;@;	[ ;"]../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/form/field/HtmlEditor;i@o;
-;0;@;	[ ;"]../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/grid/header/Container;iAo;
-;0;@;	[ ;"Z../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/grid/column/Column;iBo;
-;0;@;	[ ;"W../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/form/field/File;iCo;
-;0;@;	[ ;"W../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/resizer/Resizer;iDo;;@;	[ ;0;"%/* including package AppAnest */;iE;[ ;0o;
-;@;"!default;	[ ;o;	;@;;;"images;iF;iF;"AppAnest-resource-patho;
-;@;0;	[ ;o;	;"AppAnest_resource_path;@;iG;"AppAnest-resource-path;iG;" relative-image-path-for-uiso;
-;0;@;	[ ;"F../../../../../../AppAnest/sass/src/view/person/NaturalPersonView;iH;i
+;0;@;	[ ;"Y../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/tree/ViewDropZone;i9o;
+;0;@;	[ ;"T../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/window/Toast;i:o;;@;	[ ;0;"./* including package ext-theme-neptune */;i;;[ ;0o;
+;@;"!default;	[ ;o;	;@;;;"images;i<;i<;"$ext-theme-neptune-resource-patho;
+;@;0;	[ ;o;	;"$ext_theme_neptune_resource_path;@;i=;"$ext-theme-neptune-resource-path;i=;" relative-image-path-for-uiso;
+;0;@;	[ ;"V../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/dd/StatusProxy;i>o;
+;0;@;	[ ;"S../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/panel/Panel;i?o;
+;0;@;	[ ;"U../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/button/Button;i@o;
+;0;@;	[ ;"]../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/form/field/HtmlEditor;iAo;
+;0;@;	[ ;"]../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/grid/header/Container;iBo;
+;0;@;	[ ;"Z../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/grid/column/Column;iCo;
+;0;@;	[ ;"W../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/form/field/File;iDo;
+;0;@;	[ ;"W../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/resizer/Resizer;iEo;;@;	[ ;0;"%/* including package AppAnest */;iF;[ ;0o;
+;@;"!default;	[ ;o;	;@;;;"images;iG;iG;"AppAnest-resource-patho;
+;@;0;	[ ;o;	;"AppAnest_resource_path;@;iH;"AppAnest-resource-path;iH;" relative-image-path-for-uiso;
+;0;@;	[ ;"F../../../../../../AppAnest/sass/src/view/person/NaturalPersonView;iI;i

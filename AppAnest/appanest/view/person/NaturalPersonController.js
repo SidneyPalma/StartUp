@@ -16,6 +16,10 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
         'AppAnest.view.person.*'
     ],
 
+    requires: [
+        'Ext.window.Toast'
+    ],
+
     config: {
         control: {
             'naturalpersonlist': {

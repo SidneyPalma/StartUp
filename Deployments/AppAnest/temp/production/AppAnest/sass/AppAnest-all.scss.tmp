@@ -1022,7 +1022,7 @@ $include-ext-view-table: true;
 $include-ext-view-tablelayout: true;
 $include-ext-view-view: true;
 $include-ext-window-messagebox: true;
-$include-ext-window-toast: false;
+$include-ext-window-toast: true;
 $include-ext-window-window: true;
 $include-extthemeneptune-component: true;
 $include-extthemeneptune-container-buttongroup: false;
@@ -1335,6 +1335,7 @@ $relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/resizer/Resizer';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/selection/CheckboxModel';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/tree/ViewDropZone';
+@import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/window/Toast';
 /* including package ext-theme-neptune */
 $ext-theme-neptune-resource-path: 'images' !default;
 $relative-image-path-for-uis: $ext-theme-neptune-resource-path;

@@ -78,6 +78,10 @@
     color: #ffffff !important;
 }
 
+.distribution-edit .x-grid-row-editor .x-form-display-field {
+    padding: 5px 7px 4px 0 !important;
+}
+
 .additivetable-edit .x-form-field {
     height: 30px;
     font-size: 14px;

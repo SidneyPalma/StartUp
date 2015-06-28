@@ -265,7 +265,8 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
         storeBank.removeAll();
         storePhone.removeAll();
 
-        view.down('tabpanel').setActiveTab(0);
+        view.down('tabpanel[name=navigation-items]').setActiveTab(0);
+        view.down('tabpanel[name=navigation]').setActiveTab(0);
         me.lookupReference('bank').setDisabled(true);
         me.lookupReference('phone').setDisabled(true);
         view.down('textfield[name=shortname]').focus(false, 200);

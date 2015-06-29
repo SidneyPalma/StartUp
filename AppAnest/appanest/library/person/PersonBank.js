@@ -54,13 +54,13 @@ Ext.define( 'AppAnest.person.PersonBank', {
                 }, {
                     anchor: '100%',
                     xtype: 'comboenum',
-                    fieldLabel: 'Banco',
-                    name: 'bankdescription'
+                    fieldLabel: 'Tipo de conta',
+                    name: 'accounttypedescription'
                 }, {
                     anchor: '100%',
                     xtype: 'comboenum',
-                    fieldLabel: 'Tipo de conta',
-                    name: 'accounttypedescription'
+                    fieldLabel: 'Banco',
+                    name: 'bankdescription'
                 }, {
                     anchor: '100%',
                     fieldLabel: 'Agência',

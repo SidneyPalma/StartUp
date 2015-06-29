@@ -53,6 +53,16 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                     xtype: 'hiddenfield'
                 }, {
                     anchor: '100%',
+                    xtype: 'comboenum',
+                    fieldLabel: 'Tipo de telefone',
+                    name: 'linetypedescription'
+                }, {
+                    anchor: '100%',
+                    xtype: 'comboenum',
+                    fieldLabel: 'Tipo de linha',
+                    name: 'phonetypedescription'
+                }, {
+                    anchor: '100%',
                     fieldLabel: 'DDD',
                     name: 'ddd',
                     plugins: 'textmask',
@@ -70,16 +80,6 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                     xtype: 'comboenum',
                     fieldLabel: 'Operadora',
                     name: 'phoneoperatordescription'
-                }, {
-                    anchor: '100%',
-                    xtype: 'comboenum',
-                    fieldLabel: 'Tipo de linha',
-                    name: 'phonetypedescription'
-                }, {
-                    anchor: '100%',
-                    xtype: 'comboenum',
-                    fieldLabel: 'Tipo de telefone',
-                    name: 'linetypedescription'
                 }, {
                     name: 'isdefault',
                     xtype: 'checkboxfield',
@@ -125,7 +125,8 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                             phonenumber = Smart.maskRenderer('99999-9999',false)(record.get('phonenumber')),
                             linetypedescription = record.get('linetypedescription'),
                             phonetypedescription = record.get('phonetypedescription'),
-                            phoneoperatordescription = record.get('phoneoperatordescription');
+                            phoneoperatordescription = record.get('phoneoperatordescription'),
+                            deletepersonphone = record.get('isdefault') ? '' : '<div onClick="Ext.deletepersonphone()" style="float: right; width: 30px; color: rgba(110, 123, 139, .5);"><span class="delete-item" style="font-size: 28px;"><i class="icon-cancel"></i></span></div>';
 
                         Ext.deletepersonphone = function () {
                             me.up('personphone').onDeletePhone(me, record);
@@ -133,7 +134,7 @@ Ext.define( 'AppAnest.person.PersonPhone', {
 
                         return  '<div style="float: left;"><a class="smart-medium-users-detail">('+ ddd +') '+ phonenumber + ' - ' + linetypedescription +'</a><br/>'+
                                 '<a class="smart-medium-users-detail">' + phoneoperator +' ' + phoneoperatordescription +' - ' + phonetypedescription +'</a></div>'+
-                                '<div onClick="Ext.deletepersonphone()" style="float: right; width: 30px; color: rgba(110, 123, 139, .5);"><span class="delete-item" style="font-size: 28px;"><i class="icon-cancel"></i></span></div>';
+                                deletepersonphone;
                     }
                 }, {
                     width: 70,
@@ -165,12 +166,9 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                     store.sync({
                         scope: me,
                         success: function (batch, options) {
-                            var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
                             gridpanel.setLoading(false);
-
                         },
                         failure: function (batch, options) {
-                            var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
                             gridpanel.setLoading(false);
                         }
                     });

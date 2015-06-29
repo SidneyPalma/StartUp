@@ -18,7 +18,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'shift';";
+            where et.name = 'shift'";
 
         $sqlWeekDay = "
             select
@@ -113,11 +113,10 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                             if(($shift == 'N') && (!in_array($weekday, $fixed))) {
                                 $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
                             }
-
                         }
-
                     }
                 }
+
                 $index++;
             }
 

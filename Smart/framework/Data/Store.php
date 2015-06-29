@@ -45,7 +45,6 @@ class Store {
     public function __construct(array $link, $model) {
         $this->model = new $model();
         $this->proxy = new Proxy($link);
-//        $this->proxy = new Proxy($link, array( \PDO::MYSQL_ATTR_INIT_COMMAND=>'SET CHARACTER SET utf8;', \PDO::MYSQL_ATTR_MAX_BUFFER_SIZE=>4194304 ) );
 
         $submit = new Submit($this->getRequest());
         $notate = $this->getAnnotations($this->model);

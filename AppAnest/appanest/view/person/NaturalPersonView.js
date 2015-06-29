@@ -188,9 +188,9 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 glyph: 0xe9eb,
                                                 title: 'Complemento',
                                                 xtype: 'tabpanel',
-                                                //name: 'navigation-items',
+                                                name: 'navigation-items',
                                                 deferredRender: false,
-//                                                ui: 'navigation',
+//                                                ui: 'navigation-items',
                                                 tabBar: {
                                                     layout: {
                                                         pack: 'center'

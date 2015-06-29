@@ -47,10 +47,6 @@ Ext.define( 'AppAnest.person.PersonAddress', {
                 }
             ]
         }, {
-            anchor: '100%',
-            fieldLabel: 'Complemento',
-            name: 'addresscomplement'
-        }, {
             xtype: 'container',
             layout: 'hbox',
             defaultType: 'textfield',
@@ -69,18 +65,17 @@ Ext.define( 'AppAnest.person.PersonAddress', {
                 }
             ]
         }, {
+            anchor: '100%',
+            xtype: 'textfield',
+            fieldLabel: 'Complemento',
+            name: 'addresscomplement'
+        }, {
             xtype: 'container',
             layout: 'hbox',
             defaultType: 'textfield',
             items: [
                 {
-                    flex: 4,
-                    fieldLabel: 'Complemento',
-                    name: 'addresscomplement'
-                }, {
-                    xtype: 'splitter'
-                }, {
-                    flex: 3,
+                    flex: 1,
                     fieldLabel: 'Cidade',
                     name: 'addresslocality'
                 }, {

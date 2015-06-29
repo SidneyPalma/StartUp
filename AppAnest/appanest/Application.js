@@ -22,6 +22,7 @@ Ext.define(	'AppAnest.Application', {
     launch: function () {
         window.location.hash = "#home";
         Ext.getBody().getById('loading').hide();
+        Ext.getBody().getById('buildapp').update('v'+window.SmartApp.optimal.modulebuild);
     }
 
 });

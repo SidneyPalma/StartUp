@@ -8,6 +8,26 @@ var Ext = Ext || {};
  * @class Ext.Boot
  * @singleton
  */
+/**
+ * Load version from Application
+ *
+ * @author Samuel Oliveira da Silva
+ */
+(function () {
+    var xmlhttp = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+    window.SmartApp = (window.SmartApp) ? window.SmartApp : {};
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            window.SmartApp.optimal = JSON.parse(xmlhttp.responseText);
+        }
+    }
+
+    xmlhttp.open("GET","business/Build.json",true);
+    xmlhttp.send();
+})();
+
 Ext.Boot = Ext.Boot || (function (emptyFn) {
 
     var doc = document,
@@ -995,6 +1015,13 @@ Ext.Boot = Ext.Boot || (function (emptyFn) {
             buster = +new Date();
         } else if(cache !== true) {
             buster = cache;
+        }
+
+        try {
+            buster = window.SmartApp.optimal.modulebuild;
+        }
+        catch(err) {
+            buster = buster;
         }
 
         if(buster) {

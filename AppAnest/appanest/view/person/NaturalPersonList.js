@@ -1,3 +1,4 @@
+
 //@charset ISO-8859-1
 Ext.define( 'AppAnest.view.person.NaturalPersonList', {
     extend: 'AppAnest.person.PersonList',

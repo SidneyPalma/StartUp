@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="AppAnestDev" type="JavascriptDebugType" factoryName="JavaScript Debug" uri="http://localhost/appanestdev/AppAnest">
+  <configuration default="false" name="AppAnestDev" type="JavascriptDebugType" factoryName="JavaScript Debug" uri="http://localhost:8080/appanestdev/AppAnest">
     <RunnerSettings RunnerId="JavascriptDebugRunner" />
     <ConfigurationWrapper RunnerId="JavascriptDebugRunner" />
     <method />

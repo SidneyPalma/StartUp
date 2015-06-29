@@ -190,7 +190,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 xtype: 'tabpanel',
                                                 //name: 'navigation-items',
                                                 deferredRender: false,
-                                                ui: 'navigation-items',
+//                                                ui: 'navigation',
                                                 tabBar: {
                                                     layout: {
                                                         pack: 'center'

@@ -445,8 +445,7 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 cls: 'distribution-edit',
                                                 store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
                                                 columnsRenderer: function (value,metaData,record) {
-                                                    var shift = record.get('shift');
-                                                    metaData.style = shift == "P" ? "text-align: center;" : "";
+                                                    metaData.style = ( record.get('shift') == "P" ) ? "text-align: center;" : "";
                                                     return value;
                                                 },
                                                 columns: [

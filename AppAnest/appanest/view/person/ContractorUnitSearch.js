@@ -17,9 +17,9 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     lazyRender: true,
     selectOnTab: true,
+    hideTrigger: true,
     enableKeyEvents: true,
 
-    hideTrigger: true,
     matchFieldWidth: false,
 
     listConfig: {

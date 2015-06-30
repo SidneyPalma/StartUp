@@ -60,10 +60,12 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
 
             $id = $rows["$weekday".'id'];
             $contractorunitid = $rows[$weekday];
+            $position = $rows["$weekday".'description'];
 
             $data['id'] = $id;
             $data['shift'] = $shift;
             $data['weekday'] = $weekday;
+            $data['position'] = $position;
             $data['naturalpersonid'] = $naturalpersonid;
             $data['contractorunitid'] = $contractorunitid;
 
@@ -90,6 +92,24 @@ class naturalpersondistribution extends \AppAnest\Setup\Setup {
 
             if (($shift == 'D')||(($shift == 'N') && (in_array($weekday, $fixed)))) {
                 if (strlen($contractorunitid) !== 0) {
+                    if ($update == true) {
+                        $results = $store->update();
+                    } else {
+                        $results = $store->insert();
+                    }
+                } else {
+                    if ($update == true) {
+                        $data = array();
+                        $data['id'] = $id;
+                        $store->getModel()->getSubmit()->setRow($data);
+                        $store->getModel()->setRecord();
+                        $results = $store->delete();
+                    }
+                }
+            }
+
+            if ($shift == 'P') {
+                if (strlen($position) !== 0) {
                     if ($update == true) {
                         $results = $store->update();
                     } else {

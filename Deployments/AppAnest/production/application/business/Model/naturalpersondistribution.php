@@ -39,6 +39,12 @@ class naturalpersondistribution extends \Smart\Data\Model {
     private $shift;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $position;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -115,6 +121,22 @@ class naturalpersondistribution extends \Smart\Data\Model {
      */
     public function setShift($shift) {
         $this->shift = $shift;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPosition() {
+        return $this->position;
+    }
+
+    /**
+     * @param type $position
+     * @return \AppAnest\Model\naturalpersondistribution
+     */
+    public function setPosition($position) {
+        $this->position = $position;
         return $this;
     }
 

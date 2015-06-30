@@ -444,6 +444,11 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                 hideHeaders: false,
                                                 cls: 'distribution-edit',
                                                 store: Ext.create('AppAnest.store.person.NaturalPersonDistribution'),
+                                                columnsRenderer: function (value,metaData,record) {
+                                                    var shift = record.get('shift');
+                                                    metaData.style = shift == "P" ? "text-align: center;" : "";
+                                                    return value;
+                                                },
                                                 columns: [
                                                     {
                                                         text: '<b style="color: #0016b0">Turnos</b>',

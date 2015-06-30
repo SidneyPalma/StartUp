@@ -6,6 +6,10 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     store: 'AppAnest.store.person.ContractorUnit',
 
+    config: {
+        shift: 'T'
+    },
+
     valueField: 'shortname',
     displayField: 'shortname',
 
@@ -13,6 +17,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     lazyRender: true,
     selectOnTab: true,
+    enableKeyEvents: true,
 
     hideTrigger: true,
     matchFieldWidth: false,
@@ -23,7 +28,18 @@ Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
 
     listeners: {
         select: 'selectContractorUnit',
-        change: 'changeContractorUnit'
+        change: 'changeContractorUnit',
+        beforequery: function ( queryPlan, eOpts ) {
+            var shift = queryPlan.combo.getShift();
+            queryPlan.cancel = ( shift == 'P' );
+        },
+        keypress: function(field, e) {
+            var shift = field.getShift(),
+                lists = [48,49,50,51,52,53,54,55,56,57];
+            if((shift == 'P')&&(lists.indexOf(e.getKey()) == -1)) {
+                e.stopEvent();
+            }
+        }
     }
 
 });

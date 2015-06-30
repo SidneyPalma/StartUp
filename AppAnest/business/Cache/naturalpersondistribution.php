@@ -18,7 +18,13 @@ class naturalpersondistribution extends \Smart\Data\Cache {
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'shift'";
+            where et.name = 'shift'
+
+            union all
+
+            select
+                'P' as shift,
+                'Posição' as shiftdescription";
 
         $sqlWeekDay = "
             select
@@ -35,7 +41,8 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.contractorunitid,
                 p.shortname as contractorunitdescription,
                 npd.shift,
-                npd.weekday
+                npd.weekday,
+                npd.position
             from
                 naturalpersondistribution npd
                 left join person p on ( p.id = npd.contractorunitid )
@@ -49,11 +56,23 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 null as contractorunitid,
                 null as contractorunitdescription,
                 etl.code as shift,
-                null as weekday
+                null as weekday,
+                null as position
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-            where et.name = 'shift'";
+            where et.name = 'shift'
+
+            union all
+
+            select
+                null as id,
+                :naturalpersonid as naturalpersonid,
+                null as contractorunitid,
+                null as contractorunitdescription,
+                'P' as shift,
+                null as weekday,
+                null as position";
 
         try {
             $pdo = $proxy->prepare($sqlDistribution);
@@ -100,6 +119,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                     foreach ($distributionRows as $recDistribution) {
                         $id = $recDistribution["id"];
                         $naturalpersonid = intval($query);
+                        $position = $recDistribution["position"];
                         $contractorunitid = $recDistribution["contractorunitid"];
                         $contractorunitdescription = $recDistribution["contractorunitdescription"];
 
@@ -112,6 +132,9 @@ class naturalpersondistribution extends \Smart\Data\Cache {
 
                             if(($shift == 'N') && (!in_array($weekday, $fixed))) {
                                 $rows[$index]["$weekday".'description'] = strlen($id) != 0 ? $shiftOn : $shiftOf;
+                            }
+                            if($shift == 'P') {
+                                $rows[$index]["$weekday".'description'] = $position;
                             }
                         }
                     }

@@ -24,6 +24,9 @@ Ext.define( 'AppAnest.model.person.NaturalPersonDistribution', {
             type: 'auto',
             critical: true
         }, {
+            name: 'position',
+            type: 'int'
+        }, {
             name: 'sun',
             type: 'int',
             critical: true

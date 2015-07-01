@@ -165,7 +165,7 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                         var me = this,
                             ddd = record.get('ddd'),
                             phoneoperator = record.get('phoneoperator'),
-                            phonenumber = Smart.maskRenderer('99999-9999',false)(record.get('phonenumber')),
+                            phonenumber = Smart.maskRenderer(record.get('mobiledigit'),false)(record.get('phonenumber')),
                             linetypedescription = record.get('linetypedescription'),
                             phonetypedescription = record.get('phonetypedescription'),
                             phoneoperatordescription = record.get('phoneoperatordescription'),

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml">
-    <data-source source="LOCAL" name="MySQL - @localhost" uuid="6fbb57f2-64d2-435e-8256-52a95ef834ac">
+    <data-source source="LOCAL" name="MySQL - optimal@localhost" uuid="6fbb57f2-64d2-435e-8256-52a95ef834ac">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/optimal</jdbc-url>
       <driver-properties>
         <property name="zeroDateTimeBehavior" value="convertToNull" />
         <property name="tinyInt1isBit" value="false" />

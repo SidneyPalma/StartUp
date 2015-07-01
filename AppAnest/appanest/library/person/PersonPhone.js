@@ -62,24 +62,67 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                     fieldLabel: 'Tipo de linha',
                     name: 'phonetypedescription'
                 }, {
+                    xtype: 'container',
+                    layout: 'hbox',
                     anchor: '100%',
-                    fieldLabel: 'DDD',
-                    name: 'ddd',
-                    plugins: 'textmask',
-                    money: false,
-                    mask: '999'
-                }, {
-                    anchor: '100%',
-                    fieldLabel: 'Telefone',
-                    name: 'phonenumber',
-                    plugins: 'textmask',
-                    money: false,
-                    mask: '99999-9999'
+                    defaultType: 'textfield',
+                    items: [
+                        {
+                            width: 50,
+                            fieldLabel: 'DDD',
+                            name: 'ddd',
+                            plugins: 'textmask',
+                            money: false,
+                            mask: '999',
+                            listeners: {
+                                blur: function (field, event, eOpts) {
+                                    var personphone = field.up('personphone'),
+                                        phonenumber = personphone.down('textfield[name=phonenumber]'),
+                                        linetype = personphone.down('hiddenfield[name=linetype]');
+
+                                    phonenumber.setMask('9999-9999');
+
+                                    if(linetype.getValue() == 'C') {
+                                        Ext.Ajax.request({
+                                            url: 'business/Class/enumtype.php',
+                                            params: {
+                                                query: field.getValue(),
+                                                action: 'select',
+                                                method: 'selectMobileDigit'
+                                            },
+                                            success: function(response){
+                                                var result = Ext.decode(response.responseText);
+                                                if(result.success == true && result.records != 0) {
+                                                    var record = result.rows[0];
+                                                    phonenumber.setMask(record.mobiledigit);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        }, {
+                            xtype: 'splitter'
+                        }, {
+                            flex: 1,
+                            fieldLabel: 'Telefone',
+                            name: 'phonenumber',
+                            plugins: 'textmask',
+                            money: false,
+                            mask: '9999-9999'
+                        }
+                    ]
                 }, {
                     anchor: '100%',
                     xtype: 'comboenum',
                     fieldLabel: 'Operadora',
                     name: 'phoneoperatordescription'
+                }, {
+                    anchor: '100%',
+                    height: 80,
+                    fieldLabel: 'Descrição',
+                    xytpe: 'textareafield',
+                    name: 'description'
                 }, {
                     name: 'isdefault',
                     xtype: 'checkboxfield',

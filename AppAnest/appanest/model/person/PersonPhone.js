@@ -11,6 +11,12 @@ Ext.define( 'AppAnest.model.person.PersonPhone', {
             name: 'personid',
             type: 'int'
         }, {
+            name: 'description',
+            type: 'auto'
+        }, {
+            name: 'mobiledigit',
+            type: 'auto'
+        }, {
             name: 'phonetype',
             type: 'auto'
         }, {

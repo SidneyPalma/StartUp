@@ -6,7 +6,7 @@ use Smart\Utils\Session;
 use Smart\Mail\PasswordForgot;
 use Smart\Mail\PasswordInvite;
 use Smart\Common\Traits as Traits;
-use AppAnest\Model\Users as Model;
+use AppAnest\Model\users as Model;
 
 class users extends \Smart\Data\Cache {
     use Traits\TuserHandler;

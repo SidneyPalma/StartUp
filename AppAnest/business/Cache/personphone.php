@@ -13,6 +13,7 @@ class personphone extends \Smart\Data\Cache {
         $sql = "
             SELECT
                 pp.*,
+                coalesce(getEnum('mobiledigit', pp.ddd),'9999-9999') as mobiledigit,
                 getEnum('phoneoperator', pp.phoneoperator) as phoneoperatordescription,
                 getEnum('phonetype', pp.phonetype) as phonetypedescription,
                 getEnum('linetype', pp.linetype) as linetypedescription

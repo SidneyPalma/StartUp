@@ -26,8 +26,32 @@ class enumtype extends \Smart\Data\Cache {
         try {
             $pdo = $proxy->prepare($sql);
 
-            $pdo->bindValue(":name", "$type", \PDO::PARAM_STR);
+            $pdo->bindValue(":name", $type, \PDO::PARAM_STR);
             $pdo->bindValue(":description", "$query%", \PDO::PARAM_STR);
+
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectMobileDigit(array $data) {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "select coalesce(getEnum('mobiledigit', :query),'9999-9999') as mobiledigit";
+
+        try {
+            $pdo = $proxy->prepare($sql);
+
+            $pdo->bindValue(":query", $query, \PDO::PARAM_STR);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();

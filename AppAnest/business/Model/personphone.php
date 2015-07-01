@@ -21,6 +21,12 @@ class personphone extends \Smart\Data\Model {
     private $personid;
 
     /**
+     * @Policy {"nullable":true, "length":65535}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $description;
+
+    /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true}
      */
@@ -45,16 +51,16 @@ class personphone extends \Smart\Data\Model {
     private $phonenumber;
 
     /**
-     * @Policy {"nullable":true}
-     * @Column {"description":"", "type":"boolean", "policy":true}
-     */
-    private $isdefault;
-
-    /**
      * @Policy {"nullable":false, "length":3}
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $phoneoperator;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"boolean", "policy":true}
+     */
+    private $isdefault;
 
     /**
      * @return type integer
@@ -85,6 +91,22 @@ class personphone extends \Smart\Data\Model {
      */
     public function setPersonid($personid) {
         $this->personid = $personid;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param type $description
+     * @return \AppAnest\Model\personphone
+     */
+    public function setDescription($description) {
+        $this->description = $description;
         return $this;
     }
 
@@ -153,22 +175,6 @@ class personphone extends \Smart\Data\Model {
     }
 
     /**
-     * @return type boolean
-     */
-    public function getIsdefault() {
-        return $this->isdefault;
-    }
-
-    /**
-     * @param type $isdefault
-     * @return \AppAnest\Model\personphone
-     */
-    public function setIsdefault($isdefault) {
-        $this->isdefault = $isdefault;
-        return $this;
-    }
-
-    /**
      * @return type string
      */
     public function getPhoneoperator() {
@@ -181,6 +187,22 @@ class personphone extends \Smart\Data\Model {
      */
     public function setPhoneoperator($phoneoperator) {
         $this->phoneoperator = $phoneoperator;
+        return $this;
+    }
+
+    /**
+     * @return type boolean
+     */
+    public function getIsdefault() {
+        return $this->isdefault;
+    }
+
+    /**
+     * @param type $isdefault
+     * @return \AppAnest\Model\personphone
+     */
+    public function setIsdefault($isdefault) {
+        $this->isdefault = $isdefault;
         return $this;
     }
 

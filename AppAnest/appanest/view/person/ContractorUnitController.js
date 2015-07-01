@@ -65,7 +65,12 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
 
     onSelectPhone: function (rowModel, record, index, eOpts ) {
         var me = this,
-            phoneForm = me.lookupReference('phoneForm');
+            linetype = record.get('linetype'),
+            mobiledigit = record.get('mobiledigit'),
+            phoneForm = me.lookupReference('phoneForm'),
+            phonenumber = phoneForm.down('textfield[name=phonenumber]');
+
+        phonenumber.setMask(mobiledigit);
 
         phoneForm.loadRecord(record);
     },
@@ -167,7 +172,7 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
         var me = this,
             phoneForm = me.lookupReference('phoneForm');
         phoneForm.reset();
-        phoneForm.down('textfield[name=ddd]').focus(false, 200);
+        phoneForm.down('comboenum[name=linetypedescription]').focus(false, 200);
         btn.up('personphone').down('gridpanel[name=phone]').getSelectionModel().deselectAll();
     },
 

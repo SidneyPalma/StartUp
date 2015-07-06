@@ -285,7 +285,6 @@ class users extends \Smart\Data\Cache {
         try {
 
             $rows = $proxy->query($sql)->fetchAll();
-//            $root = self::buildNode($rows);
             $root = self::buildTree($rows);
 
         } catch ( \PDOException $e ) {

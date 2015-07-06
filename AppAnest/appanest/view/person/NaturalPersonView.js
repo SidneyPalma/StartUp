@@ -534,7 +534,16 @@ Ext.define( 'AppAnest.view.person.NaturalPersonView', {
                                                     edit: 'onDistributionEdit',
                                                     beforeedit: 'onDistributionBeforeEdit',
                                                     celldblclick: 'onDistributionCellDblClick'
-                                                }
+                                                },
+                                                dockedItems: [
+                                                    {
+                                                        dock: 'bottom',
+                                                        xtype: 'button',
+                                                        handler: 'getDistribution',
+                                                        text: 'Obter planilha com distribuição',
+                                                        showSmartTheme: 'sky'
+                                                    }
+                                                ]
                                             }
                                         ]
                                     }

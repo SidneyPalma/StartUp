@@ -50,6 +50,10 @@ Ext.define(	'AppAnest.view.person.NaturalPersonController', {
 
     url: 'business/Class/naturalperson.php',
 
+    getDistribution: function () {
+        window.open('business/Class/naturalpersondistribution.php?action=select&method=getDistribution');
+    },
+
     selectContractorUnit: function(combo, record, eOpts) {
         var me = this,
             sm = me.getView().down('gridpanel[name=distribution]').getSelectionModel(),

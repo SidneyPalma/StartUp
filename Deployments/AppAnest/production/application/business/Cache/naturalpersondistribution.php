@@ -2,6 +2,12 @@
 
 namespace AppAnest\Cache;
 
+use PHPExcel_Cell;
+use PHPExcel_IOFactory;
+use PHPExcel_Reader_Excel2007;
+use PHPExcel_Reader_Excel2005;
+use PHPExcel_CachedObjectStorage_Memory;
+
 use AppAnest\Model\naturalpersondistribution as Model;
 
 class naturalpersondistribution extends \Smart\Data\Cache {
@@ -151,6 +157,80 @@ class naturalpersondistribution extends \Smart\Data\Cache {
         }
 
         return self::getResultToJson();
+    }
+
+    public function getDistribution() {
+        $proxy = $this->getStore()->getProxy();
+        $objPHPExcel = PHPExcel_IOFactory::load("../../resources/template/DistribuicaoContratoEscala.xlsx");
+
+        $sql = "
+            select
+                p.id,
+                lpad(np.registrationid,3,'0') as registration,
+                upper(p.shortname) as naturalperson,
+                npd.shift,
+                npd.weekday,
+                ctup.shortname as contractorunit,
+                case npd.shift
+                    when 'N' then ( select position from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
+                    else null
+                end as position
+            from
+                person p
+                inner join naturalperson np on ( np.id = p.id )
+                inner join naturalpersondistribution npd on ( npd.naturalpersonid = np.id and shift != 'P' )
+                left join contractorunit ctu on ( ctu.id = npd.contractorunitid )
+                left join person ctup on ( ctup.id = ctu.id )
+            -- where p.id in (300,301)
+            order by p.id, npd.shift";
+
+        $rows = $proxy->query($sql)->fetchAll();
+
+        $rows = self::encodeUTF8($rows);
+
+        $i = 4;
+        $distribution = array();
+        $weekdaysList = array('mon'=>'E','tue'=>'F','wed'=>'G','thu'=>'H','fri'=>'I','sat'=>'J','sun'=>'K');
+
+
+        while(list(, $row) = each($rows)) {
+            extract($row);
+            $distribution[$registration][$shift]['shift'] = $shift;
+            $distribution[$registration][$shift]['registration'] = $registration;
+            $distribution[$registration][$shift]['naturalperson'] = $naturalperson;
+            $distribution[$registration][$shift]['weekday'][$weekdaysList[$weekday]] = ($shift == 'D' ? $contractorunit : $position);
+        }
+
+        foreach ($distribution as $records => $fields) {
+            foreach ($fields as $key => $val) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue("B$i", $val['registration'])
+                    ->setCellValue("C$i", $val['naturalperson'])
+                    ->setCellValue("D$i", $val['shift'])
+                    ->setCellValue("E$i", isset($val['weekday']['E']) ? $val['weekday']['E'] : '')
+                    ->setCellValue("F$i", isset($val['weekday']['F']) ? $val['weekday']['F'] : '')
+                    ->setCellValue("G$i", isset($val['weekday']['G']) ? $val['weekday']['G'] : '')
+                    ->setCellValue("H$i", isset($val['weekday']['H']) ? $val['weekday']['H'] : '')
+                    ->setCellValue("I$i", isset($val['weekday']['I']) ? $val['weekday']['I'] : '')
+                    ->setCellValue("J$i", isset($val['weekday']['J']) ? $val['weekday']['J'] : '')
+                    ->setCellValue("K$i", isset($val['weekday']['K']) ? $val['weekday']['K'] : '');
+                $i++;
+            }
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle("Distribuicao");
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel5");
+
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment;filename=DistribuicaoContratoEscala.xls");
+        header("Cache-Control: max-age=0");
+        header("Cache-Control: max-age=1");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+        header("Cache-Control: cache, must-revalidate");
+        header("Pragma: public");
+
+        $objWriter->save("php://output");
     }
 
 }

@@ -181,8 +181,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 inner join naturalpersondistribution npd on ( npd.naturalpersonid = np.id and shift != 'P' )
                 left join contractorunit ctu on ( ctu.id = npd.contractorunitid )
                 left join person ctup on ( ctup.id = ctu.id )
-            -- where p.id in (300,301)
-            order by p.id, npd.shift";
+            order by np.registrationid, npd.shift";
 
         $rows = $proxy->query($sql)->fetchAll();
 

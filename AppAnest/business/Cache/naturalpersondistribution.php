@@ -172,7 +172,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.weekday,
                 ctup.shortname as contractorunit,
                 case npd.shift
-                    when 'N' then ( select position from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
+                    when 'N' then ( select concat('Posição: ',lpad(position,3,'0')) from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
                     else null
                 end as position
             from

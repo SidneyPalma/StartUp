@@ -172,7 +172,7 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.weekday,
                 ctup.shortname as contractorunit,
                 case npd.shift
-                    when 'N' then ( select position from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
+                    when 'N' then ( select concat('Posição: ',lpad(position,3,'0')) from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
                     else null
                 end as position
             from
@@ -183,21 +183,21 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 left join person ctup on ( ctup.id = ctu.id )
             order by np.registrationid, npd.shift";
 
-        $rows = $proxy->query($sql)->fetchAll();
-
-        $rows = self::encodeUTF8($rows);
+        $rows = self::encodeUTF8($proxy->query($sql)->fetchAll());
 
         $i = 4;
         $distribution = array();
         $weekdaysList = array('mon'=>'E','tue'=>'F','wed'=>'G','thu'=>'H','fri'=>'I','sat'=>'J','sun'=>'K');
 
-
         while(list(, $row) = each($rows)) {
             extract($row);
+
+            $weekdayValue = ($shift == 'D' ? $contractorunit : (in_array($weekday,array('sat','sun'),true) ? $contractorunit : $position));
+
             $distribution[$registration][$shift]['shift'] = $shift;
             $distribution[$registration][$shift]['registration'] = $registration;
             $distribution[$registration][$shift]['naturalperson'] = $naturalperson;
-            $distribution[$registration][$shift]['weekday'][$weekdaysList[$weekday]] = ($shift == 'D' ? $contractorunit : $position);
+            $distribution[$registration][$shift]['weekday'][$weekdaysList[$weekday]] = $weekdayValue;
         }
 
         foreach ($distribution as $records => $fields) {

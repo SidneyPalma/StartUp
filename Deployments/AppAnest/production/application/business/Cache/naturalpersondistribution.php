@@ -172,7 +172,23 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.weekday,
                 ctup.shortname as contractorunit,
                 case npd.shift
-                    when 'N' then ( select concat('Posição: ',lpad(position,3,'0')) from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
+                    when 'N' then (
+                        select
+                          case weekday
+                            when 'mon' then concat('SEG-N (',lpad(position,2,'0'),')')
+                            when 'tue' then concat('TER-N (',lpad(position,2,'0'),')')
+                            when 'wed' then concat('QUA-N (',lpad(position,2,'0'),')')
+                            when 'thu' then concat('QUI-N (',lpad(position,2,'0'),')')
+                            when 'fri' then concat('SEX-N (',lpad(position,2,'0'),')')
+                            when 'sat' then concat('SAB-N (',lpad(position,2,'0'),')')
+                            when 'sun' then concat('DOM-N (',lpad(position,2,'0'),')')
+                          end as weekdayportugues
+                        from
+                          naturalpersondistribution
+                        where weekday = npd.weekday
+                          and shift = 'P'
+                          and naturalpersonid = npd.naturalpersonid
+                    )
                     else null
                 end as position
             from
@@ -185,9 +201,9 @@ class naturalpersondistribution extends \Smart\Data\Cache {
 
         $rows = self::encodeUTF8($proxy->query($sql)->fetchAll());
 
-        $i = 4;
+        $i = 7;
         $distribution = array();
-        $weekdaysList = array('mon'=>'E','tue'=>'F','wed'=>'G','thu'=>'H','fri'=>'I','sat'=>'J','sun'=>'K');
+        $weekdaysList = array('mon'=>'D','tue'=>'E','wed'=>'F','thu'=>'G','fri'=>'H','sat'=>'I','sun'=>'J');
 
         while(list(, $row) = each($rows)) {
             extract($row);
@@ -203,16 +219,16 @@ class naturalpersondistribution extends \Smart\Data\Cache {
         foreach ($distribution as $records => $fields) {
             foreach ($fields as $key => $val) {
                 $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue("B$i", $val['registration'])
-                    ->setCellValue("C$i", $val['naturalperson'])
-                    ->setCellValue("D$i", $val['shift'])
+                    ->setCellValue("A$i", $val['registration'])
+                    ->setCellValue("B$i", $val['naturalperson'])
+                    ->setCellValue("C$i", $val['shift'])
+                    ->setCellValue("D$i", isset($val['weekday']['D']) ? $val['weekday']['D'] : '')
                     ->setCellValue("E$i", isset($val['weekday']['E']) ? $val['weekday']['E'] : '')
                     ->setCellValue("F$i", isset($val['weekday']['F']) ? $val['weekday']['F'] : '')
                     ->setCellValue("G$i", isset($val['weekday']['G']) ? $val['weekday']['G'] : '')
                     ->setCellValue("H$i", isset($val['weekday']['H']) ? $val['weekday']['H'] : '')
                     ->setCellValue("I$i", isset($val['weekday']['I']) ? $val['weekday']['I'] : '')
-                    ->setCellValue("J$i", isset($val['weekday']['J']) ? $val['weekday']['J'] : '')
-                    ->setCellValue("K$i", isset($val['weekday']['K']) ? $val['weekday']['K'] : '');
+                    ->setCellValue("J$i", isset($val['weekday']['J']) ? $val['weekday']['J'] : '');
                 $i++;
             }
         }

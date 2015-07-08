@@ -172,7 +172,23 @@ class naturalpersondistribution extends \Smart\Data\Cache {
                 npd.weekday,
                 ctup.shortname as contractorunit,
                 case npd.shift
-                    when 'N' then ( select concat('Posição: ',lpad(position,3,'0')) from naturalpersondistribution where weekday = npd.weekday and shift = 'P' and naturalpersonid = npd.naturalpersonid )
+                    when 'N' then (
+                        select
+                          case weekday
+                            when 'mon' then concat('SEG-N (',lpad(position,2,'0'),')')
+                            when 'tue' then concat('TER-N (',lpad(position,2,'0'),')')
+                            when 'wed' then concat('QUA-N (',lpad(position,2,'0'),')')
+                            when 'thu' then concat('QUI-N (',lpad(position,2,'0'),')')
+                            when 'fri' then concat('SEX-N (',lpad(position,2,'0'),')')
+                            when 'sat' then concat('SAB-N (',lpad(position,2,'0'),')')
+                            when 'sun' then concat('DOM-N (',lpad(position,2,'0'),')')
+                          end as weekdayportugues
+                        from
+                          naturalpersondistribution
+                        where weekday = npd.weekday
+                          and shift = 'P'
+                          and naturalpersonid = npd.naturalpersonid
+                    )
                     else null
                 end as position
             from

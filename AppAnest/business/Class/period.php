@@ -2,6 +2,6 @@
 
 require_once '../../vendor/autoload.php';
 
-$object = new \AppAnest\Coach\personphone();
+$object = new \AppAnest\Coach\period();
 
 echo $object->callAction();

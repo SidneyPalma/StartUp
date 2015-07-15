@@ -7,7 +7,18 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
     url: 'business/Class/additiveshift.php',
 
-    setProcessMap: function (btn) {
+    onItemDblClick: function (view, record, item, index, e, eOpts) {
+        var me = this,
+            view = me.getView(),
+            positioncute = view.down('numberfield[name=positioncute]');
+
+        positioncute.setValue(record.get('position'));
+
+        me.setProcessMap();
+
+    },
+
+    setProcessMap: function () {
         var me = this,
             view = me.getView(),
             fm = view.down('form'),
@@ -35,12 +46,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
                             dataIndex: 'week'  + Ext.String.leftPad(i, 2, '0'),
                             width: 30,
                             renderer: function (value, meta, rec, rowIndex) {
-                                var positioncute = param.positioncute;
-
-                                metaStyle = "font-size: 14px; line-height: 18px;";
-
-                                meta.style = (parseInt(rowIndex) == parseInt(positioncute)) ? 'background-color: rgb(248, 202, 0)' : '';
-
+                                meta.style = (parseInt(rowIndex) == parseInt(param.positioncute)) ? 'background-color: rgb(248, 202, 0)' : '';
                                 return value;
                             }
                         });
@@ -58,13 +64,11 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
                         align: 'center',
                         columns: [
                             {
-                                locked: true,
                                 text: '##',
                                 align: 'center',
                                 dataIndex: 'position',
                                 width: 40
                             }, {
-                                locked: true,
                                 align: 'left',
                                 text: 'Unidade',
                                 dataIndex: 'contractorunit',
@@ -117,8 +121,11 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
     onSelectWeekDay: function ( combo, record, eOpts ) {
         var me = this,
             view = me.getView(),
+            panel = me.lookupReference('contractorunitmap'),
             positioncute = view.down('numberfield[name=positioncute]'),
             store = me.lookupReference('contractorunitlist').getStore();
+
+        panel.getStore().removeAll();
 
         store.setParams({
             action: 'select',

@@ -74,6 +74,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                             {
                                 region: 'north',
                                 xtype: 'form',
+                                title: 'Unidades mapeadas',
                                 bodyStyle: 'padding-bottom: 10px;',
                                 name: 'periodparams',
                                 layout: 'anchor',
@@ -131,7 +132,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                     }
                                 ]
                             }, {
-                                title: 'Unidades mapeadas',
+                                //title: 'Unidades mapeadas',
                                 region: 'center',
                                 xtype: 'gridpanel',
                                 rowLines: false,
@@ -198,7 +199,10 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         showSmartTheme: 'red-dark',
                                         handler: 'setProcessMap'
                                     }
-                                ]
+                                ],
+                                listeners: {
+                                    itemdblclick: 'onItemDblClick'
+                                }
                             }
                         ]
                     }, {
@@ -212,7 +216,12 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                         hideHeaders: false,
                         rowLines: false,
                         columnLines: true,
+                        //enableLocking: true,
                         store: storeMap,
+                        viewConfig: {
+                            loadMask: false,
+                            loadingText: undefined
+                        },
                         columns: [],
                         buttons: [
                             {

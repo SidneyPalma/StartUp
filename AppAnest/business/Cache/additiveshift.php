@@ -90,6 +90,9 @@ class additiveshift extends \Smart\Data\Cache {
             $turningHorizontal[] = $fields;
         }
 
+        unset($crsContractorUnit);
+        unset($tmpTurningMonthly);
+
         self::_setRows($turningHorizontal);
 
         return self::getResultToJson();

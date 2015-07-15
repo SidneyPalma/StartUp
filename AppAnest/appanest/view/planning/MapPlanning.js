@@ -213,7 +213,15 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                         rowLines: false,
                         columnLines: true,
                         store: storeMap,
-                        columns: []
+                        columns: [],
+                        buttons: [
+                            {
+                                glyph: 0xe86c,
+                                scale: 'medium',
+                                text: 'Salvar Planejamento',
+                                showSmartTheme: 'green'
+                            }
+                        ]
                     }
                 ]
             }

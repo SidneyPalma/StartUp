@@ -6,6 +6,8 @@ Ext.define( 'AppAnest.view.period.PeriodSearch', {
 
     pageSize: 0,
 
+    fieldLabel: 'Periodo',
+
     requires: [
         'AppAnest.store.scheduling.SchedulingPeriod',
     ],
@@ -19,7 +21,7 @@ Ext.define( 'AppAnest.view.period.PeriodSearch', {
         '<tpl style:"font-size: 14px;" for=".">',
             '<div class="x-boundlist-item">' +
                 '<span style="font-size: 17px; color:#3333FF; display: block;">{description}</span>' +
-                '<span style="font-size: 17px; color:#3333FF; display: block;">{periodof} - {periodto}</span>' +
+                '<span style="font-size: 14px; color:#990000; display: block;">{periodof} - {periodto}</span>' +
             '</div>',
         '</tpl>'
     ],
@@ -27,7 +29,7 @@ Ext.define( 'AppAnest.view.period.PeriodSearch', {
     // template for the content displayField
     displayTpl: [
         '<tpl for=".">',
-        '{description}',
+            '{periodof} - {periodto}',
         '</tpl>'
     ]
 

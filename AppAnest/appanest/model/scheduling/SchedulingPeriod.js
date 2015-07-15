@@ -16,10 +16,16 @@ Ext.define( 'AppAnest.model.scheduling.SchedulingPeriod', {
             type: 'int'
         }, {
             name: 'periodof',
-            type: 'auto'
+            type: 'auto',
+            convert: function (value, record) {
+                return Ext.util.Format.date(Ext.Date.parse(value,"Y-m-d"),'d/m/Y');
+            }
         }, {
             name: 'periodto',
-            type: 'auto'
+            type: 'auto',
+            convert: function (value, record) {
+                return Ext.util.Format.date(Ext.Date.parse(value,"Y-m-d"),'d/m/Y');
+            }
         }, {
             name: 'status',
             type: 'auto'

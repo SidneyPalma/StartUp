@@ -141,7 +141,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                 columnsRenderer: function (value, meta, rec) {
                                     var positioncute = rec.get('positioncute'),
                                         metaStyle = "font-size: 14px; line-height: 18px;";
-                                    meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
+                                    meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
                                     return value;
                                 },
                                 columns: [
@@ -150,7 +150,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         dataIndex: 'positioncute',
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute');
-                                            meta.style = positioncute ? 'background-color: rgb(248, 202, 0)' : '';
+                                            meta.style = positioncute ? 'background-color: rgba(199, 200, 34, 0.2)' : '';
                                             return value != 0 ? '<span style="color: rgb(153, 0, 0); width: 20px; font-size: 18px;"><i class="icon-right-big"></i></span>' : '';
                                         }
                                     }, {
@@ -161,7 +161,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute'),
                                                 metaStyle = "font-size: 14px; line-height: 18px;";
-                                            meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
+                                            meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
                                             return Ext.String.leftPad(value, 2, '0');
                                         }
                                     }, {
@@ -177,7 +177,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute'),
                                                 metaStyle = "font-size: 14px; line-height: 18px;";
-                                            meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
+                                            meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
                                             return  '...' + value;
                                         },
                                         summaryRenderer: function(value, summaryData, dataIndex) {
@@ -216,7 +216,6 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                         hideHeaders: false,
                         rowLines: false,
                         columnLines: true,
-                        //enableLocking: true,
                         store: storeMap,
                         viewConfig: {
                             loadMask: false,

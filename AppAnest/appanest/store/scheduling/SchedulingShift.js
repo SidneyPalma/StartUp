@@ -20,6 +20,9 @@ Ext.define( 'AppAnest.store.scheduling.SchedulingShift', {
         }, {
             name: 'position',
             type: 'auto'
+        }, {
+            name: 'positioncute',
+            type: 'int'
         }
     ]
 

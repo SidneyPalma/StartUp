@@ -46,7 +46,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
                             dataIndex: 'week'  + Ext.String.leftPad(i, 2, '0'),
                             width: 30,
                             renderer: function (value, meta, rec, rowIndex) {
-                                meta.style = (parseInt(rowIndex) == parseInt(param.positioncute)) ? 'background-color: rgb(248, 202, 0)' : '';
+                                meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : '';
                                 return value;
                             }
                         });
@@ -59,23 +59,25 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
                 panel.reconfigure(store, [
                     {
-                        locked: true,
-                        text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
-                        align: 'center',
-                        columns: [
-                            {
-                                text: '##',
-                                align: 'center',
-                                dataIndex: 'position',
-                                width: 40
-                            }, {
-                                align: 'left',
-                                text: 'Unidade',
-                                dataIndex: 'contractorunit',
-                                width: 120
-                            }
-                        ]
-                    }, {
+                        //flex: 1,
+                        //text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
+                        //align: 'left',
+                        //dataIndex: 'contractorunit',
+                        //minWidth: 160
+                        //columns: [
+                        //    {
+                        //        text: '##',
+                        //        align: 'center',
+                        //        dataIndex: 'position',
+                        //        width: 40
+                        //    }, {
+                        //        align: 'left',
+                        //        text: 'Unidade',
+                        //        dataIndex: 'contractorunit',
+                        //        width: 120
+                        //    }
+                        //]
+                    //}, {
                         align: 'center',
                         text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'S E M A N A S' + '</a>',
                         columns: getFields()

@@ -27,6 +27,28 @@ trait TresultSet {
         'records'=>0 );
 
     /**
+     * Pesquisa recursiva em um multidimensional array in key=>value
+     *
+     * @return array Contém a estrutura de retorno
+     * @author http://stackoverflow.com/questions/1019076/how-to-search-by-key-value-in-a-multidimensional-array-in-php
+     */
+    public static function searchArray (array $array, $key, $value) {
+        $results = array();
+
+        if (is_array($array)) {
+            if (isset($array[$key]) && $array[$key] == $value) {
+                $results[] = $array;
+            }
+
+            foreach ($array as $subarray) {
+                $results = array_merge($results, self::searchArray($subarray, $key, $value));
+            }
+        }
+
+        return $results;
+    }
+
+    /**
      * Estrutura de Retorno self::$result
      * 
      * @return json Contém a estrutura de retorno

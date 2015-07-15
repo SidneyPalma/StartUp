@@ -46,6 +46,18 @@ class additiveshift extends \Smart\Data\Cache {
             }
         }
 
+        $finded = false;
+
+        // realinhar posição de corte
+        $rownumber = 1;
+        foreach ($crsContractorUnit as $record) {
+            if ( (intval($record["position"]) == intval($i_cutecost)) && ($finded == false) ) {
+                $finded = true;
+                $i_cutecost = $rownumber;
+            }
+            $rownumber++;
+        }
+
         $week = 1;
 
         $id = 0;
@@ -64,6 +76,7 @@ class additiveshift extends \Smart\Data\Cache {
 
                 $tmpTurningMonthly[$loopnumber]["id"] = $id;
                 $tmpTurningMonthly[$loopnumber]["position"] = str_pad($position,2,"0",STR_PAD_LEFT);
+                $tmpTurningMonthly[$loopnumber]["positioncute"] = $i_cutecost;
                 $tmpTurningMonthly[$loopnumber]["contractorunit"] = $contractorunit;
                 $tmpTurningMonthly[$loopnumber]["contractorunitid"] = $contractorunitid;
                 $tmpTurningMonthly[$loopnumber]["week" . str_pad($week,2,"0",STR_PAD_LEFT)] = $i_position;

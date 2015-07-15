@@ -50,6 +50,7 @@ $include-appanest-store-person-naturalpersonphone: true;
 $include-appanest-store-person-personbank: true;
 $include-appanest-store-person-personphone: true;
 $include-appanest-store-scheduling-schedulingperiod: true;
+$include-appanest-store-scheduling-schedulingshift: true;
 $include-appanest-store-scheduling-schedulingshiftmap: true;
 $include-appanest-store-shifttype-shifttype: true;
 $include-appanest-store-users-users: true;

@@ -4,6 +4,108 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
     alias: 'controller.mapplanning',
 
+
+    url: 'business/Class/additiveshift.php',
+
+    setProcessMap: function (btn) {
+        var me = this,
+            view = me.getView(),
+            fm = view.down('form'),
+            param = fm.getValues(),
+            panel = me.lookupReference('contractorunitmap'),
+            store = panel.getStore(),
+            storeList = me.lookupReference('contractorunitlist').getStore();
+
+        param.action = 'select';
+        param.method = 'selectChart';
+
+        view.setLoading('Processando ...');
+
+        store.setParams(param).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                var getFields = function () {
+                    var fields = [], i,
+                        dutyamount = storeList.sum('dutyamount');
+
+                    for (i = 1; i <= dutyamount; i++) {
+                        fields.push({
+                            text: i,
+                            align: 'center',
+                            dataIndex: 'week'  + Ext.String.leftPad(i, 2, '0'),
+                            width: 30,
+                            renderer: function (value, meta, rec, rowIndex) {
+                                var positioncute = param.positioncute;
+
+                                metaStyle = "font-size: 14px; line-height: 18px;";
+
+                                meta.style = (parseInt(rowIndex) == parseInt(positioncute)) ? 'background-color: rgb(248, 202, 0)' : '';
+
+                                return value;
+                            }
+                        });
+                    }
+
+                    return fields;
+                };
+
+                view.setLoading(false);
+
+                panel.reconfigure(store, [
+                    {
+                        locked: true,
+                        text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
+                        align: 'center',
+                        columns: [
+                            {
+                                locked: true,
+                                text: '##',
+                                align: 'center',
+                                dataIndex: 'position',
+                                width: 40
+                            }, {
+                                locked: true,
+                                align: 'left',
+                                text: 'Unidade',
+                                dataIndex: 'contractorunit',
+                                width: 120
+                            }
+                        ]
+                    }, {
+                        align: 'center',
+                        text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'S E M A N A S' + '</a>',
+                        columns: getFields()
+                    //}, {
+                    //    flex: 1,
+                    //    align: 'center',
+                    //    text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + '###' + '</a>'
+                    }
+                ]);
+
+                panel.updateLayout();
+            }
+        });
+
+        //view.setLoading('Processando ...');
+        //
+        //fm.submit({
+        //    scope: me,
+        //    url: me.url,
+        //    params:  {
+        //        action: 'select',
+        //        method: 'selectChart'
+        //    },
+        //    clientValidation: true,
+        //    submitEmptyText: false,
+        //    success: function(form, action) {
+        //        view.setLoading(false);
+        //    },
+        //    failure: function(form, action) {
+        //        view.setLoading(false);
+        //    }
+        //});
+    },
+
     onFilterWeekDay: function ( queryPlan, eOpts ) {
         var combo = queryPlan.combo,
             store = combo.store;

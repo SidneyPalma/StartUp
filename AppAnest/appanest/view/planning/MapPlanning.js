@@ -28,23 +28,34 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
     },
 
     buildItems: function () {
-        var me = this;
+        var me = this,
+            storeMap = Ext.create('AppAnest.store.scheduling.SchedulingShift', {
+
+                constructor: function () {
+                    var me = this, i;
+
+                    for (i = 1; i < 100; i++) {
+                        me.fields.push('week'  + Ext.String.leftPad(i, 2, '0'));
+                    }
+
+                    me.callParent();
+                }
+            });
 
         me.items = [
             {
                 frame: true,
                 xtype: 'panel',
 
-                glyph: 0xe93d,
+                glyph: 0xe9d7,
 
-                bodyStyle: 'padding: 10px 10px 10px 10px;',
+                padding: 10,
 
                 layout: {
-                    type: 'hbox',
-                    align: 'stretch'
+                    type: 'border'
                 },
                 header: {
-                    title: 'Gerar Mapa',
+                    title: 'MAPA - Giro Horizontal',
                     items: [
                         {
                             xtype: 'button',
@@ -71,14 +82,8 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                 },
                                 items: [
                                     {
-                                    //    useMondaFont: true,
-                                    //    xtype: 'periodsearch',
-                                    //    fieldStyle: {
-                                    //        color: 'blue;',
-                                    //        fontSize: '16px;'
-                                    //    }
-                                    //}, {
                                         useMondaFont: true,
+                                        submitValue: true,
                                         xtype: 'comboenum',
                                         name: 'weekdaydescription',
                                         fieldLabel: 'Dia da Semana',
@@ -112,12 +117,14 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                             }, {
                                                 flex: 1,
                                                 value: 14,
+                                                name: 'frequency',
                                                 fieldLabel: 'Frequencia'
                                             }, {
                                                 xtype: 'splitter'
                                             }, {
                                                 flex: 1,
                                                 value: 1,
+                                                name: 'positionstart',
                                                 fieldLabel: 'Semana'
                                             }
                                         ]
@@ -181,14 +188,32 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                     {
                                         ftype: 'summary'
                                     }
+                                ],
+                                buttonAlign: 'center',
+                                buttons: [
+                                    {
+                                        glyph: 0xe9d7,
+                                        scale: 'medium',
+                                        text: 'Processar Mapa',
+                                        showSmartTheme: 'red-dark',
+                                        handler: 'setProcessMap'
+                                    }
                                 ]
-                                //listeners: {
-                                //    render: 'onRenderGridUnit'
-                                //}
                             }
                         ]
                     }, {
-                        region: 'center'
+                        width: 30,
+                        region: 'west'
+                    }, {
+                        region: 'center',
+                        xtype: 'gridpanel',
+                        title: 'Mapeamento de Plantões Noturnos',
+                        reference: 'contractorunitmap',
+                        hideHeaders: false,
+                        rowLines: false,
+                        columnLines: true,
+                        store: storeMap,
+                        columns: []
                     }
                 ]
             }

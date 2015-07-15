@@ -7,8 +7,92 @@ use AppAnest\Model\additiveshift as Model;
 class additiveshift extends \Smart\Data\Cache {
 
     public function selectChart(array $data) {
+        $weekday = "amount" . $data["weekdaydescription"];
+        $i_cutecost = $data["positioncute"];
+        $crsContractorUnit = array();
+        $tmpTurningMonthly = array();
+        $turningHorizontal = array();
+
         $proxy = $this->getStore()->getProxy();
 
+        $sql = "
+            select
+                cu.position,
+                cu.id as contractorunitid,
+                p.shortname as contractorunit,
+                sum(coalesce(ads.$weekday,0)) as dutyamount
+            from
+                contractorunit cu
+                left join person p on ( p.id = cu.id )
+                inner join contractorsubunit csu on ( csu.contractorunitid = cu.id )
+                inner join additiveshift ads on ( ads.contractorsubunitid = csu.id )
+                inner join shifttype st on ( st.id = ads.shifttypeid and st.shift = 'N' )
+            where coalesce(cu.position,0) != 0
+            group by
+                cu.id,
+                p.shortname,
+                cu.position
+            order by cu.position";
+
+        $rows = self::encodeUTF8($proxy->query($sql)->fetchAll());
+
+        // Construindo a Lista de Unidades
+        foreach ($rows as $record) {
+            $rownumber = 1;
+            $dutyamount = $record["dutyamount"];
+            while ($rownumber <= $dutyamount) {
+                $crsContractorUnit[] = $record;
+                $rownumber++;
+            }
+        }
+
+        $week = 1;
+
+        $id = 0;
+        $i_position = 1;
+        $loopnumber = 1;
+        $weeknumber = count($crsContractorUnit);
+
+        // para cada Coluna = $week
+        while ($week <= $weeknumber) {
+
+            // obtem as unidades
+            foreach ($crsContractorUnit as $record) {
+                $position = intval($record["position"]);
+                $contractorunit = $record["contractorunit"];
+                $contractorunitid = intval($record["contractorunitid"]);
+
+                $tmpTurningMonthly[$loopnumber]["id"] = $id;
+                $tmpTurningMonthly[$loopnumber]["position"] = $position;
+                $tmpTurningMonthly[$loopnumber]["contractorunit"] = $contractorunit;
+                $tmpTurningMonthly[$loopnumber]["contractorunitid"] = $contractorunitid;
+                $tmpTurningMonthly[$loopnumber]["week" . str_pad($week,2,"0",STR_PAD_LEFT)] = $i_position;
+
+                $id++;
+                $loopnumber++;
+                $i_position++;
+
+                if($i_position > $weeknumber)  {
+                    $i_position = 1;
+                }
+            }
+
+            $week++;
+
+            if ($week != 1) {
+                $i_position = $tmpTurningMonthly[intval($i_cutecost)]["week" . str_pad($week-1,2,"0",STR_PAD_LEFT)];
+            }
+
+            $loopnumber = 1;
+        }
+
+        foreach ($tmpTurningMonthly as $record=>$fields) {
+            $turningHorizontal[] = $fields;
+        }
+
+        self::_setRows($turningHorizontal);
+
+        return self::getResultToJson();
 
     }
 

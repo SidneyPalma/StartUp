@@ -25,8 +25,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
         }).load({
             scope: me,
             callback: function(records, operation, success) {
-                var weekday = "mon,tue,wed,thu,fri",
-                    recNew = store.findRecord('position',positioncute.getValue());
+                var recNew = store.findRecord('position',positioncute.getValue());
                 recNew.set('positioncute',1);
                 recNew.commit();
                 positioncute.setMaxValue(store.getCount());

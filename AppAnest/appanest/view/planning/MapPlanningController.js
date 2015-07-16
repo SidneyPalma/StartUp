@@ -46,7 +46,10 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
                             dataIndex: 'week'  + Ext.String.leftPad(i, 2, '0'),
                             width: 30,
                             renderer: function (value, meta, rec, rowIndex) {
-                                meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : '';
+                                var color = parseInt(rec.get('position')) % 2 == 0;
+                                meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+
+                                meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
                                 return value;
                             }
                         });
@@ -59,32 +62,39 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
                 panel.reconfigure(store, [
                     {
-                        //flex: 1,
-                        //text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
-                        //align: 'left',
-                        //dataIndex: 'contractorunit',
-                        //minWidth: 160
-                        //columns: [
-                        //    {
-                        //        text: '##',
-                        //        align: 'center',
-                        //        dataIndex: 'position',
-                        //        width: 40
-                        //    }, {
-                        //        align: 'left',
-                        //        text: 'Unidade',
-                        //        dataIndex: 'contractorunit',
-                        //        width: 120
-                        //    }
-                        //]
-                    //}, {
+                        text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
+                        align: 'center',
+                        columns: [
+                            {
+                                text: '##',
+                                align: 'center',
+                                dataIndex: 'position',
+                                width: 40,
+                                renderer: function (value, meta, rec, rowIndex) {
+                                    var color = parseInt(rec.get('position')) % 2 == 0;
+                                    meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+
+                                    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
+                                    return value;
+                                }
+                            }, {
+                                align: 'left',
+                                text: 'Unidade',
+                                dataIndex: 'contractorunit',
+                                width: 120,
+                                renderer: function (value, meta, rec, rowIndex) {
+                                    var color = parseInt(rec.get('position')) % 2 == 0;
+                                    meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+
+                                    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
+                                    return value;
+                                }
+                            }
+                        ]
+                    }, {
                         align: 'center',
                         text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'S E M A N A S' + '</a>',
                         columns: getFields()
-                    //}, {
-                    //    flex: 1,
-                    //    align: 'center',
-                    //    text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + '###' + '</a>'
                     }
                 ]);
 
@@ -92,24 +102,6 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
             }
         });
 
-        //view.setLoading('Processando ...');
-        //
-        //fm.submit({
-        //    scope: me,
-        //    url: me.url,
-        //    params:  {
-        //        action: 'select',
-        //        method: 'selectChart'
-        //    },
-        //    clientValidation: true,
-        //    submitEmptyText: false,
-        //    success: function(form, action) {
-        //        view.setLoading(false);
-        //    },
-        //    failure: function(form, action) {
-        //        view.setLoading(false);
-        //    }
-        //});
     },
 
     onFilterWeekDay: function ( queryPlan, eOpts ) {

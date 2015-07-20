@@ -21,7 +21,7 @@ class enumtype extends \Smart\Data\Cache {
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
             where et.name = :name
               and etl.description LIKE :description
-            order by etl.description";
+            order by etl.orderby, etl.description";
 
         try {
             $pdo = $proxy->prepare($sql);

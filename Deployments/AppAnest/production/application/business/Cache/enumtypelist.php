@@ -17,7 +17,8 @@ class enumtypelist extends \Smart\Data\Cache {
                 etl.*
             FROM
                 enumtypelist etl
-            WHERE etl.enumtypeid = :enumtypeid";
+            WHERE etl.enumtypeid = :enumtypeid
+            ORDER BY orderby";
 
         try {
             $pdo = $proxy->prepare($sql);

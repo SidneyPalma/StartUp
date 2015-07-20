@@ -6,6 +6,44 @@ use AppAnest\Model\contractorunit as Model;
 
 class contractorunit extends \Smart\Data\Cache {
 
+    public function selectList(array $data) {
+        $weekday = 'amount' . $data['weekday'];
+
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            select
+                cu.id,
+                cu.id as contractorunitid,
+                p.shortname as contractorunit,
+                cu.position,
+                sum(coalesce(ads.$weekday,0)) as dutyamount
+            from
+                contractorunit cu
+                left join person p on ( p.id = cu.id )
+                inner join contractorsubunit csu on ( csu.contractorunitid = cu.id )
+                inner join additiveshift ads on ( ads.contractorsubunitid = csu.id )
+                inner join shifttype st on ( st.id = ads.shifttypeid and st.shift = 'N' )
+            where coalesce(cu.position,0) != 0
+            group by
+                cu.id,
+                p.shortname,
+                cu.position
+            order by cu.position";
+
+        try {
+            $rows = $proxy->query($sql)->fetchAll();
+
+            self::_setRows($rows);
+
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $p = $f = array();
         $query = $data['query'];

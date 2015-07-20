@@ -226,6 +226,10 @@
     background: rgba(0, 123, 0, 1);
 }
 
+.icon-move-hover:hover {
+    color: rgba(3, 98, 253, 1);
+}
+
 .additive-status-a {
     background: rgba(3, 98, 253, .6);
 }

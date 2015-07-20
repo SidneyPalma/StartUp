@@ -30,7 +30,7 @@ Ext.define( 'Smart.form.field.ComboEnum', {
         me.params.method = 'selectEnum';
         me.params.type = hiddenNameId;
         me.hiddenNameId = hiddenNameId;
-        me.fieldLabel = me.fieldLabel || me.name;
+        //me.fieldLabel = me.fieldLabel || me.name;
         me.valueField = me.valueField || hiddenNameId;
         me.displayField = me.displayField || me.name;
         me.fields.push(me.valueField,me.displayField);

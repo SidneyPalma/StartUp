@@ -74,12 +74,15 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                             {
                                 region: 'north',
                                 xtype: 'form',
-                                title: 'Unidades mapeadas',
-                                bodyStyle: 'padding-bottom: 10px;',
+                                title: 'Unidades Mapeadas',
+                                //bodyStyle: 'padding-bottom: 5px;',
                                 name: 'periodparams',
                                 layout: 'anchor',
                                 defaults: {
                                     anchor: '100%'
+                                },
+                                style: {
+                                    borderBottom: 'solid 1px #cecece'
                                 },
                                 items: [
                                     {
@@ -126,22 +129,27 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                                 flex: 1,
                                                 value: 1,
                                                 name: 'positionstart',
-                                                fieldLabel: 'Semana'
+                                                fieldLabel: 'Posição'
                                             }
                                         ]
+                                    }, {
+                                        checked: true,
+                                        xtype: 'checkboxfield',
+                                        name: 'highlight',
+                                        boxLabel: 'Destacar resultados obtidos'
                                     }
                                 ]
                             }, {
-                                //title: 'Unidades mapeadas',
                                 region: 'center',
                                 xtype: 'gridpanel',
                                 rowLines: false,
+                                cls: 'grid-row-span',
                                 reference: 'contractorunitlist',
                                 store: Ext.create('AppAnest.store.scheduling.SchedulingShiftMap', { pageSize: 0 }),
                                 columnsRenderer: function (value, meta, rec) {
                                     var positioncute = rec.get('positioncute'),
                                         metaStyle = "font-size: 14px; line-height: 18px;";
-                                    meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
+                                    meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
                                     return value;
                                 },
                                 columns: [
@@ -150,8 +158,8 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         dataIndex: 'positioncute',
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute');
-                                            meta.style = positioncute ? 'background-color: rgba(199, 200, 34, 0.2)' : '';
-                                            return value != 0 ? '<span style="color: rgb(153, 0, 0); width: 20px; font-size: 18px;"><i class="icon-right-big"></i></span>' : '';
+                                            meta.style = positioncute ? 'background-color: rgb(248, 202, 0)' : '';
+                                            return value != 0 ? '<span style="color: rgb(153, 0, 0); font-size: 18px;"><i class="icon-right-big"></i></span>' : '';
                                         }
                                     }, {
                                         width: 40,
@@ -161,7 +169,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute'),
                                                 metaStyle = "font-size: 14px; line-height: 18px;";
-                                            meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
+                                            meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
                                             return Ext.String.leftPad(value, 2, '0');
                                         }
                                     }, {
@@ -170,6 +178,18 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         dataIndex: 'contractorunit'
                                     }, {
                                         width: 60,
+                                        align: 'center',
+                                        renderer: function (value, meta, rec) {
+                                            var positioncute = rec.get('positioncute'),
+                                                metaStyle = "font-size: 14px; line-height: 18px;";
+                                            meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
+                                            return  '<div style="color: rgba(105, 210, 231, .5); font-size: 18px;">' +
+                                                        '<div class="icon-move-hover" style="float: left; width: 20px; cursor: pointer;"><i class="icon-up-big"></i></div>' +
+                                                        '<div class="icon-move-hover" style="float: right; width: 20px; cursor: pointer;"><i class="icon-down-big"></i></div>' +
+                                                    '</div>';
+                                        }
+                                    }, {
+                                        width: 40,
                                         text: 'Plantoes',
                                         align: 'right',
                                         dataIndex: 'dutyamount',
@@ -177,7 +197,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         renderer: function (value, meta, rec) {
                                             var positioncute = rec.get('positioncute'),
                                                 metaStyle = "font-size: 14px; line-height: 18px;";
-                                            meta.style = positioncute ? metaStyle + ' background-color: rgba(199, 200, 34, 0.2)' : metaStyle;
+                                            meta.style = positioncute ? metaStyle + ' background-color: rgb(248, 202, 0)' : metaStyle;
                                             return  '...' + value;
                                         },
                                         summaryRenderer: function(value, summaryData, dataIndex) {
@@ -196,12 +216,12 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                                         glyph: 0xe9d7,
                                         scale: 'medium',
                                         text: 'Processar Mapa',
-                                        showSmartTheme: 'red-dark',
+                                        showSmartTheme: 'sky',
                                         handler: 'setProcessMap'
                                     }
                                 ],
                                 listeners: {
-                                    itemdblclick: 'onItemDblClick'
+                                    celldblclick: 'onCellDblClick'
                                 }
                             }
                         ]
@@ -209,6 +229,12 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                         width: 30,
                         region: 'west'
                     }, {
+                        //tools: [
+                        //    {
+                        //        type: 'help',
+                        //        callback: 'onHelp'
+                        //    }
+                        //],
                         region: 'center',
                         xtype: 'gridpanel',
                         title: 'Mapeamento de Plantões Noturnos',
@@ -222,12 +248,19 @@ Ext.define( 'AppAnest.view.planning.MapPlanning', {
                             loadingText: undefined
                         },
                         columns: [],
+                        buttonAlign: 'center',
                         buttons: [
                             {
                                 glyph: 0xe86c,
                                 scale: 'medium',
                                 text: 'Salvar Planejamento',
-                                showSmartTheme: 'green'
+                                showSmartTheme: 'red-dark'
+                            }, {
+                                glyph: 0xe869,
+                                scale: 'medium',
+                                text: 'Voltar',
+                                showSmartTheme: 'green',
+                                handler: 'onHistoryBack'
                             }
                         ]
                     }

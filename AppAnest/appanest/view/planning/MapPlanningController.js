@@ -7,15 +7,22 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
     url: 'business/Class/additiveshift.php',
 
-    onItemDblClick: function (view, record, item, index, e, eOpts) {
+    onHelp: function (panel) {
+        var tools = Ext.widget('mapplanningtools');
+
+        tools.show();
+    },
+
+    onCellDblClick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts) {
         var me = this,
             view = me.getView(),
             positioncute = view.down('numberfield[name=positioncute]');
 
-        positioncute.setValue(record.get('position'));
-
-        me.setProcessMap();
-
+        if(parseInt(cellIndex) != 3) {
+            positioncute.setValue(record.get('position'));
+            me.setProcessMap();
+            return false;
+        }
     },
 
     setProcessMap: function () {
@@ -25,7 +32,9 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
             param = fm.getValues(),
             panel = me.lookupReference('contractorunitmap'),
             store = panel.getStore(),
-            storeList = me.lookupReference('contractorunitlist').getStore();
+            storeList = me.lookupReference('contractorunitlist').getStore(),
+            highlight = view.down('checkboxfield[name=highlight]').getValue(),
+            positionstart = view.down('numberfield[name=positionstart]').getValue();
 
         param.action = 'select';
         param.method = 'selectChart';
@@ -41,15 +50,20 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
 
                     for (i = 1; i <= dutyamount; i++) {
                         fields.push({
-                            text: i,
+                            text: '<a style="color: blue;">' + i + '</a>',
                             align: 'center',
                             dataIndex: 'week'  + Ext.String.leftPad(i, 2, '0'),
                             width: 30,
                             renderer: function (value, meta, rec, rowIndex) {
-                                var color = parseInt(rec.get('position')) % 2 == 0;
-                                meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+                                var color = parseInt(rec.get('position')) % 2 == 0,
+                                    metaStyle = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
 
-                                meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
+                                meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgb(248, 202, 0)' : metaStyle;
+
+                                if((parseInt(value) == parseInt(positionstart)) && (highlight) ) {
+                                    meta.style = 'background-color: rgb(189, 252, 0)';
+                                }
+
                                 return value;
                             }
                         });
@@ -70,25 +84,61 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
                                 align: 'center',
                                 dataIndex: 'position',
                                 width: 40,
-                                renderer: function (value, meta, rec, rowIndex) {
-                                    var color = parseInt(rec.get('position')) % 2 == 0;
+                                renderer: function (value, meta, record, rowIndex, colIndex, store) {
+                                    var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('position'),
+                                        last = rowIndex >= store.getCount() - 1 || value !== store.getAt(rowIndex + 1).get('position');
+                                    var color = parseInt(record.get('position')) % 2 == 0;
                                     meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
 
-                                    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
-                                    return value;
+
+                                    if (first) {
+                                        var i = rowIndex + 1;
+                                        while (i < store.getCount() && value === store.getAt(i).get('position')) {
+                                            i++;
+                                        }
+                                    }
+
+                                    meta.style = (parseInt(rowIndex) == parseInt(record.get('positioncute'))-1) ? 'background-color: rgb(248, 202, 0)' : meta.style;
+
+                                    return first ? value : '';
                                 }
+                                //renderer: function (value, meta, rec, rowIndex) {
+                                //    var color = parseInt(rec.get('position')) % 2 == 0;
+                                //    meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+                                //
+                                //    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgb(248, 202, 0)' : meta.style;
+                                //    return value;
+                                //}
                             }, {
                                 align: 'left',
                                 text: 'Unidade',
                                 dataIndex: 'contractorunit',
                                 width: 120,
-                                renderer: function (value, meta, rec, rowIndex) {
-                                    var color = parseInt(rec.get('position')) % 2 == 0;
-                                    meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+                                renderer: function (value, meta, record, rowIndex, colIndex, store) {
+                                    var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
+                                        last = rowIndex >= store.getCount() - 1 || value !== store.getAt(rowIndex + 1).get('contractorunit');
+                                        var color = parseInt(record.get('position')) % 2 == 0;
+                                        meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
 
-                                    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(199, 200, 34, 0.2)' : meta.style;
-                                    return value;
+
+                                    if (first) {
+                                        var i = rowIndex + 1;
+                                        while (i < store.getCount() && value === store.getAt(i).get('contractorunit')) {
+                                            i++;
+                                        }
+                                    }
+
+                                    meta.style = (parseInt(rowIndex) == parseInt(record.get('positioncute'))-1) ? 'background-color: rgb(248, 202, 0)' : meta.style;
+
+                                    return first ? value : '';
                                 }
+                                //renderer: function (value, meta, rec, rowIndex) {
+                                //    var color = parseInt(rec.get('position')) % 2 == 0;
+                                //    meta.style = (color) ? '' : 'background-color: rgba(73, 180, 159, .3)';
+                                //
+                                //    meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgb(248, 202, 0)' : meta.style;
+                                //    return value;
+                                //}
                             }
                         ]
                     }, {

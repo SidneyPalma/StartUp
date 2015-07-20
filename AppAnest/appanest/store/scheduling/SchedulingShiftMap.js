@@ -5,7 +5,7 @@ Ext.define( 'AppAnest.store.scheduling.SchedulingShiftMap', {
 
     storeId: 'schedulingshiftmap',
 
-    url: 'business/Class/additiveshift.php',
+    url: 'business/Class/contractorunit.php',
 
     model: 'AppAnest.model.scheduling.SchedulingShiftMap'
 

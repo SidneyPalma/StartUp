@@ -112,6 +112,9 @@ Ext.define( 'AppAnest.controller.App', {
         },
         'mapplanning': {
             action: 'setMapPlanning'
+        },
+        'schedulingplanning': {
+            action: 'setSchedulingPlanning'
         }
     },
 
@@ -508,6 +511,10 @@ Ext.define( 'AppAnest.controller.App', {
 
     setMapPlanning: function () {
         this.addToMainCenterRegion({ xtype: 'mapplanning' });
+    },
+
+    setSchedulingPlanning: function () {
+        this.addToMainCenterRegion({ xtype: 'schedulingplanning' });
     }
 
 });

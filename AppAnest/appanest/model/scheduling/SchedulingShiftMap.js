@@ -3,6 +3,9 @@ Ext.define( 'AppAnest.model.scheduling.SchedulingShiftMap', {
 
     fields: [
         {
+            name: 'id',
+            type: 'int'
+        }, {
             name: 'contractorunitid',
             type: 'int'
         }, {

@@ -4,7 +4,27 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanningController', {
 
     alias: 'controller.schedulingplanning',
 
-    onLoadWeek: function (btn) {
+    onChangeFilter: function ( field, newValue, oldValue, eOpts ) {
+        var me = this,
+            store = me.lookupReference('schedulingplanning').getStore();
+
+        store.clearFilter();
+        store.filter('contractorunit',newValue);
+    },
+
+    onSchemaSave: function () {
+        var me = this,
+            list = [],
+            store = me.lookupReference('schedulingplanning').getStore();
+
+        store.each(function(record,index) {
+            list.push(record.data);
+        },me);
+
+        console.info(Ext.encode(list));
+    },
+
+    onLoadWeek: function () {
         var me = this,
             view = me.getView(),
             panel = me.lookupReference('schedulingplanning'),
@@ -40,16 +60,6 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanningController', {
         rc.set(fieldName + 'description',record.get('allocationschemadescription'));
         rc.commit();
     },
-
-    //changeAllocationSchema: function ( field, newValue, oldValue, eOpts ) {
-    //    //var me = this,
-    //    //    sm = me.lookupReference('schedulingplanning').getSelectionModel(),
-    //    //    rc = sm.getSelection()[0];
-    //    //
-    //    //if(newValue == null) {
-    //    //    rc.set(field.updateField,null);
-    //    //}
-    //}
 
     onAllocationSchemaBeforeEdit: function (editor, context, eOpts) {
         var fixed = [2, 3, 4, 5, 6, 7, 8],

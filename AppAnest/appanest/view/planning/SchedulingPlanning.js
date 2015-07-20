@@ -40,7 +40,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                 padding: 10,
 
                 layout: {
-                    type: 'border'
+                    type: 'fit'
                 },
                 header: {
                     title: 'Agenda - Planejamento de Calculo',
@@ -54,16 +54,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                 },
                 items: [
                     {
-                        width: 300,
-                        region: 'west',
-                        xtype: 'container'
-                    }, {
-                        width: 30,
-                        region: 'west'
-                    }, {
-                        region: 'center',
                         xtype: 'gridpanel',
-                        title: 'Mapeamento de Plantões Noturnos',
                         name: 'schedulingplanning',
                         reference: 'schedulingplanning',
                         hideHeaders: false,
@@ -80,10 +71,36 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                             clicksToEdit: 2
                         },
                         listeners: {
-                            //edit: 'onDistributionEdit',
                             beforeedit: 'onAllocationSchemaBeforeEdit'
-                            //celldblclick: 'onAllocationSchemaCellDblClick'
                         },
+                        tbar: [
+                            {
+                                labelWidth: 80,
+                                labelAlign: 'left',
+                                width: 300,
+                                xtype: 'textfield',
+                                fieldLabel: 'Esquemas'
+                            }, {
+                                width: 100,
+                                text: 'Carregar',
+                                glyph: 0xe958,
+                                showSmartTheme: 'green'
+                            }, {
+                                xtype: 'tbfill'
+                            }, {
+                                width: 300,
+                                labelWidth: 60,
+                                labelAlign: 'left',
+                                xtype: 'textfield',
+                                fieldLabel: 'Filtrar',
+                                listeners: {
+                                    change: 'onChangeFilter'
+                                }
+                            }, {
+                                glyph: 0xe8ff,
+                                showSmartTheme: 'green'
+                            }
+                        ],
                         columnsRenderer: function (value, meta, record) {
                             var metaStyle = '',
                                 shift = record.get('shift'),
@@ -252,7 +269,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                 scale: 'medium',
                                 text: 'Salvar Planejamento',
                                 showSmartTheme: 'red-dark',
-                                handler: 'onLoadWeek'
+                                handler: 'onSchemaSave'
                             }, {
                                 glyph: 0xe869,
                                 scale: 'medium',
@@ -265,6 +282,10 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                 ]
             }
         ]
+    },
+
+    listeners: {
+        render: 'onLoadWeek'
     }
 
 });

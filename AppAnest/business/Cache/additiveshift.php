@@ -38,7 +38,6 @@ class additiveshift extends \Smart\Data\Cache {
                 inner join contractorsubunit csu on ( csu.contractorunitid = cu.id )
                 inner join additiveshift ads on ( ads.contractorsubunitid = csu.id )
                 inner join shifttype st on ( st.id = ads.shifttypeid )
-            -- where cu.id in (37,43)
             group by
                 cu.id,
                 p.shortname,
@@ -62,13 +61,21 @@ class additiveshift extends \Smart\Data\Cache {
                     $record['id'] = $i;
                     $record['position'] = $rownumber;
 
-                    $record['mondescription'] = intval($record['mon']) != 0 ? $record['mondescription'] : '';
-                    $record['tuedescription'] = intval($record['tue']) != 0 ? $record['tuedescription'] : '';
-                    $record['weddescription'] = intval($record['wed']) != 0 ? $record['weddescription'] : '';
-                    $record['thudescription'] = intval($record['thu']) != 0 ? $record['thudescription'] : '';
-                    $record['fridescription'] = intval($record['fri']) != 0 ? $record['fridescription'] : '';
-                    $record['satdescription'] = intval($record['sat']) != 0 ? $record['satdescription'] : '';
-                    $record['sundescription'] = intval($record['sun']) != 0 ? $record['sundescription'] : '';
+                    $record['mondescription'] = (intval($record['mon']) != 0) ? $record['mondescription'] : '';
+                    $record['tuedescription'] = (intval($record['tue']) != 0) ? $record['tuedescription'] : '';
+                    $record['weddescription'] = (intval($record['wed']) != 0) ? $record['weddescription'] : '';
+                    $record['thudescription'] = (intval($record['thu']) != 0) ? $record['thudescription'] : '';
+                    $record['fridescription'] = (intval($record['fri']) != 0) ? $record['fridescription'] : '';
+                    $record['satdescription'] = (intval($record['sat']) != 0) ? $record['satdescription'] : '';
+                    $record['sundescription'] = (intval($record['sun']) != 0) ? $record['sundescription'] : '';
+
+                    $record['mon'] = (intval($record['mon']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['tue'] = (intval($record['tue']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['wed'] = (intval($record['wed']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['thu'] = (intval($record['thu']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['fri'] = (intval($record['fri']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['sat'] = (intval($record['sat']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['sun'] = (intval($record['sun']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
 
                     $crsContractorUnit[] = $record;
                     $i++;

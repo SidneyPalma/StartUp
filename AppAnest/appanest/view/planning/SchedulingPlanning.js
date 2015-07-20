@@ -129,38 +129,36 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         renderer: function (value, meta, record, rowIndex, colIndex, store) {
                                             var returnShift = '',
                                                 returnSubunit = '',
-                                                returnPosition = '',
                                                 subunit = record.get('subunit'),
-                                                position = record.get('position');
-
-                                            returnPosition = Ext.String.format('<div style="float: left; width: 10px;">{0}. </div>',position);
+                                                position = record.get('position'),
+                                                returnPosition = Ext.String.format('<div style="float: left; width: 10px;">{0}. </div>',position);
 
                                             switch(value) {
                                                 case 'D':
-                                                    meta.style = 'background-color: rgba(248, 202, 0, .5);';
-                                                    returnShift = '<div style="float: left; width: 20px;"><i class="icon-sun"></i></div>';
+                                                    meta.style = 'background-color: rgba(248, 202, 0, .5); line-height: 16px;';
+                                                    returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(255,160,17, 1);"><i class="icon-sun"></i></div>';
                                                     break;
                                                 case 'N':
-                                                    meta.style = 'background-color: rgba(248, 202, 0, .9);';
-                                                    returnShift = '<div style="float: left; width: 20px;"><i class="icon-moon-inv"></i></div>';
+                                                    meta.style = 'background-color: rgba(248, 202, 0, .9); line-height: 16px;';
+                                                    returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-moon-inv"></i></div>';
                                                     break;
                                             }
 
                                             switch(subunit) {
                                                 case 'C':
-                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(252, 24, 36);"><i class="icon-heart"></i></div>';
+                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(252, 24, 36); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-heart"></i></div>';
                                                     break;
                                                 case 'N':
-                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(23, 153, 138);"><i class="icon-chat"></i></div>';
+                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(23, 153, 138); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-chat"></i></div>';
                                                     break;
                                                 case 'H':
-                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(0, 29, 196);"><i class="icon-h-sigh"></i></div>';
+                                                    returnSubunit = '<div style="float: right; width: 20px; color: rgb(0, 29, 196); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-h-sigh"></i></div>';
                                                     break;
                                                 case 'P':
                                                     returnSubunit = '';
                                                     break;
                                                 default:
-                                                    returnSubunit = '<div style="float: right; width: 20px;"><i class="icon-cogs"></i></div>';
+                                                    returnSubunit = '<div style="float: right; width: 20px; text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-cogs"></i></div>';
                                                     break;
                                             }
 

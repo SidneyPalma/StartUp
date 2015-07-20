@@ -52,10 +52,17 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanningController', {
     //}
 
     onAllocationSchemaBeforeEdit: function (editor, context, eOpts) {
-        var fieldName = context.field.replace('description',''),
-            weekday = parseInt(context.record.get(fieldName));
+        var fixed = [2, 3, 4, 5, 6, 7, 8],
+            items = editor.getEditor().items,
+            field = context.field.replace('description',''),
+            lists = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-        return weekday !== 0;
+        Ext.each(fixed, function (value, index) {
+            var weekday = parseInt(context.record.get(lists[index]));
+            items.getAt(value).setDisabled(weekday == 0);
+        });
+
+        return parseInt(context.record.get(field)) !== 0;
     }
 
 });

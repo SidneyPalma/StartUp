@@ -10,6 +10,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
         'Ext.form.RadioGroup',
         'Ext.grid.plugin.RowEditing',
         'Ext.selection.CheckboxModel',
+        'Smart.form.field.ComboSearch',
         'AppAnest.view.planning.AllocationSchemaSearch'
     ],
 
@@ -75,30 +76,19 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                         },
                         tbar: [
                             {
-                                labelWidth: 80,
-                                labelAlign: 'left',
-                                width: 300,
+                                width: 266,
                                 xtype: 'textfield',
-                                fieldLabel: 'Esquemas'
-                            }, {
-                                width: 100,
-                                text: 'Carregar',
-                                glyph: 0xe958,
-                                showSmartTheme: 'green'
-                            }, {
-                                xtype: 'tbfill'
-                            }, {
-                                width: 300,
-                                labelWidth: 60,
-                                labelAlign: 'left',
-                                xtype: 'textfield',
-                                fieldLabel: 'Filtrar',
+                                fieldLabel: Ext.emptyText,
+                                hasSearch: true,
                                 listeners: {
                                     change: 'onChangeFilter'
                                 }
                             }, {
-                                glyph: 0xe8ff,
-                                showSmartTheme: 'green'
+                                width: 352,
+                                labelWidth: 80,
+                                labelAlign: 'left',
+                                xtype: 'textfield',
+                                fieldLabel: 'Esquemas'
                             }
                         ],
                         columnsRenderer: function (value, meta, record) {

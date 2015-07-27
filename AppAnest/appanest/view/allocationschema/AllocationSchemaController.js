@@ -58,19 +58,15 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         }
     },
 
-    onChangeFilter: function ( field, newValue, oldValue, eOpts ) {
-        var me = this,
-            view = me.getView(),
-            store = view.down('gridpanel[name=allocationschemaweek]').getStore();
+    onChangeFilterMonthly: function ( field, newValue, oldValue, eOpts ) {
+        var store = Ext.getStore('allocationschemamonthly');
 
         store.clearFilter();
         store.filter('contractorunit',newValue);
     },
 
     onChangeFilterWeekly: function ( field, newValue, oldValue, eOpts ) {
-        var me = this,
-            view = me.getView(),
-            store = view.down('gridpanel[name=allocationschemaweekly]').getStore();
+        var store = Ext.getStore('allocationschemaweekday');
 
         store.clearFilter();
         store.filter('contractorunit',newValue);
@@ -104,7 +100,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                     var rec = records[0];
                     allocationschemaid = rec.get('id');
                     form.loadRecord(rec);
-                    console.info(rec.data);
                     view.down('radiogroup').down('#type1').setDisabled(false);
                 } else {
                     periodid.setValue(record.get('id'));
@@ -235,7 +230,20 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
     onDeleteMonthly: function () {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            id = view.down('hiddenfield[name=id]').getValue(),
+            allocationschema = Ext.getStore('allocationschema'),
+            record = allocationschema.findRecord('id',id);
+
+        if(record) {
+            record.set('schemaweek','');
+            record.store.sync({
+                success: function (batch, options) {
+                    record.commit();
+                    me.onSelectPeriod(null,record);
+                }
+            });
+        }
     },
 
     onDeleteWeekDay: function () {

@@ -154,7 +154,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         submitValue: false,
                                                         fieldLabel: 'Filtrar Unidade',
                                                         listeners: {
-                                                            change: 'onChangeFilter'
+                                                            change: 'onChangeFilterMonthly'
                                                         }
                                                     }
                                                 ]
@@ -420,7 +420,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         showSmartTheme: 'red-dark',
                                         handler: 'onUpdateSchemaMonthly'
                                     }, {
-                                        hidden: true,
                                         glyph: 0xec9d,
                                         scale: 'medium',
                                         text: 'Limpar',

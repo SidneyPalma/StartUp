@@ -115,6 +115,9 @@ Ext.define( 'AppAnest.controller.App', {
         },
         'schedulingplanning': {
             action: 'setSchedulingPlanning'
+        },
+        'allocationschema': {
+            action: 'setAllocationSchema'
         }
     },
 
@@ -515,6 +518,10 @@ Ext.define( 'AppAnest.controller.App', {
 
     setSchedulingPlanning: function () {
         this.addToMainCenterRegion({ xtype: 'schedulingplanning' });
+    },
+
+    setAllocationSchema: function () {
+        this.addToMainCenterRegion({ xtype: 'allocationschema' });
     }
 
 });

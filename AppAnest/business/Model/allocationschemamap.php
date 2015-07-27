@@ -21,12 +21,6 @@ class allocationschemamap extends \Smart\Data\Model {
     private $allocationschemaid;
 
     /**
-     * @Policy {"nullable":false}
-     * @Column {"description":"", "type":"integer", "policy":true}
-     */
-    private $positioncute;
-
-    /**
      * @Policy {"nullable":false, "length":3}
      * @Column {"description":"", "type":"string", "policy":true}
      */
@@ -36,7 +30,7 @@ class allocationschemamap extends \Smart\Data\Model {
      * @Policy {"nullable":false, "length":65535}
      * @Column {"description":"", "type":"string", "policy":true}
      */
-    private $map;
+    private $schemamap;
 
     /**
      * @return type integer
@@ -71,22 +65,6 @@ class allocationschemamap extends \Smart\Data\Model {
     }
 
     /**
-     * @return type integer
-     */
-    public function getPositioncute() {
-        return $this->positioncute;
-    }
-
-    /**
-     * @param type $positioncute
-     * @return \AppAnest\Model\allocationschemamap
-     */
-    public function setPositioncute($positioncute) {
-        $this->positioncute = $positioncute;
-        return $this;
-    }
-
-    /**
      * @return type string
      */
     public function getWeekday() {
@@ -105,16 +83,16 @@ class allocationschemamap extends \Smart\Data\Model {
     /**
      * @return type string
      */
-    public function getMap() {
-        return $this->map;
+    public function getSchemamap() {
+        return $this->schemamap;
     }
 
     /**
-     * @param type $map
+     * @param type $schemamap
      * @return \AppAnest\Model\allocationschemamap
      */
-    public function setMap($map) {
-        $this->map = $map;
+    public function setSchemamap($schemamap) {
+        $this->schemamap = $schemamap;
         return $this;
     }
 

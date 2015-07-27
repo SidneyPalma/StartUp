@@ -58,7 +58,7 @@ Ext.define( 'Ext.overrides.app.BaseController', {
 
         return fm.submit({
             scope: me,
-            url: url || me.url,
+            url: url || me.url || md.getUrl(),
             submitEmptyText: false,
             params: Ext.merge(defaultParams,params),
             success: function(form, action) {
@@ -149,7 +149,6 @@ Ext.define( 'Ext.overrides.app.BaseController', {
                     me._failure(batch, options);
                     me._failure = Ext.emptyFn;                    
                 }
-                
             },
             failure: function (batch, options) {
                 var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;

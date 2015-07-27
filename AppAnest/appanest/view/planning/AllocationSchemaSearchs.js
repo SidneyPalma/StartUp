@@ -1,8 +1,8 @@
 //@charset ISO-8859-1
-Ext.define( 'AppAnest.view.planning.AllocationSchemaSearch', {
+Ext.define( 'AppAnest.view.planning.AllocationSchemaSearchs', {
     extend: 'Smart.form.field.ComboEnum',
 
-    alias: 'widget.allocationschemasearch',
+    alias: 'widget.allocationschemasearchs',
 
     hideTrigger: true,
     matchFieldWidth: false,

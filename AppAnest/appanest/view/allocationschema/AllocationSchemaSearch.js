@@ -1,8 +1,8 @@
 //@charset ISO-8859-1
-Ext.define( 'AppAnest.view.period.PeriodSearch', {
+Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaSearch', {
     extend: 'Smart.form.field.ComboSearch',
 
-    alias: 'widget.periodsearch',
+    alias: 'widget.allocationschemasearch',
 
     pageSize: 0,
     editable: false,
@@ -10,18 +10,18 @@ Ext.define( 'AppAnest.view.period.PeriodSearch', {
     fieldLabel: 'Periodo',
 
     requires: [
-        'AppAnest.store.period.Period'
+        'AppAnest.store.allocationschema.AllocationSchema'
     ],
 
     displayField: 'month',
 
-    store: 'AppAnest.store.period.Period',
+    store: 'AppAnest.store.allocationschema.AllocationSchema',
 
     // template for the content List
     tpl: [
         '<tpl style:"font-size: 14px;" for=".">',
             '<div class="x-boundlist-item">' +
-                '<span style="font-size: 17px; color:#3333FF; display: block; font-family: Monda;">{description}</span>' +
+                '<span style="font-size: 17px; color:#3333FF; display: block; font-family: Monda;">{perioddescription}</span>' +
                 '<span style="font-size: 14px; color:#990000; display: block; font-family: Monda;">{periodof} - {periodto}</span>' +
             '</div>',
         '</tpl>'

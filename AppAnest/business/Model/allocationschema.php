@@ -21,16 +21,28 @@ class allocationschema extends \Smart\Data\Model {
     private $periodid;
 
     /**
-     * @Policy {"nullable":false, "length":80}
+     * @Policy {"nullable":true, "length":80}
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $username;
 
     /**
-     * @Policy {"nullable":false, "length":65535}
+     * @Policy {"nullable":true, "length":65535}
      * @Column {"description":"", "type":"string", "policy":true}
      */
-    private $schema;
+    private $schemaweek;
+
+    /**
+     * @Policy {"nullable":true, "length":80}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $description;
+
+    /**
+     * @Policy {"nullable":true, "length":65535}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $observation;
 
     /**
      * @return type integer
@@ -83,16 +95,48 @@ class allocationschema extends \Smart\Data\Model {
     /**
      * @return type string
      */
-    public function getSchema() {
-        return $this->schema;
+    public function getSchemaweek() {
+        return $this->schemaweek;
     }
 
     /**
-     * @param type $schema
+     * @param type $schemaweek
      * @return \AppAnest\Model\allocationschema
      */
-    public function setSchema($schema) {
-        $this->schema = $schema;
+    public function setSchemaweek($schemaweek) {
+        $this->schemaweek = $schemaweek;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * @param type $description
+     * @return \AppAnest\Model\allocationschema
+     */
+    public function setDescription($description) {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * @param type $observation
+     * @return \AppAnest\Model\allocationschema
+     */
+    public function setObservation($observation) {
+        $this->observation = $observation;
         return $this;
     }
 

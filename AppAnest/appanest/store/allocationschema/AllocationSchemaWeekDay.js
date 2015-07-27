@@ -1,11 +1,11 @@
-Ext.define( 'AppAnest.store.scheduling.SchedulingShift', {
+Ext.define( 'AppAnest.store.allocationschema.AllocationSchemaWeekDay', {
     extend: 'Smart.data.StoreBase',
 
-    alias: 'store.SchedulingShift',
+    alias: 'store.AllocationSchemaWeekDay',
 
-    storeId: 'schedulingshift',
+    storeId: 'allocationschemaweekday',
 
-    url: 'business/Class/additiveshift.php',
+    url: 'business/Class/allocationschemamap.php',
 
     fields: [
         {

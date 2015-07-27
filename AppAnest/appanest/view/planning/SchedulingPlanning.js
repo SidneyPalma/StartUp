@@ -11,7 +11,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
         'Ext.grid.plugin.RowEditing',
         'Ext.selection.CheckboxModel',
         'Smart.form.field.ComboSearch',
-        'AppAnest.view.planning.AllocationSchemaSearch'
+        'AppAnest.view.planning.AllocationSchemaSearchs'
     ],
 
     controller: 'schedulingplanning',
@@ -186,7 +186,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'mon',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }, {
@@ -195,7 +195,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'tue',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }, {
@@ -204,7 +204,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'wed',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }, {
@@ -213,7 +213,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'thu',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }, {
@@ -222,7 +222,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'fri',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }
@@ -236,7 +236,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'sat',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }, {
@@ -245,7 +245,7 @@ Ext.define( 'AppAnest.view.planning.SchedulingPlanning', {
                                         width: 120,
                                         editor: {
                                             updateField: 'sun',
-                                            xtype: 'allocationschemasearch',
+                                            xtype: 'allocationschemasearchs',
                                             name: 'allocationschemadescription'
                                         }
                                     }

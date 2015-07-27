@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/AppAnest/business" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AppAnest/smart" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/4.0.2" />
       <excludeFolder url="file://$MODULE_DIR$/AppAnest/.sencha" />
       <excludeFolder url="file://$MODULE_DIR$/AppAnest/ext" />
       <excludeFolder url="file://$MODULE_DIR$/AppAnest/overrides" />

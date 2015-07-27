@@ -166,7 +166,7 @@ Ext.define( 'AppAnest.view.planning.MapPlanningController', {
         var me = this,
             view = me.getView(),
             panel = me.lookupReference('contractorunitmap'),
-            positioncute = view.down('numberfield[name=positioncute]'),
+            //positioncute = view.down('numberfield[name=positioncute]'),
             store = me.lookupReference('contractorunitlist').getStore();
 
         panel.getStore().removeAll();

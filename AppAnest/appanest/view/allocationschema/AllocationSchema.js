@@ -10,6 +10,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
         'Ext.form.RadioGroup',
         'Ext.grid.plugin.RowEditing',
         'Ext.selection.CheckboxModel',
+        'AppAnest.view.planning.AllocationSchemaShift',
         'AppAnest.store.allocationschema.AllocationSchema',
         'AppAnest.store.allocationschema.AllocationSchemaMap',
         'AppAnest.store.allocationschema.AllocationSchemaMonthly',
@@ -344,7 +345,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'mon',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }, {
@@ -353,7 +354,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'tue',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }, {
@@ -362,7 +363,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'wed',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }, {
@@ -371,7 +372,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'thu',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }, {
@@ -380,7 +381,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'fri',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }
@@ -394,7 +395,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'sat',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }, {
@@ -403,7 +404,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 width: 120,
                                                 editor: {
                                                     updateField: 'sun',
-                                                    xtype: 'allocationschemasearch',
+                                                    xtype: 'allocationschemasearchshift',
                                                     name: 'allocationschemadescription'
                                                 }
                                             }

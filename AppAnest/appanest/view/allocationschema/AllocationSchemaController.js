@@ -33,7 +33,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
         schema.getLayout().setActiveItem(newValue.type);
         allocationschemap.getLayout().setActiveItem(newValue.type);
-console.info(id);
+
         view.down('periodsearch').setReadOnlyColor(newValue.type == 1);
 
         switch (newValue.type) {
@@ -193,7 +193,7 @@ console.info(id);
         var me = this,
             view = me.getView(),
             fieldName = combo.updateField,
-            sm = view.down('gridpanel[name=allocationschemaweek]').getSelectionModel(),
+            sm = view.down('gridpanel[name=schemamonthly]').getSelectionModel(),
             rc = sm.getSelection()[0];
 
         rc.set(fieldName,record.get('allocationschema'));

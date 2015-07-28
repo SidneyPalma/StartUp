@@ -59,17 +59,23 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     },
 
     onChangeFilterMonthly: function ( field, newValue, oldValue, eOpts ) {
-        var store = Ext.getStore('allocationschemamonthly');
+        var me = this,
+            store = Ext.getStore('allocationschemamonthly');
 
         store.clearFilter();
         store.filter('contractorunit',newValue);
+
+        me.onSearchAlter(field, newValue, oldValue, eOpts);
     },
 
     onChangeFilterWeekly: function ( field, newValue, oldValue, eOpts ) {
-        var store = Ext.getStore('allocationschemaweekday');
+        var me = this,
+            store = Ext.getStore('allocationschemaweekday');
 
         store.clearFilter();
         store.filter('contractorunit',newValue);
+
+        me.onSearchAlter(field, newValue, oldValue, eOpts);
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {
@@ -250,24 +256,20 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         var me = this,
             view = me.getView(),
             grid = view.down('gridpanel[name=schemamonthlymap]'),
-            model = grid.getSelectionModel().getSelection()[0],
             weekdayStore = view.down('gridpanel[name=schemaweekday]').getStore();
 
-        if ( model.get('id').length == 0 ) {
-            return false;
-        }
-
-        model.set('schemamap','');
-        model.store.sync({
-            success: function (batch, options) {
-                weekdayStore.removeAll();
-                model.store.each(function(rec,index) {
-                    rec.set('isselected',false);
-                    rec.commit();
-                },me);
-                model.commit();
+        grid.store.each(function(model,index) {
+            if ((model.get('isselected'))&&(model.get('id').length != 0)) {
+                model.set('schemamap','');
+                model.store.sync({
+                    success: function (batch, options) {
+                        weekdayStore.removeAll();
+                        model.set('isselected',false);
+                        model.commit();
+                    }
+                });
             }
-        });
+        },me);
 
     },
 

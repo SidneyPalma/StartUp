@@ -150,6 +150,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         name: 'observation',
                                                         fieldLabel: 'Observação'
                                                     }, {
+                                                        showClear: true,
                                                         xtype: 'textfield',
                                                         submitValue: false,
                                                         fieldLabel: 'Filtrar Unidade',
@@ -250,7 +251,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         enumType = ['001','002'],
                                         shift = record.get('shift'),
                                         color = parseInt(record.get('position')) % 2 == 0,
-                                        field = this.columnManager.columns[colIndex].dataIndex.replace('description','');
+                                        field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','');
 
                                     if(shift == 'N') {
                                         metaStyle = 'background-color: rgba(242, 243, 235, .9);';

@@ -127,6 +127,7 @@ class allocationschema extends \Smart\Data\Cache {
                 inner join contractorsubunit csu on ( csu.contractorunitid = cu.id )
                 inner join additiveshift ads on ( ads.contractorsubunitid = csu.id )
                 inner join shifttype st on ( st.id = ads.shifttypeid )
+                inner join additive a on ( a.id = ads.additiveid and a.additivestatus = 'A' )
             group by
                 cu.id,
                 p.shortname,
@@ -141,32 +142,43 @@ class allocationschema extends \Smart\Data\Cache {
             $rows = self::encodeUTF8($proxy->query($sql)->fetchAll());
 
             $i++;
+
             // Construindo a Lista de Unidades
             foreach ($rows as $record) {
                 $rownumber = 1;
                 $greatest = $record["greatest"];
+
+                $mon = intval($record['mon']);
+                $tue = intval($record['tue']);
+                $wed = intval($record['wed']);
+                $thu = intval($record['thu']);
+                $fri = intval($record['fri']);
+                $sat = intval($record['sat']);
+                $sun = intval($record['sun']);
+
                 while ($rownumber <= $greatest) {
 
                     $record['id'] = $i;
                     $record['position'] = $rownumber;
 
-                    $record['mondescription'] = (intval($record['mon']) != 0) ? $record['mondescription'] : '';
-                    $record['tuedescription'] = (intval($record['tue']) != 0) ? $record['tuedescription'] : '';
-                    $record['weddescription'] = (intval($record['wed']) != 0) ? $record['weddescription'] : '';
-                    $record['thudescription'] = (intval($record['thu']) != 0) ? $record['thudescription'] : '';
-                    $record['fridescription'] = (intval($record['fri']) != 0) ? $record['fridescription'] : '';
-                    $record['satdescription'] = (intval($record['sat']) != 0) ? $record['satdescription'] : '';
-                    $record['sundescription'] = (intval($record['sun']) != 0) ? $record['sundescription'] : '';
+                    $record['mondescription'] = ($mon >= $rownumber) ? $record['mondescription'] : '...';
+                    $record['tuedescription'] = ($tue >= $rownumber) ? $record['tuedescription'] : '...';
+                    $record['weddescription'] = ($wed >= $rownumber) ? $record['weddescription'] : '...';
+                    $record['thudescription'] = ($thu >= $rownumber) ? $record['thudescription'] : '...';
+                    $record['fridescription'] = ($fri >= $rownumber) ? $record['fridescription'] : '...';
+                    $record['satdescription'] = ($sat >= $rownumber) ? $record['satdescription'] : '...';
+                    $record['sundescription'] = ($sun >= $rownumber) ? $record['sundescription'] : '...';
 
-                    $record['mon'] = (intval($record['mon']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['tue'] = (intval($record['tue']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['wed'] = (intval($record['wed']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['thu'] = (intval($record['thu']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['fri'] = (intval($record['fri']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['sat'] = (intval($record['sat']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['sun'] = (intval($record['sun']) != 0) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['mon'] = ($mon >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['tue'] = ($tue >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['wed'] = ($wed >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['thu'] = ($thu >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['fri'] = ($fri >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['sat'] = ($sat >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['sun'] = ($sun >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
 
                     $crsContractorUnit[] = $record;
+
                     $i++;
                     $rownumber++;
                 }
@@ -180,7 +192,6 @@ class allocationschema extends \Smart\Data\Cache {
         }
 
         return self::getResultToJson();
-
     }
 
 }

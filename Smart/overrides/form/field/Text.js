@@ -2,12 +2,24 @@ Ext.define( 'Ext.overrides.form.field.Text', {
     override: 'Ext.form.field.Text',
 
     hasSearch: false,
+    showClear: false,
     paramName: 'query',
 
     initComponent: function () {
         var me = this;
 
         me.callParent();
+
+        if(me.showClear === true ) {
+            me.setTriggers({
+                clear: {
+                    weight: 0,
+                    hidden: true,
+                    cls: Ext.baseCSSPrefix + 'form-clear-trigger',
+                    handler: 'onSearchClear'
+                }
+            });
+        }
 
         if(me.hasSearch === true ) {
             me.emptyText = 'Pesquisar';

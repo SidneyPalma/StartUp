@@ -169,6 +169,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 },
                                                 items: [
                                                     {
+                                                        showClear: true,
                                                         xtype: 'textfield',
                                                         submitValue: false,
                                                         fieldLabel: 'Filtrar Unidade',

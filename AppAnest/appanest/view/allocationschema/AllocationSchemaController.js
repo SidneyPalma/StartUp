@@ -26,7 +26,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             schema = view.down('container[name=schema]'),
             form = view.down('form[name=schemamonthly]'),
             id = form.down('hiddenfield[name=id]').getValue(),
-            //schemamonthly = me.lookupReference('schemamonthly'),
             schemamap = view.down('gridpanel[name=schemamonthlymap]'),
             allocationschemap = me.lookupReference('allocationschemap'),
             schemaweekday = view.down('gridpanel[name=schemaweekday]');

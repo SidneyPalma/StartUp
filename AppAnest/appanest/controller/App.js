@@ -110,12 +110,6 @@ Ext.define( 'AppAnest.controller.App', {
         'contractlist': {
             action: 'setContractList'
         },
-        'mapplanning': {
-            action: 'setMapPlanning'
-        },
-        'schedulingplanning': {
-            action: 'setSchedulingPlanning'
-        },
         'allocationschema': {
             action: 'setAllocationSchema'
         }
@@ -510,14 +504,6 @@ Ext.define( 'AppAnest.controller.App', {
 	
 	setContractList: function () {
         this.addToMainCenterRegion({ xtype: 'contractlist' });
-    },
-
-    setMapPlanning: function () {
-        this.addToMainCenterRegion({ xtype: 'mapplanning' });
-    },
-
-    setSchedulingPlanning: function () {
-        this.addToMainCenterRegion({ xtype: 'schedulingplanning' });
     },
 
     setAllocationSchema: function () {

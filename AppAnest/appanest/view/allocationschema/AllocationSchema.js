@@ -249,7 +249,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                 columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
                                     var metaStyle = '',
                                         valueDefault = value,
-                                        enumType = ['001','002'],
+                                        enumType = ['001','002','011'],
                                         shift = record.get('shift'),
                                         color = parseInt(record.get('position')) % 2 == 0,
                                         field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','');

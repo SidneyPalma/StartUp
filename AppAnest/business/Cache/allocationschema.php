@@ -119,8 +119,8 @@ class allocationschema extends \Smart\Data\Cache {
                 case st.shift when 'D' then getEnum('allocationschema','001') when 'N' then getEnum('allocationschema','002') end as weddescription,
                 case st.shift when 'D' then getEnum('allocationschema','001') when 'N' then getEnum('allocationschema','002') end as thudescription,
                 case st.shift when 'D' then getEnum('allocationschema','001') when 'N' then getEnum('allocationschema','002') end as fridescription,
-                case st.shift when 'D' then getEnum('allocationschema','001') when 'N' then getEnum('allocationschema','002') end as satdescription,
-                case st.shift when 'D' then getEnum('allocationschema','001') when 'N' then getEnum('allocationschema','002') end as sundescription,
+                case st.shift when 'D' then getEnum('allocationschema','011') when 'N' then getEnum('allocationschema','011') end as satdescription,
+                case st.shift when 'D' then getEnum('allocationschema','011') when 'N' then getEnum('allocationschema','011') end as sundescription,
                 greatest(sum(coalesce(ads.amountmon,0)),sum(coalesce(ads.amounttue,0)),sum(coalesce(ads.amountwed,0)),sum(coalesce(ads.amountthu,0)),sum(coalesce(ads.amountfri,0)),sum(coalesce(ads.amountsat,0)),sum(coalesce(ads.amountsun,0))) as greatest
             from
                 contractorunit cu
@@ -175,8 +175,8 @@ class allocationschema extends \Smart\Data\Cache {
                     $record['wed'] = ($wed >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
                     $record['thu'] = ($thu >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
                     $record['fri'] = ($fri >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['sat'] = ($sat >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
-                    $record['sun'] = ($sun >= $rownumber) ? ($record['shift'] == 'D' ? '001' : '002') : '000';
+                    $record['sat'] = ($sat >= $rownumber) ? ($record['shift'] == 'D' ? '011' : '011') : '000';
+                    $record['sun'] = ($sun >= $rownumber) ? ($record['shift'] == 'D' ? '011' : '011') : '000';
 
                     $crsContractorUnit[] = $record;
 

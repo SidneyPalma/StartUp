@@ -33,6 +33,8 @@ class allocationschema extends \Smart\Data\Event {
         $submit = $model->getSubmit();
         $schemaweek = $submit->getRowValue('schemaweek');
 
+//        $sqlSelect = "select schemamap from allocationschema where id = $id";
+
         if(strlen($schemaweek) == 0) {
             $sql = "update allocationschemamap set schemamap = null where allocationschemaid = :allocationschemaid";
 

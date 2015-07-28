@@ -223,24 +223,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         return parseInt(context.record.get(field)) !== 0;
     },
 
-    onChangeCute: function ( field, newValue, oldValue, eOpts ) {
-        var me = this,
-            view = me.getView(),
-            grid = view.down('gridpanel[name=schemamonthlymap]'), //allocationschemaweekly schemamonthlymap
-            store = grid.getStore(),
-            recOld = store.findRecord('position',oldValue),
-            recNew = store.findRecord('position',newValue);
-
-        grid.getSelectionModel( )
-
-        if(recNew && recOld) {
-            recOld.set('positioncute',0);
-            recOld.commit();
-            recNew.set('positioncute',1);
-            recNew.commit();
-        }
-    },
-
     onDeleteMonthly: function () {
         var me = this,
             view = me.getView(),

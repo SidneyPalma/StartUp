@@ -100,13 +100,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         allocationschema.setParams(param).load({
             scope: me,
             callback: function(records, operation, success) {
-                var allocationschemaid;
+                var allocationschemaid, schemaweek;
 
                 if(records.length && success == true) {
                     var rec = records[0];
                     allocationschemaid = rec.get('id');
+                    schemaweek = rec.get('schemaweek');
                     form.loadRecord(rec);
-                    view.down('radiogroup').down('#type1').setDisabled(false);
+                    view.down('radiogroup').down('#type1').setDisabled(!((schemaweek) && (schemaweek.length != 0)));
                 } else {
                     periodid.setValue(record.get('id'));
                 }
@@ -135,7 +136,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             list = [],
             view = me.getView(),
             form = view.down('form[name=schemamonthly]'),
-            store = view.down('gridpanel[name=schemamonthly]').getStore();
+            store = Ext.getStore('allocationschemamonthly');
+
+        store.clearFilter();
 
         store.each(function(record,index) {
             list.push(record.data);
@@ -163,31 +166,36 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             list = [],
             view = me.getView(),
             grid = view.down('gridpanel[name=schemamonthlymap]'),
-            model = grid.getSelectionModel().getSelection()[0],
-            weekdayStore = view.down('gridpanel[name=schemaweekday]').getStore();
+            store = Ext.getStore('allocationschemaweekday');
 
-        if ( weekdayStore.getCount() == 0) {
+        store.clearFilter();
+
+        if ( store.getCount() == 0) {
             return false;
         }
 
-        weekdayStore.each(function(record,index) {
+        store.each(function(record,index) {
             list.push(record.data);
         },me);
 
-        model.set('schemamap',Ext.encode(list));
-        model.set('id',( model.get('id').length == 0 ? '' : model.get('id') ));
-        model.store.sync({
-            success: function (batch, options) {
-                var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+        grid.store.each(function(model,index) {
+            if (model.get('isselected')) {
+                model.set('schemamap',Ext.encode(list));
+                model.set('id',( model.get('id').length == 0 ? '' : model.get('id') ));
+                model.store.sync({
+                    success: function (batch, options) {
+                        var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
 
-                if((options.operations.create)&&(resultSet !== null) && (resultSet.success)) {
-                    var opr = batch.getOperations()[0],
-                        rec = opr.getRecords()[0];
-                    model.set('id',rec.get('id'));
-                    model.commit();
-                }
+                        if((options.operations.create)&&(resultSet !== null) && (resultSet.success)) {
+                            var opr = batch.getOperations()[0],
+                                rec = opr.getRecords()[0];
+                            model.set('id',rec.get('id'));
+                            model.commit();
+                        }
+                    }
+                });
             }
-        });
+        },me);
     },
 
     selectAllocationSchema: function(combo, record, eOpts) {
@@ -270,7 +278,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 });
             }
         },me);
-
     },
 
     onCellDblClickWeekDay: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {

@@ -50,6 +50,7 @@ class allocationschema extends \Smart\Data\Cache {
                 a.id,
                 a.periodid,
                 a.username,
+                a.schemaweek,
                 a.description,
                 a.observation
             from

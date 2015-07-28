@@ -352,7 +352,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                         align: 'left',
                         text: 'Unidade',
                         dataIndex: 'contractorunit',
-                        width: 120,
+                        width: 160,
                         renderer: function (value, meta, record, rowIndex, colIndex, store) {
                             var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
                                 color = parseInt(record.get('position')) % 2 == 0,

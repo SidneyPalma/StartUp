@@ -71,12 +71,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                 },
                 items: [
                     {
-                        width: 300,
+                        width: 250,
                         region: 'west',
                         xtype: 'panel',
                         items: [
                             {
-                                title: 'Esquemas de atribuição de plantões',
+                                title: 'Esquemas de atribuição',
                                 xtype: 'form',
                                 layout: 'anchor',
                                 defaults: {

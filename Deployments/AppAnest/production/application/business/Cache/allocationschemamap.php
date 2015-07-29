@@ -2,6 +2,20 @@
 
 namespace AppAnest\Cache;
 
+use PHPExcel;
+use PHPExcel_Cell;
+use PHPExcel_Style;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Fill;
+use PHPExcel_Style_Color;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Reader_Excel2007;
+use PHPExcel_Reader_Excel2005;
+use PHPExcel_Style_Conditional;
+use PHPExcel_Worksheet_ColumnDimension;
+use PHPExcel_CachedObjectStorage_Memory;
+
 use AppAnest\Model\allocationschemamap as Model;
 
 class allocationschemamap extends \Smart\Data\Cache {
@@ -147,6 +161,190 @@ class allocationschemamap extends \Smart\Data\Cache {
         self::_setRows($turningHorizontal);
 
         return self::getResultToJson();
+    }
+
+    public function getWorkSheetWeekDay(array $data) {
+        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+        $schemamap = isset($_GET["schemamap"]) ? $_GET["schemamap"] : null;
+
+        if(isset($id)) {
+            $pdo = $this->getStore()->getProxy()->prepare("select schemamap from allocationschemamap where id = :id");
+
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+            $pdo->execute();
+            $day = self::encodeUTF8($pdo->fetchAll());
+            $schemamap = $day[0]["schemamap"];
+        }
+
+        $rows = self::jsonToArray($this->removeAccents($schemamap));
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle("MAPA");
+//        $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+//                    ->setLastModifiedBy("Maarten Balliauw")
+//                    ->setTitle("Office 2007 XLSX Test Document")
+//                    ->setSubject("Office 2007 XLSX Test Document")
+//                    ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+//                    ->setKeywords("office 2007 openxml php")
+//                    ->setCategory("Test result file");
+
+        $sharedStyle1 = new PHPExcel_Style();
+        $sharedStyle2 = new PHPExcel_Style();
+        $sharedStyle3 = new PHPExcel_Style();
+        $sharedStyle4 = new PHPExcel_Style();
+
+        $sharedStyle1->applyFromArray(
+            array('fill' 	=> array(
+                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                'color'		=> array('argb' => 'F2E191')
+            ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+        $sharedStyle2->applyFromArray(
+            array('fill' 	=> array(
+                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                'color'		=> array('argb' => 'FBEDA5')
+            ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+        $sharedStyle3->applyFromArray(
+            array('fill' 	=> array(
+                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                'color'		=> array('argb' => 'FFFFFF')
+            ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+        $sharedStyle4->applyFromArray(
+            array('fill' 	=> array(
+                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                'color'		=> array('argb' => 'BDFC00')
+            ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $i = 3;
+
+        // Distribuição Horizontal
+        foreach ($rows as $record => $fields) {
+            for ($x = 1; $x <= count($rows); $x++) {
+                $colName = self::getColExcell($x);
+                $colWeek = str_pad($x,2,"0",STR_PAD_LEFT);
+                $objPHPExcel->getActiveSheet()->setCellValue($colName . $i, $fields["week" . $colWeek]);
+            }
+            $i++;
+        }
+
+        //!($x % 2) ? "par" : "impar";
+
+        $posSize = count($rows);
+        $colName = self::getColExcell($posSize);
+
+        // Colunas Unidades, Ajustando Tamanho
+        $objPHPExcel->getActiveSheet()->insertNewColumnBefore('A',2);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(30);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(22);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(05);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+
+        $i = 3;
+        // Unidades, Posições
+        foreach ($rows as $record => $fields) {
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A$i", $fields["position"])
+                ->setCellValue("B$i", $fields["contractorunit"]);
+            $i++;
+        }
+
+        // Semanas Unidades
+        for ($x = 3; $x < count($rows)+3; $x++) {
+            $colName = self::getColExcell($x);
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue($colName . '2', $x-2)
+                ->getColumnDimension($colName)->setWidth(5);
+        }
+
+        $objPHPExcel->getActiveSheet()
+            ->setCellValue('A2','Semana=>')
+            ->mergeCells('A2:B2');
+
+        $fontStyle = array(
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '033649'),
+                'size'  => 14,
+                'name'  => 'Calibri'
+            ),
+            'alignment' => array(
+                'vertical'      => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'horizontal'    => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+            )
+        );
+
+        // Estilos
+        $objPHPExcel->getActiveSheet()
+            ->setSharedStyle($sharedStyle1, "A2:$colName" . 2)
+            ->setSharedStyle($sharedStyle2, "A3:B" . ($posSize+2))
+            ->setSharedStyle($sharedStyle3, "C3:$colName" . ($posSize+2))
+            ->getStyle("A2:$colName" . 2)->applyFromArray($fontStyle);
+
+        $objPHPExcel->getActiveSheet()->getStyle("A2:A" . ($posSize+2))->applyFromArray($fontStyle);
+
+        // Destacando Posiçao
+        $objConditional = new PHPExcel_Style_Conditional();
+        $objConditional->setConditionType(PHPExcel_Style_Conditional::CONDITION_CELLIS)
+            ->setOperatorType(PHPExcel_Style_Conditional::OPERATOR_EQUAL)
+            ->addCondition('1');
+        $objConditional->getStyle()->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB('FFED4F');
+
+        $conditionalStyles = $objPHPExcel->getActiveSheet()->getStyle("C3:$colName" . ($posSize+2))->getConditionalStyles();
+        array_push($conditionalStyles, $objConditional);
+        $objPHPExcel->getActiveSheet()->getStyle("C3:$colName" . ($posSize+2))->setConditionalStyles($conditionalStyles);
+
+
+        $i = 1;
+        // Destacando Corte
+        foreach ($rows as $record => $fields) {
+            $positioncute = intval($fields['positioncute']);
+            if($i == $positioncute) {
+                $objPHPExcel->getActiveSheet()
+                    ->setSharedStyle($sharedStyle4, "C" . ($positioncute+2) . ":$colName" . ($positioncute+2));
+            }
+            $i++;
+        }
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment;filename=MAPA.xlsx");
+        header("Cache-Control: max-age=0");
+        header("Cache-Control: max-age=1");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+        header("Cache-Control: cache, must-revalidate");
+        header("Pragma: public");
+
+        $objWriter->save("php://output");
     }
 
 }

@@ -361,6 +361,23 @@ trait TresultSet {
         return curl_exec ($ch);
     }
 
+    public static function getColExcell ($pos) {
+        $vertor = array(
+            'A','B','C','D','E','F','G','H','I','J','K','L','M',
+            'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+        $kon = count($vertor);
+
+        if( $pos > $kon ) {
+            $fator = (int)( $pos / $kon );
+            $a = $vertor[$fator-1];
+            $b = $vertor[($pos-($kon*$fator))-1];
+            return $a . $b;
+        } else {
+            return $vertor[$pos-1];
+        }
+    }
+
     public function buscarCep() {
         $data = $_POST;
         $query = $data['query'];

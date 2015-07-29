@@ -223,6 +223,16 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         return parseInt(context.record.get(field)) !== 0;
     },
 
+    onWorkSheetWeekDay: function () {
+        var me = this,
+            view = me.getView(),
+            grid = view.down('gridpanel[name=schemamonthlymap]'),
+            data = grid.getSelectionModel().getSelection()[0],
+            id = data.get('id');
+
+        window.open('business/Class/allocationschemamap.php?action=select&method=getWorkSheetWeekDay&id='+id);
+    },
+
     onDeleteMonthly: function () {
         var me = this,
             view = me.getView(),

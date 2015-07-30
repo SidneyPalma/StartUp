@@ -70,10 +70,12 @@ class allocationschemamap extends \Smart\Data\Cache {
 
         $proxy = $this->getStore()->getProxy();
 
-        // Obter novo
-        $sqlSchemaWeek = "select schemaweek from allocationschema where id = :id";
+        $positionWeek = 'position' . $weekday;
 
-        $pdo = $proxy->prepare($sqlSchemaWeek);
+        $orderBy = $proxy->query("select id from contractorunit order by $positionWeek")->fetchAll();
+
+        // Obter novo
+        $pdo = $proxy->prepare("select schemaweek from allocationschema where id = :id");
 
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
@@ -86,8 +88,20 @@ class allocationschemamap extends \Smart\Data\Cache {
         $rownumber = 0;
         $contractorunitid = '';
 
+        $list = array();
+
+        foreach ($orderBy as $order) {
+            $id = intval($order['id']);
+            foreach ($rows as $record) {
+                $unit = intval($record["contractorunitid"]);
+                if($id == $unit) {
+                    $list[] = $record;
+                }
+            }
+        }
+
         // Construindo a Lista de Unidades
-        foreach ($rows as $record) {
+        foreach ($list as $record) {
             if ($record[$weekday] == "002") {
                 if($contractorunitid !== $record["contractorunitid"]) $position++;
                 $crsContractorUnit[$rownumber]["position"] = $position;

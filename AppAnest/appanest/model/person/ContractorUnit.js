@@ -19,6 +19,24 @@ Ext.define( 'AppAnest.model.person.ContractorUnit', {
         }, {
             name: 'parentname',
             type: 'auto'
+        }, {
+            name: 'position',
+            type: 'int'
+        }, {
+            name: 'positionmon',
+            type: 'int'
+        }, {
+            name: 'positiontue',
+            type: 'int'
+        }, {
+            name: 'positionwed',
+            type: 'int'
+        }, {
+            name: 'positionthu',
+            type: 'int'
+        }, {
+            name: 'positionfri',
+            type: 'int'
         }
     ]
 

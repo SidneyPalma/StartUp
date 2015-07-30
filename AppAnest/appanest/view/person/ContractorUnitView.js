@@ -203,6 +203,54 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                                 xtype: 'container'
                                                             }
                                                         ]
+                                                    }, {
+                                                        xtype: 'fieldcontainer',
+                                                        layout: 'hbox',
+                                                        fieldLabel: 'Posicionamento',
+                                                        defaultType: 'numberfield',
+                                                        defaults: {
+                                                            minValue: 0,
+                                                            allowBlank: false,
+                                                            hideTrigger: true
+                                                        },
+                                                        labelStyle: 'color: blue; font-size: 14px;',
+                                                        items: [
+                                                            {
+                                                                flex: 1,
+                                                                name: 'position',
+                                                                fieldLabel: 'Escala'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'positionmon',
+                                                                fieldLabel: 'Segunda'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'positiontue',
+                                                                fieldLabel: 'Terça'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'positionwed',
+                                                                fieldLabel: 'Quarta'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'positionthu',
+                                                                fieldLabel: 'Quinta'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'positionfri',
+                                                                fieldLabel: 'Sexta'
+                                                            }
+                                                        ]
                                                     }
                                                 ]
                                             }, {

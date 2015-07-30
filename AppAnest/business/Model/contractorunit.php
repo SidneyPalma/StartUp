@@ -15,6 +15,12 @@ class contractorunit extends \Smart\Data\Model {
     private $id;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $position;
+
+    /**
      * @Policy {"nullable":false, "length":14}
      * @Column {"description":"", "type":"string", "policy":true}
      */
@@ -27,10 +33,40 @@ class contractorunit extends \Smart\Data\Model {
     private $countyregistration;
 
     /**
-     * @Policy {"nullable":false, "length":80}
+     * @Policy {"nullable":true, "length":80}
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $maincontact;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $positionmon;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $positiontue;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $positionwed;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $positionthu;
+
+    /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $positionfri;
 
     /**
      * @return type integer
@@ -45,6 +81,22 @@ class contractorunit extends \Smart\Data\Model {
      */
     public function setId($id) {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPosition() {
+        return $this->position;
+    }
+
+    /**
+     * @param type $position
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPosition($position) {
+        $this->position = $position;
         return $this;
     }
 
@@ -93,6 +145,86 @@ class contractorunit extends \Smart\Data\Model {
      */
     public function setMaincontact($maincontact) {
         $this->maincontact = $maincontact;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPositionmon() {
+        return $this->positionmon;
+    }
+
+    /**
+     * @param type $positionmon
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPositionmon($positionmon) {
+        $this->positionmon = $positionmon;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPositiontue() {
+        return $this->positiontue;
+    }
+
+    /**
+     * @param type $positiontue
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPositiontue($positiontue) {
+        $this->positiontue = $positiontue;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPositionwed() {
+        return $this->positionwed;
+    }
+
+    /**
+     * @param type $positionwed
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPositionwed($positionwed) {
+        $this->positionwed = $positionwed;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPositionthu() {
+        return $this->positionthu;
+    }
+
+    /**
+     * @param type $positionthu
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPositionthu($positionthu) {
+        $this->positionthu = $positionthu;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getPositionfri() {
+        return $this->positionfri;
+    }
+
+    /**
+     * @param type $positionfri
+     * @return \AppAnest\Model\contractorunit
+     */
+    public function setPositionfri($positionfri) {
+        $this->positionfri = $positionfri;
         return $this;
     }
 

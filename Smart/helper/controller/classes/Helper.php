@@ -90,6 +90,7 @@ class Helper extends \Smart\Data\Proxy
         $this->createEvent();
         $this->createCache();
         $this->createCoach();
+        $this->createExtJS();
 
         return self::getResultToJson();
     }
@@ -321,6 +322,10 @@ class Helper extends \Smart\Data\Proxy
         fwrite($file, "\r\n\r\n");
 
         fwrite($file, 'echo $object->callAction();');
+
+    }
+
+    private function createExtJS() {
 
     }
 

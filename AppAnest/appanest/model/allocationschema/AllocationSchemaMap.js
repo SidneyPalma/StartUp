@@ -31,6 +31,12 @@ Ext.define( 'AppAnest.model.allocationschema.AllocationSchemaMap', {
             type: 'boolean',
             persist: false,
             defaultValue: false
+        }, {
+            name: 'weekold',
+            type: 'int'
+        }, {
+            name: 'weeknew',
+            type: 'int'
         }
     ]
 

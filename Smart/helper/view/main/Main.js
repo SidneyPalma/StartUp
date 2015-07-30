@@ -59,9 +59,27 @@ Ext.define( 'Smart.view.main.Main', {
                                 fieldLabel: 'Parametros da Entidade',
                                 items: [
                                     {
-                                        name: 'namespace',
                                         flex: 1,
-                                        fieldLabel: 'Namespace'
+                                        xtype: 'container',
+                                        layout: 'hbox',
+                                        defaultType: 'textfield',
+                                        defaults: {
+                                            allowBlank: false
+                                        },
+                                        items: [
+                                            {
+                                                flex: 1,
+                                                name: 'namespace',
+                                                fieldLabel: 'Namespace'
+                                            }, {
+                                                xtype: 'splitter'
+                                            }, {
+                                                flex: 2,
+                                                name: 'package',
+                                                allowBlank: true,
+                                                fieldLabel: 'Pacote ExtJS (model e store, opcional)'
+                                            }
+                                        ]
                                     }, {
                                         xtype: 'splitter'
                                     }, {

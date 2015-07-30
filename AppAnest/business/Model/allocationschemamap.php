@@ -33,6 +33,18 @@ class allocationschemamap extends \Smart\Data\Model {
     private $schemamap;
 
     /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $weekold;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $weeknew;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -93,6 +105,38 @@ class allocationschemamap extends \Smart\Data\Model {
      */
     public function setSchemamap($schemamap) {
         $this->schemamap = $schemamap;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getWeekold() {
+        return $this->weekold;
+    }
+
+    /**
+     * @param type $weekold
+     * @return \AppAnest\Model\allocationschemamap
+     */
+    public function setWeekold($weekold) {
+        $this->weekold = $weekold;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getWeeknew() {
+        return $this->weeknew;
+    }
+
+    /**
+     * @param type $weeknew
+     * @return \AppAnest\Model\allocationschemamap
+     */
+    public function setWeeknew($weeknew) {
+        $this->weeknew = $weeknew;
         return $this;
     }
 

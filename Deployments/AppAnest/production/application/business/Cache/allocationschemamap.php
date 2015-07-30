@@ -168,13 +168,23 @@ class allocationschemamap extends \Smart\Data\Cache {
         $schemamap = isset($_GET["schemamap"]) ? $_GET["schemamap"] : null;
 
         if(isset($id)) {
-            $pdo = $this->getStore()->getProxy()->prepare("select schemamap from allocationschemamap where id = :id");
+            $sql = "
+                select
+                    upper(getEnum('weekday',m.weekday)) as weekdaydesciption,
+                    m.schemamap
+                from
+                    allocationschemamap m
+                    inner join allocationschema a on ( a.id = m.allocationschemaid )
+                where m.id = :id";
+
+            $pdo = $this->getStore()->getProxy()->prepare($sql);
 
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
 
             $pdo->execute();
             $day = self::encodeUTF8($pdo->fetchAll());
             $schemamap = $day[0]["schemamap"];
+            $weekdaydesciption = $day[0]["weekdaydesciption"];
         }
 
         $rows = self::jsonToArray($this->removeAccents($schemamap));
@@ -193,11 +203,13 @@ class allocationschemamap extends \Smart\Data\Cache {
         $sharedStyle2 = new PHPExcel_Style();
         $sharedStyle3 = new PHPExcel_Style();
         $sharedStyle4 = new PHPExcel_Style();
+        $sharedStyle5 = new PHPExcel_Style();
+        $sharedStyle6 = new PHPExcel_Style();
 
         $sharedStyle1->applyFromArray(
             array('fill' 	=> array(
                 'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'F2E191')
+                'color'		=> array('argb' => 'FFD700')
             ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -209,7 +221,7 @@ class allocationschemamap extends \Smart\Data\Cache {
         $sharedStyle2->applyFromArray(
             array('fill' 	=> array(
                 'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'FBEDA5')
+                'color'		=> array('argb' => 'FFFFFF')
             ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -218,9 +230,9 @@ class allocationschemamap extends \Smart\Data\Cache {
             ));
         $sharedStyle3->applyFromArray(
             array('fill' 	=> array(
-                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'FFFFFF')
-            ),
+                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                    'color'		=> array('argb' => 'FFFFFF')
+                ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -230,9 +242,33 @@ class allocationschemamap extends \Smart\Data\Cache {
             ));
         $sharedStyle4->applyFromArray(
             array('fill' 	=> array(
-                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'BDFC00')
-            ),
+                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                    'color'		=> array('argb' => 'feddae')
+                ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+        $sharedStyle5->applyFromArray(
+            array('fill' 	=> array(
+                        'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                        'color'		=> array('argb' => 'FFFAF0')
+                    ),
+                'borders' => array(
+                    'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
+                    'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
+                )
+            ));
+        $sharedStyle6->applyFromArray(
+            array('fill' 	=> array(
+                        'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                        'color'		=> array('argb' => 'F0E68C')
+                    ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -255,8 +291,6 @@ class allocationschemamap extends \Smart\Data\Cache {
             $i++;
         }
 
-        //!($x % 2) ? "par" : "impar";
-
         $posSize = count($rows);
         $colName = self::getColExcell($posSize);
 
@@ -265,7 +299,7 @@ class allocationschemamap extends \Smart\Data\Cache {
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(22);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(05);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
 
         $i = 3;
         // Unidades, Posições
@@ -280,6 +314,9 @@ class allocationschemamap extends \Smart\Data\Cache {
         for ($x = 3; $x < count($rows)+3; $x++) {
             $colName = self::getColExcell($x);
             $objPHPExcel->getActiveSheet()
+                ->getRowDimension($x)
+                ->setRowHeight(21);
+            $objPHPExcel->getActiveSheet()
                 ->setCellValue($colName . '2', $x-2)
                 ->getColumnDimension($colName)->setWidth(5);
         }
@@ -288,13 +325,31 @@ class allocationschemamap extends \Smart\Data\Cache {
             ->setCellValue('A2','Semana=>')
             ->mergeCells('A2:B2');
 
-        $fontStyle = array(
+        $fontStyle1 = array(
             'font'  => array(
                 'bold'  => true,
                 'color' => array('rgb' => '033649'),
-                'size'  => 14,
+                'size'  => 13,
                 'name'  => 'Calibri'
             ),
+            'alignment' => array(
+                'vertical'      => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'horizontal'    => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+            )
+        );
+        $fontStyle2 = array(
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '033649'),
+                'size'  => 13,
+                'name'  => 'Calibri'
+            ),
+            'alignment' => array(
+                'vertical'      => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'horizontal'    => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+            )
+        );
+        $fontStyle3 = array(
             'alignment' => array(
                 'vertical'      => PHPExcel_Style_Alignment::VERTICAL_CENTER,
                 'horizontal'    => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
@@ -306,34 +361,85 @@ class allocationschemamap extends \Smart\Data\Cache {
             ->setSharedStyle($sharedStyle1, "A2:$colName" . 2)
             ->setSharedStyle($sharedStyle2, "A3:B" . ($posSize+2))
             ->setSharedStyle($sharedStyle3, "C3:$colName" . ($posSize+2))
-            ->getStyle("A2:$colName" . 2)->applyFromArray($fontStyle);
+            ->getStyle("A2:$colName" . 2)->applyFromArray($fontStyle1);
 
-        $objPHPExcel->getActiveSheet()->getStyle("A2:A" . ($posSize+2))->applyFromArray($fontStyle);
-
-        // Destacando Posiçao
+        // Destacando Ocorrência
         $objConditional = new PHPExcel_Style_Conditional();
         $objConditional->setConditionType(PHPExcel_Style_Conditional::CONDITION_CELLIS)
             ->setOperatorType(PHPExcel_Style_Conditional::OPERATOR_EQUAL)
             ->addCondition('1');
-        $objConditional->getStyle()->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB('FFED4F');
+        $objConditional->getStyle()->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)->getEndColor()->setARGB('DBFC00');
 
         $conditionalStyles = $objPHPExcel->getActiveSheet()->getStyle("C3:$colName" . ($posSize+2))->getConditionalStyles();
         array_push($conditionalStyles, $objConditional);
         $objPHPExcel->getActiveSheet()->getStyle("C3:$colName" . ($posSize+2))->setConditionalStyles($conditionalStyles);
 
-
         $i = 1;
-        // Destacando Corte
+        $old = $i;
+        $new = $i;
+
+        // Destacando Corte na Unidade
         foreach ($rows as $record => $fields) {
+            $contractorunit = $fields['contractorunit'];
             $positioncute = intval($fields['positioncute']);
-            if($i == $positioncute) {
-                $objPHPExcel->getActiveSheet()
-                    ->setSharedStyle($sharedStyle4, "C" . ($positioncute+2) . ":$colName" . ($positioncute+2));
+
+            $tmp = isset($rows[$i]['contractorunit']) ? $rows[$i]['contractorunit'] : '';
+
+            if($contractorunit !== $tmp) {
+
+                // Alternando cores das linhas
+                if($new % 2 == 0) {
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle6, "A" . ($old+2) . ":B" . ($i+2));
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle5, "C" . ($old+2) . ":$colName" . ($i+2));
+                }
+
+                // Merge nas Unidades
+                $objPHPExcel->getActiveSheet()->mergeCells("A" . ($old+2) . ":A" . ($i+2));
+                $objPHPExcel->getActiveSheet()->mergeCells("B" . ($old+2) . ":B" . ($i+2));
+
+                $new++;
+                $old = $i+1;
             }
+
+            // Destaca Corte
+            if($i == $positioncute) {
+                $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle4, "C" . ($positioncute+2) . ":$colName" . ($positioncute+2));
+            }
+
             $i++;
         }
+        $objPHPExcel->getActiveSheet()->getStyle("A1:$colName" . 1)->applyFromArray($fontStyle1);
 
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objPHPExcel->getActiveSheet()
+            ->setCellValue('A1',"DIA DA SEMANA $weekdaydesciption")
+            ->mergeCells("A1:$colName" . 1);
+
+        // Estilos
+        $objPHPExcel->getActiveSheet()
+            ->setSharedStyle($sharedStyle1, "A1:$colName" . 1)
+            ->getStyle("A1:$colName" . 1)->applyFromArray($fontStyle1);
+
+        $objPHPExcel->getActiveSheet()->getStyle("A2:A" . ($posSize+2))->applyFromArray($fontStyle1);
+        $objPHPExcel->getActiveSheet()->getStyle("B2:B" . ($posSize+2))->applyFromArray($fontStyle2);
+        $objPHPExcel->getActiveSheet()->getStyle("C3:$colName"  . ($posSize+2))->applyFromArray($fontStyle3);
+
+        // Somas
+        $colSum = count($rows)+2;
+        $colNameSum = self::getColExcell($posSize+3);
+        $colNamePos = self::getColExcell($posSize+2);
+
+        // Linhas
+        for ($x = 2; $x < count($rows)+3; $x++) {
+            $objPHPExcel->getActiveSheet()->setCellValue($colNameSum . $x,"=SUM(C$x:$colNamePos" .$x. ")");
+        }
+
+        // Colunas
+        for ($x = 3; $x < $colSum+1; $x++) {
+            $colNameSum = self::getColExcell($x);
+            $objPHPExcel->getActiveSheet()->setCellValue($colNameSum . ($colSum+1),"=SUM($colNameSum" . 3 . ":$colNameSum" . $colSum .")");
+        }
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
 
         header("Content-Type: application/vnd.ms-excel");
         header("Content-Disposition: attachment;filename=MAPA.xlsx");

@@ -194,19 +194,23 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                                 align: 'center',
                                                                 renderer: function (value, meta, rec) {
                                                                     var schemamap = rec.get('schemamap') || '',
-                                                                        strSelected = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>';
-                                                                    return (schemamap.length != 0) ? Ext.String.format(strSelected,'rgba(0, 0, 139, 0.298039)','icon-print-3') : Ext.String.format(strSelected,'rgba(110, 123, 139, .3)','');
+                                                                        strSelectedOn = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px; cursor: pointer;"><i class="{1}"></i></span>',
+                                                                        strSelectedOf = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>',
+                                                                        isselected = rec.get('isselected') ? Ext.String.format(strSelectedOn,'rgba(0, 0, 139, 1)','icon-print-3') : Ext.String.format(strSelectedOf,'rgba(0, 0, 139, 0.298039)','icon-print-3');
+                                                                    return (schemamap.length != 0) ? isselected : Ext.String.format(strSelected,'rgba(110, 123, 139, .3)','');
                                                                 }
                                                             }, {
                                                                 width: 50,
                                                                 align: 'center',
                                                                 renderer: function (value, meta, rec) {
-                                                                    var strSelected = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>';
-                                                                    return (rec.get('isselected')) ? Ext.String.format(strSelected,'rgba(251, 60, 74, 1)','icon-ok-circled') : Ext.String.format(strSelected,'rgba(251, 60, 74, .3)','icon-ok-circled');
+                                                                    var strSelectedOn = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px; cursor: pointer;"><i class="{1}"></i></span>',
+                                                                        strSelectedOf = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>';
+                                                                    return (rec.get('isselected')) ? Ext.String.format(strSelectedOf,'rgba(251, 60, 74, 1)','icon-ok-circled') : Ext.String.format(strSelectedOn,'rgba(251, 60, 74, .3)','icon-ok-circled');
                                                                 }
                                                             }
                                                         ],
                                                         listeners: {
+                                                            cellclick: 'onCellClick',
                                                             celldblclick: 'onCellDblClick'
                                                         }
                                                     }
@@ -456,12 +460,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         text: 'Salvar Planejamento',
                                         showSmartTheme: 'red-dark',
                                         handler: 'onUpdateSchemaWeekDay'
-                                    }, {
-                                        glyph: 0xecc0,
-                                        scale: 'medium',
-                                        text: 'Planilha',
-                                        showSmartTheme: 'red-dark',
-                                        handler: 'onWorkSheetWeekDay'
                                     }, {
                                         glyph: 0xec9d,
                                         scale: 'medium',

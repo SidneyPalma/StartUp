@@ -223,16 +223,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         return parseInt(context.record.get(field)) !== 0;
     },
 
-    onWorkSheetWeekDay: function () {
-        var me = this,
-            view = me.getView(),
-            grid = view.down('gridpanel[name=schemamonthlymap]'),
-            data = grid.getSelectionModel().getSelection()[0],
-            id = data.get('id');
-
-        window.open('business/Class/allocationschemamap.php?action=select&method=getWorkSheetWeekDay&id='+id);
-    },
-
     onDeleteMonthly: function () {
         var me = this,
             view = me.getView(),
@@ -395,6 +385,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         Ext.resumeLayouts(true);
     },
 
+    onCellClick: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
+
+        if((cellIndex == 1)&&(record.get('isselected') == true)) {
+            window.open('business/Class/allocationschemamap.php?action=select&method=getWorkSheetWeekDay&id='+record.get('id'));
+        }
+
+    },
+
     onCellDblClick: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var me = this,
             view = me.getView(),
@@ -404,32 +402,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             schemaweekday = view.down('gridpanel[name=schemaweekday]'),
             store = schemaweekday.getStore();
 
-        if((schemamap) && (schemamap.length != 0)) {
-
-            record.store.each(function(rec,index) {
-                rec.set('isselected',false);
-            },me);
-
-            record.set('isselected',true);
-
-            schemamap = Ext.decode(schemamap);
-            store.removeAll();
-            store.loadData(schemamap);
-
-            me.setWeekDayData(schemaweekday);
-
-            return false;
-        }
-
-        param.action = 'select';
-        param.method = 'selectWeekDay';
-        param.weekday = record.get('weekday');
-        param.positioncute = 1;
-        param.id = view.down('hiddenfield[name=id]').getValue();
-
-        store.setParams(param).load({
-            scope: me,
-            callback: function(records, operation, success) {
+        if(cellIndex == 2) {
+            if((schemamap) && (schemamap.length != 0)) {
 
                 record.store.each(function(rec,index) {
                     rec.set('isselected',false);
@@ -437,9 +411,35 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 record.set('isselected',true);
 
+                schemamap = Ext.decode(schemamap);
+                store.removeAll();
+                store.loadData(schemamap);
+
                 me.setWeekDayData(schemaweekday);
+
+                return false;
             }
-        });
+
+            param.action = 'select';
+            param.method = 'selectWeekDay';
+            param.weekday = record.get('weekday');
+            param.positioncute = 1;
+            param.id = view.down('hiddenfield[name=id]').getValue();
+
+            store.setParams(param).load({
+                scope: me,
+                callback: function(records, operation, success) {
+
+                    record.store.each(function(rec,index) {
+                        rec.set('isselected',false);
+                    },me);
+
+                    record.set('isselected',true);
+
+                    me.setWeekDayData(schemaweekday);
+                }
+            });
+        }
     }
 
 });

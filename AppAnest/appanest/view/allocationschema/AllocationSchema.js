@@ -129,10 +129,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 layout: 'anchor',
                                                 defaults: {
                                                     anchor: '100%',
+                                                    allowBlank: false,
                                                     useMondaFont: true
                                                 },
                                                 items: [
                                                     {
+                                                        allowBlank: true,
                                                         xtype: 'hiddenfield',
                                                         name: 'id'
                                                     }, {
@@ -150,6 +152,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         name: 'observation',
                                                         fieldLabel: 'Observação'
                                                     }, {
+                                                        allowBlank: true,
                                                         showClear: true,
                                                         xtype: 'textfield',
                                                         submitValue: false,
@@ -193,11 +196,11 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                                 width: 50,
                                                                 align: 'center',
                                                                 renderer: function (value, meta, rec) {
-                                                                    var schemamap = rec.get('schemamap') || '',
+                                                                    var schemamap = rec.get('schemamap') ? rec.get('schemamap') : '',
                                                                         strSelectedOn = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px; cursor: pointer;"><i class="{1}"></i></span>',
                                                                         strSelectedOf = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>',
                                                                         isselected = rec.get('isselected') ? Ext.String.format(strSelectedOn,'rgba(0, 0, 139, 1)','icon-print-3') : Ext.String.format(strSelectedOf,'rgba(0, 0, 139, 0.298039)','icon-print-3');
-                                                                    return (schemamap.length != 0) ? isselected : Ext.String.format(strSelected,'rgba(110, 123, 139, .3)','');
+                                                                    return (schemamap.length != 0) ? isselected : Ext.String.format(strSelectedOf,'rgba(110, 123, 139, .3)','');
                                                                 }
                                                             }, {
                                                                 width: 50,

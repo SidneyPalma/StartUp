@@ -103,9 +103,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 if(records.length && success == true) {
                     var rec = records[0];
-                    allocationschemaid = rec.get('id');
                     schemaweek = rec.get('schemaweek');
                     form.loadRecord(rec);
+
                     view.down('radiogroup').down('#type1').setDisabled(!((schemaweek) && (schemaweek.length != 0)));
                 } else {
                     periodid.setValue(record.get('id'));
@@ -115,7 +115,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 param.action = 'select';
                 param.method = 'selectWeek';
-                param.allocationschemaid = allocationschemaid;
+                param.allocationschemaid = rec.get('id');
                 view.setLoading('Carregando esquema ...');
 
                 schemamonthly.getStore().setParams(param).load({
@@ -135,23 +135,28 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             list = [],
             view = me.getView(),
             form = view.down('form[name=schemamonthly]'),
-            store = Ext.getStore('allocationschemamonthly');
+            schema = Ext.getStore('allocationschema'),
+            schemamonthly = Ext.getStore('allocationschemamonthly');
 
-        store.clearFilter();
 
-        store.each(function(record,index) {
+        schemamonthly.clearFilter();
+        schemamonthly.each(function(record,index) {
             list.push(record.data);
         },me);
 
         form.down('hiddenfield[name=schemaweek]').setValue(Ext.encode(list));
 
-        me.setModuleData('allocationschema');
+        me.setModuleData(schema);
         me.setModuleForm(form);
 
         me._success = function (frm, action) {
-            var record = frm.getRecord();
+            var record = frm.getRecord(),
+                result = schema.findRecord('id',record.get('id'));
+
             view.down('radiogroup').down('#type1').setDisabled(false);
             form.down('hiddenfield[name=id]').setValue(record.get('id'));
+            result.set('schemaweek',record.get('schemaweek'));
+            result.commit();
         }
 
         me._failure = function (frm, action) {
@@ -227,15 +232,17 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         var me = this,
             view = me.getView(),
             id = view.down('hiddenfield[name=id]').getValue(),
-            allocationschema = Ext.getStore('allocationschema'),
-            record = allocationschema.findRecord('id',id);
+            schema = Ext.getStore('allocationschema'),
+            record = schema.findRecord('id',id),
+            schemamonthly = Ext.getStore('allocationschemamonthly');
 
         if(record) {
-            record.set('schemaweek','');
+            record.set('schemaweek',null);
             record.store.sync({
                 success: function (batch, options) {
                     record.commit();
-                    me.onSelectPeriod(null,record);
+                    schemamonthly.load();
+                    view.down('radiogroup').down('#type1').setDisabled(true);
                 }
             });
         }

@@ -90,11 +90,12 @@ class allocationschemamap extends \Smart\Data\Cache {
 
         $list = array();
 
+        // Ordenando pelo dia da Semana
         foreach ($orderBy as $order) {
             $id = intval($order['id']);
             foreach ($rows as $record) {
                 $unit = intval($record["contractorunitid"]);
-                if($id == $unit) {
+                if ($id == $unit) {
                     $list[] = $record;
                 }
             }

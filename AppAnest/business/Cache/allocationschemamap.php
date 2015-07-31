@@ -30,6 +30,8 @@ class allocationschemamap extends \Smart\Data\Cache {
                 asm.id,
                 asm.schemamap,
                 etl.code as weekday,
+                asm.weekold,
+                asm.weeknew,
                 :allocationschemaid as allocationschemaid,
                 etl.description as weekdaydescription
             from

@@ -1,16 +1,10 @@
 Ext.define( 'AppAnest.model.allocationschema.AllocationSchemaMap', {
     extend: 'Ext.data.Model',
 
-
-    idProperty: 'id',
-
     fields: [
         {
             name: 'id',
-            type: 'int',
-            convert: function (value, record) {
-                return Ext.isNumber(parseInt(value)) ? value : '';
-            }
+            type: 'int'
         }, {
             name: 'allocationschemaid',
             type: 'int',

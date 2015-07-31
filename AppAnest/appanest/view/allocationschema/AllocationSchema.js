@@ -99,6 +99,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         columns: 2,
                                         vertical: false,
                                         fieldLabel: 'Tipo',
+                                        labelStyle: 'color: blue; font-size: 14px;',
                                         items: [
                                             {
                                                 itemId: 'type0',
@@ -157,6 +158,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         xtype: 'textfield',
                                                         submitValue: false,
                                                         fieldLabel: 'Filtrar Unidade',
+                                                        labelStyle: 'color: blue; font-size: 14px;',
                                                         listeners: {
                                                             change: 'onChangeFilterMonthly'
                                                         }
@@ -175,6 +177,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         showClear: true,
                                                         xtype: 'textfield',
                                                         submitValue: false,
+                                                        labelStyle: 'color: blue; font-size: 14px;',
                                                         fieldLabel: 'Filtrar Unidade',
                                                         listeners: {
                                                             change: 'onChangeFilterWeekly'
@@ -199,7 +202,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                                     var schemamap = rec.get('schemamap') ? rec.get('schemamap') : '',
                                                                         strSelectedOn = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px; cursor: pointer;"><i class="{1}"></i></span>',
                                                                         strSelectedOf = '<span style="color: {0}; width: 20px; font-size: 20px; line-height: 22px;"><i class="{1}"></i></span>',
-                                                                        isselected = rec.get('isselected') ? Ext.String.format(strSelectedOn,'rgba(0, 0, 139, 1)','icon-print-3') : Ext.String.format(strSelectedOf,'rgba(0, 0, 139, 0.298039)','icon-print-3');
+                                                                        isselected = rec.get('isselected') ? Ext.String.format(strSelectedOn,'rgba(0, 0, 139, 1)','icon-grid') : Ext.String.format(strSelectedOf,'rgba(0, 0, 139, 0.298039)','icon-grid');
                                                                     return (schemamap.length != 0) ? isselected : Ext.String.format(strSelectedOf,'rgba(110, 123, 139, .3)','');
                                                                 }
                                                             }, {
@@ -216,6 +219,31 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                             cellclick: 'onCellClick',
                                                             celldblclick: 'onCellDblClick'
                                                         }
+                                                    }, {
+                                                        xtype: 'fieldcontainer',
+                                                        layout: 'hbox',
+                                                        fieldLabel: 'Marcadores',
+                                                        labelStyle: 'color: blue; font-size: 14px;',
+                                                        defaultType: 'numberfield',
+                                                        defaults: {
+                                                            hideTrigger: true,
+                                                            useMondaFont: true,
+                                                            submitValue: false,
+                                                            readOnlyColor: true
+                                                        },
+                                                        items: [
+                                                            {
+                                                                flex: 1,
+                                                                name: 'weekold',
+                                                                fieldLabel: 'Anterior'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'weeknew',
+                                                                fieldLabel: 'Atual'
+                                                            }
+                                                        ]
                                                     }
                                                 ]
                                             }

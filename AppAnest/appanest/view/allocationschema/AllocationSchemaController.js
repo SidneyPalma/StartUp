@@ -424,6 +424,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 me.setWeekDayData(schemaweekday);
 
+                view.down('numberfield[name=weekold]').setValue(record.get('weekold'));
+                view.down('numberfield[name=weeknew]').setValue(record.get('weeknew'));
+
                 return false;
             }
 
@@ -436,7 +439,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             store.setParams(param).load({
                 scope: me,
                 callback: function(records, operation, success) {
-
                     record.store.each(function(rec,index) {
                         rec.set('isselected',false);
                     },me);

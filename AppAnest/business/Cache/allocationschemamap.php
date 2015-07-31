@@ -265,7 +265,8 @@ class allocationschemamap extends \Smart\Data\Cache {
                     'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
                 )
-            ));
+            )
+        );
         $sharedStyle4->applyFromArray(
             array('fill' 	=> array(
                     'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
@@ -303,13 +304,13 @@ class allocationschemamap extends \Smart\Data\Cache {
                     'left'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'top'       => array('style' => PHPExcel_Style_Border::BORDER_THIN)
                 )
-            ));
-
+            )
+        );
         $sharedStyleWeekOld->applyFromArray(
             array('fill' 	=> array(
-                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'E8DDCB')
-            ),
+                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                    'color'		=> array('argb' => 'E8DDCB')
+                ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -320,9 +321,9 @@ class allocationschemamap extends \Smart\Data\Cache {
         );
         $sharedStyleWeekNew->applyFromArray(
             array('fill' 	=> array(
-                'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
-                'color'		=> array('argb' => 'CDB380')
-            ),
+                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                    'color'		=> array('argb' => 'CDB380')
+                ),
                 'borders' => array(
                     'bottom'	=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
                     'right'		=> array('style' => PHPExcel_Style_Border::BORDER_THIN),
@@ -370,7 +371,7 @@ class allocationschemamap extends \Smart\Data\Cache {
             $colName = self::getColExcell($x);
             $objPHPExcel->getActiveSheet()
                 ->getRowDimension($x)
-                ->setRowHeight(21);
+                ->setRowHeight(18);
             $objPHPExcel->getActiveSheet()
                 ->setCellValue($colName . '2', $x-2)
                 ->getColumnDimension($colName)->setWidth(5);

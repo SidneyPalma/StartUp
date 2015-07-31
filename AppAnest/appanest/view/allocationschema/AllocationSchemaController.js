@@ -300,9 +300,15 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     },
 
     setWeekDayData: function (schemaweekday) {
-        var store = schemaweekday.getStore(),
+        var me = this,
+            view = me.getView(),
+            store = schemaweekday.getStore(),
+            grid = view.down('gridpanel[name=schemamonthlymap]'),
+            model = grid.getSelectionModel().getSelection()[0],
             getFields = function () {
             var fields = [], i,
+                weekold = model.get('weekold'),
+                weeknew = model.get('weeknew'),
                 dutyamount = store.getCount();
 
             for (i = 1; i <= dutyamount; i++) {
@@ -311,14 +317,23 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                     align: 'center',
                     dataIndex: 'week' + Ext.String.leftPad(i, 2, '0'),
                     width: 30,
-                    renderer: function (value, meta, rec, rowIndex) {
+                    renderer: function (value, meta, rec, rowIndex, colIndex) {
                         var color = parseInt(rec.get('position')) % 2 == 0,
                             metaStyle = (color) ? '' : 'background-color: rgba(242, 243, 235, .9)';
 
-                        meta.style = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(254, 189, 98, .5)' : metaStyle;
+                        metaStyle = (parseInt(rowIndex) == parseInt(rec.get('positioncute'))-1) ? 'background-color: rgba(254, 189, 98, .5)' : metaStyle;
+
+                        if((parseInt(colIndex)-1) == parseInt(weekold)) {
+                            metaStyle = 'background-color: rgba(205, 179, 128, 0.4);';
+                        }
+
+                        if((parseInt(colIndex)-1) == parseInt(weeknew)) {
+                            metaStyle = 'background-color: rgba(205, 179, 128, 0.8);';
+                        }
+                        meta.style = metaStyle;
 
                         if(parseInt(value) == 1) {
-                            meta.style = 'background-color: rgb(189, 252, 0)';
+                            meta.style = 'background-color: rgb(189, 252, 0);';
                         }
 
                         return value;

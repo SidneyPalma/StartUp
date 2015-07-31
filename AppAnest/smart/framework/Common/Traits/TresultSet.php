@@ -343,6 +343,29 @@ trait TresultSet {
         return self::jsonToArray($bunch);
     }
 
+    public static function orderByArray($data, $field) {
+        $code = "return strnatcmp(\$a['$field'], \$b['$field']);";
+        usort($data, create_function('$a,$b', $code));
+        return $data;
+    }
+
+    public static function getColExcell ($pos) {
+        $vetor = array(
+            'A','B','C','D','E','F','G','H','I','J','K','L','M',
+            'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+
+        $kon = count($vetor);
+
+        if( $pos > $kon ) {
+            $fator = (int)( $pos / $kon );
+            $a = $vetor[$fator-1];
+            $b = $vetor[($pos-($kon*$fator))-1];
+            return $a . $b;
+        } else {
+            return $vetor[$pos-1];
+        }
+    }
+
     public static function getWebService($url,$data=array(),$get=array()){
         $url = explode('?',$url,2);
 
@@ -359,23 +382,6 @@ trait TresultSet {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         return curl_exec ($ch);
-    }
-
-    public static function getColExcell ($pos) {
-        $vertor = array(
-            'A','B','C','D','E','F','G','H','I','J','K','L','M',
-            'N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
-
-        $kon = count($vertor);
-
-        if( $pos > $kon ) {
-            $fator = (int)( $pos / $kon );
-            $a = $vertor[$fator-1];
-            $b = $vertor[($pos-($kon*$fator))-1];
-            return $a . $b;
-        } else {
-            return $vertor[$pos-1];
-        }
     }
 
     public function buscarCep() {

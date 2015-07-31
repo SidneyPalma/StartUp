@@ -1,7 +1,14 @@
 Ext.define( 'Ext.overrides.grid.column.Column', {
     override: 'Ext.grid.column.Column',
 
-    hideable: false,
-    menuDisabled: true
+    initComponent: function () {
+        var me = this;
+
+        //me.sortable = false;
+        me.hideable = false;
+        me.menuDisabled = true;
+
+        me.callParent();
+    }
 
 });

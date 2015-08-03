@@ -8,6 +8,7 @@ class allocationschema extends \Smart\Data\Cache {
 
     private function setTurningVerticalByLastWeek (array $data) {
         $id = 5;
+        $dayOfWeek = array(2,3,4,5,6);
 
         $removeAll = array();
         $removeUnt = array();
@@ -36,7 +37,7 @@ class allocationschema extends \Smart\Data\Cache {
               and sm.dutydate <  sp.periodto
             order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
 
-        // criando primeira semana
+        // criando primeira semana, obtendo da ultima semana do peiodo anterior
         $pdo = $proxy->prepare($sqlLastWeek);
         $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
         $pdo->execute();
@@ -57,14 +58,14 @@ class allocationschema extends \Smart\Data\Cache {
 
         }
 
-        $week = array('dayWeek'=>'2','week'=>$lastWeek);
-
-        $this->setTurningVerticalDaysOfWeek($week);
+        // obter dia, fazer o giro
+        foreach($dayOfWeek as $dayCode) {
+            $dayList = self::searchArray($lastWeek,'dayofweek',$dayCode);
+            $this->setTurningVerticalDaysOfWeek($dayList,$dayCode);
+        }
     }
 
-    private function setTurningVerticalDaysOfWeek (array $data) {
-        $dayList = $data['week'];
-        $dayWeek = $data['dayWeek'];
+    private function setTurningVerticalDaysOfWeek (array $dayList, $dayCode) {
         $proxy = $this->getStore()->getProxy();
 
         $sqlListWeek = "
@@ -82,9 +83,12 @@ class allocationschema extends \Smart\Data\Cache {
                 schedulingperiod sp
                 where sp.periodid = 2
                   and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
-                  and dayofweek(date_add(sp.periodof, interval row day)) = 2";
+                  and dayofweek(date_add(sp.periodof, interval row day)) = :dayCode";
 
-        $rows = $proxy->query($sqlListWeek)->fetchAll();
+        $pdo = $proxy->prepare($sqlListWeek);
+        $pdo->bindValue(":dayCode", $dayCode, \PDO::PARAM_INT);
+        $pdo->execute();
+        $rows = self::encodeUTF8($pdo->fetchAll());
 
         $sql = "call getLoopOut(:schedulingperiodid,:naturalpersonid,:contractorunitid,:dateofmonth,'D',:position,'samuel.dasilva');";
 
@@ -113,14 +117,15 @@ class allocationschema extends \Smart\Data\Cache {
         $crsUnique = array();
         $tmpDaysOfWeek = array();
 
+        // Remover duplicidades
         foreach($dayWeek as $record) {
             if(isset($record['position'])) unset($record['position']);
             if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
             $crsUnique[] = $record;
         }
-
         $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
 
+        // Fazer o Giro
         foreach($tmpUnique as $unit) {
             $position = 1;
             $crsDaysOfWeek = array();
@@ -132,6 +137,7 @@ class allocationschema extends \Smart\Data\Cache {
                 $crsDaysOfWeek[] = $record;
             }
 
+            // Ordenar Unidade pela Posição
             $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
 
             foreach($sortedArray as $item) {

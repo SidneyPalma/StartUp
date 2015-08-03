@@ -32,7 +32,7 @@ trait TresultSet {
      * @return array Contém a estrutura de retorno
      * @author http://stackoverflow.com/questions/1019076/how-to-search-by-key-value-in-a-multidimensional-array-in-php
      */
-    public static function searchArray (array $array, $key, $value) {
+    public static function searchArray ($array, $key, $value) {
         $results = array();
 
         if (is_array($array)) {
@@ -46,6 +46,54 @@ trait TresultSet {
         }
 
         return $results;
+    }
+
+    /**
+     * Remove duplicados em um multidimensional array in key=>value
+     *
+     * @return array Contém a estrutura de retorno
+     * @author http://stackoverflow.com/questions/7134824/delete-element-from-multi-dimensional-array-based-on-key
+     */
+    public static function traverseArray($array) {
+        return array_map("unserialize", array_unique(array_map("serialize", $array)));
+    }
+
+    /**
+     * Ordenar um multidimensional array in key=>value
+     *
+     * @return array Contém a estrutura de retorno
+     * @author http://php.net/manual/pt_BR/function.sort.php
+     */
+    public static function sorterArray ($array, $key, $order=SORT_ASC) {
+        $new_array = array();
+        $sortable_array = array();
+
+        if (count($array) > 0) {
+            foreach ($array as $k => $v) {
+                if (is_array($v)) {
+                    foreach ($v as $k2 => $v2) {
+                        if ($k2 == $key) {
+                            $sortable_array[$k] = $v2;
+                        }
+                    }
+                } else {
+                    $sortable_array[$k] = $v;
+                }
+            }
+            switch ($order) {
+                case SORT_ASC:
+                    asort($sortable_array);
+                    break;
+                case SORT_DESC:
+                    arsort($sortable_array);
+                    break;
+            }
+            foreach ($sortable_array as $k => $v) {
+                $new_array[] = $array[$k];
+            }
+        }
+
+        return $new_array;
     }
 
     /**

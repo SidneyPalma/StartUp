@@ -6,6 +6,169 @@ use AppAnest\Model\allocationschema as Model;
 
 class allocationschema extends \Smart\Data\Cache {
 
+    private function setTurningVerticalByLastWeek (array $data) {
+        $id = 5;
+        $dayOfWeek = array(2,3,4,5,6);
+
+        $removeAll = array();
+        $removeUnt = array();
+        $removeDay = array();
+//        $removeAll = array('409');
+//        $removeUnt = array(array('344'=>'41'));
+//        $removeDay = array(array('344'=>'mon'));
+
+        $proxy = $this->getStore()->getProxy();
+
+        // Obter LastWeek
+        $sqlLastWeek = "
+            select
+                sm.contractorunitid,
+                smp.naturalpersonid,
+                dayofweek(sm.dutydate) as dayofweek
+            from
+                allocationschema a
+                inner join schedulingperiod sp on ( sp.periodid = a.periodid )
+                inner join schedulingmonthly sm on ( sm.schedulingperiodid = sp.id )
+                inner join schedulingmonthlypartners smp on ( smp.schedulingmonthlyid = sm.id )
+            where a.id = :id
+              and sm.shift = 'D'
+              and dayofweek(sm.dutydate) between 2 and 6
+              and sm.dutydate >= sp.periodof - interval 7 day
+              and sm.dutydate <  sp.periodto
+            order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
+
+        // criando primeira semana, obtendo da ultima semana do peiodo anterior
+        $pdo = $proxy->prepare($sqlLastWeek);
+        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+        $pdo->execute();
+        $lastWeek = self::encodeUTF8($pdo->fetchAll());
+
+        // remover socio da lista
+        foreach ($removeAll as $value) {
+            $finded = self::searchArray($lastWeek,'naturalpersonid',$value);
+            foreach ($finded as $element) {
+                $key = array_search($element, $lastWeek);
+                if($key) unset($lastWeek[$key]);
+            }
+        }
+        foreach ($removeUnt as $value) {
+
+        }
+        foreach ($removeDay as $value) {
+
+        }
+
+        // obter dia, fazer o giro
+        foreach($dayOfWeek as $dayCode) {
+            $dayList = self::searchArray($lastWeek,'dayofweek',$dayCode);
+            $this->setTurningVerticalDaysOfWeek($dayList,$dayCode);
+        }
+    }
+
+    private function setTurningVerticalDaysOfWeek (array $dayList, $dayCode) {
+        $proxy = $this->getStore()->getProxy();
+
+        $sqlListWeek = "
+            select
+                sp.id as schedulingperiodid,
+                concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dateofmonth,
+                substring(lower(dayname(concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')))),1,3) as dayname
+            from
+                ( select @row := @row + 1 as row
+                    from
+                  (select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6) t1,
+                  (select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6) t2,
+                  (select @row:=-1) t3 limit 31
+                ) b,
+                schedulingperiod sp
+                where sp.periodid = 2
+                  and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
+                  and dayofweek(date_add(sp.periodof, interval row day)) = :dayCode";
+
+        $pdo = $proxy->prepare($sqlListWeek);
+        $pdo->bindValue(":dayCode", $dayCode, \PDO::PARAM_INT);
+        $pdo->execute();
+        $rows = self::encodeUTF8($pdo->fetchAll());
+
+        $sql = "call getLoopOut(:schedulingperiodid,:naturalpersonid,:contractorunitid,:dateofmonth,'D',:position,'samuel.dasilva');";
+
+        foreach($rows as $m) {
+            $dateofmonth = $m['dateofmonth'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+            $dayWeek = $this->setTurningV($dayList);
+            foreach($dayWeek as $d) {
+                $position = $d['position'];
+                $naturalpersonid = $d['naturalpersonid'];
+                $contractorunitid = $d['contractorunitid'];
+
+                $pdo = $proxy->prepare($sql);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->execute();
+            }
+            $dayList = $dayWeek;
+        }
+    }
+
+    private function setTurningV (array $dayWeek) {
+        $crsUnique = array();
+        $tmpDaysOfWeek = array();
+
+        // Remover duplicidades
+        foreach($dayWeek as $record) {
+            if(isset($record['position'])) unset($record['position']);
+            if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
+            $crsUnique[] = $record;
+        }
+        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
+
+        // Fazer o Giro
+        foreach($tmpUnique as $unit) {
+            $position = 1;
+            $crsDaysOfWeek = array();
+            $list = self::searchArray($dayWeek,'contractorunitid',$unit['contractorunitid']);
+
+            foreach ($list as $record) {
+                $position = count($list) == $position ? 1 : ($position+1);
+                $record['position'] = $position;
+                $crsDaysOfWeek[] = $record;
+            }
+
+            // Ordenar Unidade pela Posição
+            $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
+
+            foreach($sortedArray as $item) {
+                array_push($tmpDaysOfWeek,$item);
+            }
+        }
+
+        return $tmpDaysOfWeek;
+    }
+
+    public function setTurningVertical (array $data) {
+        $id = $data['id'];
+        $proxy = $this->getStore()->getProxy();
+
+        // Obter histórico
+        $sqlSchemaWeek = "select schemaweek from allocationschema where id = :id";
+
+        $pdo = $proxy->prepare($sqlSchemaWeek);
+
+        $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $week = self::encodeUTF8($pdo->fetchAll());
+
+        $this->setTurningVerticalByLastWeek($data);
+
+        self::_setRows($week);
+
+        return self::getResultToJson();
+    }
+
     public function selectLike(array $data) {
         $start = $data['start'];
         $limit = $data['limit'];

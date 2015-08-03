@@ -145,6 +145,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         xtype: 'hiddenfield',
                                                         name: 'schemaweek'
                                                     }, {
+                                                        xtype: 'hiddenfield',
+                                                        name: 'highlights',
+                                                        value: 1
+                                                    }, {
                                                         xtype: 'textfield',
                                                         name: 'description',
                                                         fieldLabel: 'Descrição'

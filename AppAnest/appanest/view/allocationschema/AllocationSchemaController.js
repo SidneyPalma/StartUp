@@ -294,6 +294,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             grid = view.down('gridpanel[name=schemamonthlymap]'),
             model = grid.getSelectionModel().getSelection()[0],
             schemaweekday = view.down('gridpanel[name=schemaweekday]'),
+            highlights = view.down('hiddenfield[name=highlights]'),
             store = schemaweekday.getStore();
 
         record.store.each(function(rec,index) {
@@ -316,6 +317,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 }
             });
         }
+
+        if(cellIndex > 1) {
+            var week = 'week' + Ext.String.leftPad(cellIndex-1, 2, '0');
+            highlights.setValue(record.get(week));
+            me.setWeekDayData(schemaweekday);
+        }
     },
 
     setWeekDayData: function (schemaweekday) {
@@ -324,6 +331,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             store = schemaweekday.getStore(),
             grid = view.down('gridpanel[name=schemamonthlymap]'),
             model = grid.getSelectionModel().getSelection()[0],
+            highlights = view.down('hiddenfield[name=highlights]').getValue(),
             getFields = function () {
             var fields = [], i,
                 weekold = model.get('weekold'),
@@ -351,7 +359,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                         }
                         meta.style = metaStyle;
 
-                        if(parseInt(value) == 1) {
+                        if(parseInt(value) == parseInt(highlights)) {
                             meta.style = 'background-color: rgb(189, 252, 0);';
                         }
 

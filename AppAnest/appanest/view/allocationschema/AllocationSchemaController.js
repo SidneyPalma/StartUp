@@ -295,6 +295,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             model = grid.getSelectionModel().getSelection()[0],
             schemaweekday = view.down('gridpanel[name=schemaweekday]'),
             highlights = view.down('hiddenfield[name=highlights]'),
+            schemaweek = view.down('hiddenfield[name=schemaweek]'),
             store = schemaweekday.getStore();
 
         record.store.each(function(rec,index) {
@@ -319,9 +320,11 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         }
 
         if(cellIndex > 1) {
-            var week = 'week' + Ext.String.leftPad(cellIndex-1, 2, '0');
-            highlights.setValue(record.get(week));
-            me.setWeekDayData(schemaweekday);
+            if(schemaweek.getValue().length != 0) {
+                var week = 'week' + Ext.String.leftPad(cellIndex-1, 2, '0');
+                highlights.setValue(record.get(week));
+                me.setWeekDayData(schemaweekday);
+            }
         }
     },
 

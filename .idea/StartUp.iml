@@ -30,6 +30,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Smart/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/Whocall" />
       <excludeFolder url="file://$MODULE_DIR$/_AppAnest" />
+      <excludeFolder url="file://$MODULE_DIR$/phpoffice" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

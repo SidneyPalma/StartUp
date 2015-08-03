@@ -211,6 +211,7 @@ class allocationschemamap extends \Smart\Data\Cache {
         $rows = self::jsonToArray($this->removeAccents($schemamap));
 
         $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle("MAPA");
 //        $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
 //                    ->setLastModifiedBy("Maarten Balliauw")
@@ -332,8 +333,6 @@ class allocationschemamap extends \Smart\Data\Cache {
                 )
             )
         );
-
-        $objPHPExcel->setActiveSheetIndex(0);
 
         $i = 3;
 
@@ -527,7 +526,7 @@ class allocationschemamap extends \Smart\Data\Cache {
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
 
         header("Content-Type: application/vnd.ms-excel");
-        header("Content-Disposition: attachment;filename=MAPA.xlsx");
+        header("Content-Disposition: attachment;filename=MAPA - $weekdaydesciption.xlsx");
         header("Cache-Control: max-age=0");
         header("Cache-Control: max-age=1");
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

@@ -95,6 +95,114 @@ class Helper extends \Smart\Data\Proxy
         return self::getResultToJson();
     }
 
+    private function createExtJS() {
+        $root = $_SERVER["DOCUMENT_ROOT"] . $this->doc . "ExtJS/";
+        $data = $this->submit;
+        $rows = $data['rows'];
+        $package = $data['package'];
+        $namespace = $data['namespace'];
+        $createmodel = $data['createmodel'];
+
+        $list = explode('.',$package);
+
+        $classname = end($list);
+        $file = $classname . '.js';
+        $storeId = strtolower($classname);
+
+        $finded = array_search($classname,$list);
+        unset($list[$finded]);
+
+        if (!file_exists($root . "store/")) {
+            mkdir($root . "store/" . implode("/", $list). "/", 0777, true);
+        }
+
+        $store = $root . "store/" . implode("/", $list). "/" . $file;
+        $model = $root . "model/" . implode("/", $list). "/" . $file;
+
+        // Criando Store
+        $file = fopen($store, "w");
+        fwrite($file, "Ext.define( '$namespace.store.$package', {\r\n");
+        fwrite($file, "    extend: 'Smart.data.StoreBase',");
+        fwrite($file, "\r\n\r\n");
+
+        fwrite($file, "    alias: 'store.$classname',");
+        fwrite($file, "\r\n\r\n");
+
+        fwrite($file, "    storeId: '$storeId',");
+        fwrite($file, "\r\n\r\n");
+
+        fwrite($file, "    url: 'business/Class/$storeId.php',");
+        fwrite($file, "\r\n\r\n");
+
+        if($createmodel == 'true') {
+            fwrite($file, "    model: '$namespace.model.$package'");
+        } else {
+            $this->createField($file,$rows);
+        }
+        fwrite($file, "\r\n\r\n");
+
+        fwrite($file, "});");
+
+        // Criando Model (se solicitado)
+        if($createmodel == 'true') {
+            if (!file_exists($root . "model/")) {
+                mkdir($root . "model/" . implode("/", $list). "/", 0777, true);
+            }
+
+            $file = fopen($model, "w");
+            fwrite($file, "Ext.define( '$namespace.model.$package', {\r\n");
+            fwrite($file, "    extend: 'Ext.data.Model',");
+            fwrite($file, "\r\n\r\n");
+
+            $this->createField($file,$rows);
+            fwrite($file, "\r\n\r\n");
+
+            fwrite($file, "});");
+        }
+    }
+
+    private function createField(&$file, $rows) {
+        $list = self::jsonToArray($rows);
+
+        $i = 1;
+        fwrite($file, "    fields: [\r\n");
+        fwrite($file, "        {\r\n");
+
+        // fields
+        foreach ($list as $key => $value) {
+
+            $value["HAS_IGNORE"] = strtolower($value["HAS_IGNORE"]) == '1' ? 'true' : 'false';
+
+            if($value["HAS_IGNORE"] === 'true') continue;
+
+            $columnName = strtolower($value["COLUMN_NAME"]);
+
+            switch (self::_DATA_TYPE($value)) {
+                case 'integer':
+                    $columnType = 'int';
+                    break;
+                case 'string':
+                    $columnType = 'auto';
+                    break;
+                default:
+                    $columnType = $value;
+            }
+
+            fwrite($file, "            name: '$columnName',\r\n");
+            fwrite($file, "            type: '$columnType'\r\n");
+
+            if($i == count($list)) {
+                fwrite($file, "        }\r\n");
+            } else {
+                fwrite($file, "        }, {\r\n");
+            }
+
+            $i++;
+        }
+
+        fwrite($file, "    ]");
+    }
+
     private function createModel() {
         $root = $_SERVER["DOCUMENT_ROOT"] . $this->doc . "Model/";
         $data = $this->submit;
@@ -322,10 +430,6 @@ class Helper extends \Smart\Data\Proxy
         fwrite($file, "\r\n\r\n");
 
         fwrite($file, 'echo $object->callAction();');
-
-    }
-
-    private function createExtJS() {
 
     }
 

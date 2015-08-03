@@ -15,7 +15,7 @@ Ext.define( 'Smart.view.main.Main', {
     controller: 'main',
 
     layout: {
-        type: 'hbox'
+        type: 'border'
     },
 
     initComponent: function () {
@@ -31,15 +31,14 @@ Ext.define( 'Smart.view.main.Main', {
 
         me.items = [
             {
-                flex: 1,
+                width: 400,
+                region: 'west',
                 xtype: 'container'
             }, {
+                region: 'center',
                 frame: true,
                 xtype: 'form',
-                layout: 'fit',
                 title: 'Smart - Class builder',
-                width: 800,
-                height: 600,
                 items: [
                     {
                         padding: 10,
@@ -76,8 +75,7 @@ Ext.define( 'Smart.view.main.Main', {
                                             }, {
                                                 flex: 2,
                                                 name: 'package',
-                                                allowBlank: true,
-                                                fieldLabel: 'Pacote ExtJS (model e store, opcional)'
+                                                fieldLabel: 'Pacote ExtJS (store e model)'
                                             }
                                         ]
                                     }, {
@@ -104,16 +102,26 @@ Ext.define( 'Smart.view.main.Main', {
                                     {
                                         name: 'cache',
                                         flex: 1,
-                                        emptyText: 'Cache\\'+'\\',
+                                        emptyText: 'Cache\\' + '\\',
                                         fieldLabel: 'Cache ( repositórios de DML´s customizados )'
                                     }, {
                                         xtype: 'splitter'
                                     }, {
                                         name: 'event',
                                         flex: 1,
-                                        emptyText: 'Event\\'+'\\',
+                                        emptyText: 'Event\\' + '\\',
                                         allowBlank: true,
                                         fieldLabel: 'Event (eventos do model, opcional)'
+                                    }
+                                ]
+                            }, {
+                                defaultType: 'checkboxfield',
+                                items: [
+                                    {
+                                        fieldLabel: 'ExtJS DataPackage',
+                                        boxLabel  : 'Gerar Model',
+                                        name      : 'createmodel',
+                                        checked   : true
                                     }
                                 ]
                             }, {
@@ -235,7 +243,8 @@ Ext.define( 'Smart.view.main.Main', {
                     }
                 ]
             }, {
-                flex: 1,
+                width: 400,
+                region: 'east',
                 xtype: 'container'
             }
         ];

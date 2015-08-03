@@ -453,6 +453,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                     {
                                         glyph: 0xe86c,
                                         scale: 'medium',
+                                        text: 'Processar Escala',
+                                        showSmartTheme: 'blue',
+                                        handler: 'onCreateSchemaMonthly'
+                                    }, {
+                                        glyph: 0xe86c,
+                                        scale: 'medium',
                                         text: 'Salvar Planejamento',
                                         showSmartTheme: 'red-dark',
                                         handler: 'onUpdateSchemaMonthly'

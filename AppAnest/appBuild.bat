@@ -8,4 +8,4 @@ cls
     sencha app build
 
 ::Iniciando versão build
-    start http://localhost/appanest
+    start http://localhost:8080/appanest

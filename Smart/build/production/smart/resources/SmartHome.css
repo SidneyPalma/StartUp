@@ -1,6 +1,51 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans);
 
+.username .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/username.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.password .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/password.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.birthdate .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda'; 
+    background: url(images/default/birthdate.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.mainmail .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/mainmail.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
+.invite .x-form-field {
+    height: 28px;
+    line-height: 2;
+    font-family: 'Monda';
+    background: url(images/default/invite.png) no-repeat left;
+    background-size: contain;
+    padding-left: 30px;
+}
+
 .wallpaper00 > .x-panel-body {
     background: url(images/smart/wallpaper/wood00.jpg) repeat bottom right !important;
 }
@@ -103,10 +148,12 @@
     font-family: 'Hammersmith One', sans-serif;
     font-size: 32px !important;
 }
+
 .theme-smart-login .message {
     color: white;
     font-family: 'PT Sans', sans-serif;
 }
+
 .theme-smart-login .login-footer {
     font-size: 16px;
     text-align: left;

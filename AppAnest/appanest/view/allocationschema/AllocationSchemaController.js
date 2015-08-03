@@ -99,7 +99,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         allocationschema.setParams(param).load({
             scope: me,
             callback: function(records, operation, success) {
-                var allocationschemaid, schemaweek;
+                var schemaweek;
 
                 if(records.length && success == true) {
                     var rec = records[0];
@@ -126,6 +126,25 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                         }
                     }
                 });
+            }
+        });
+    },
+
+    onCreateSchemaMonthly: function () {
+        var me = this,
+            view = me.getView(),
+            id = view.down('hiddenfield[name=id]').getValue();
+
+        Ext.Ajax.request({
+            url: 'business/Class/allocationschema.php',
+            params: {
+                id: id,
+                action: 'select',
+                method: 'setTurningVertical'
+            },
+            success: function(response){
+                var text = response.responseText;
+                console.info(Ext.decode(text));
             }
         });
     },

@@ -7,6 +7,8 @@ Ext.define( 'AppAnest.store.person.ContractorUnitSchema', {
 
     url: 'business/Class/contractorunitschema.php',
 
-    model: 'AppAnest.model.person.ContractorUnitSchema'
+    model: 'AppAnest.model.person.ContractorUnitSchema',
+
+    groupField: 'shiftdescription'
 
 });

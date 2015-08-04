@@ -6,6 +6,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
 
     requires: [
         'Ext.tab.*',
+        'Ext.grid.feature.Grouping',
         'Smart.form.field.ComboEnum',
         'Smart.address.TextAddress',
         'Smart.address.SearchAddress',
@@ -418,6 +419,13 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                         listeners: {
                                                             cellclick: 'onCellClick'
                                                         },
+                                                        features: [
+                                                            {
+                                                                ftype:'grouping',
+                                                                collapsible: false,
+                                                                groupHeaderTpl: '<b style="color: #0000ff;">{name}</b>'
+                                                            }
+                                                        ],
                                                         columns: [
                                                             {
                                                                 width: 40,

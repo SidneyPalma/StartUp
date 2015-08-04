@@ -99,9 +99,14 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
             store.sync({
                 scope: me,
                 success: function ( batch, options ) {
+                    store.removeAll();
                     store.load();
+                    shifts.down('form').down('naturalpersonsearch').reset();
+                    shifts.down('form').down('numberfield').onSpinnerUpClick();
                 },
                 failure: function ( batch, options ) {
+                    store.removeAll();
+                    store.load();
                 }
             });
         }

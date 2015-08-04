@@ -4,6 +4,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
     alias: 'controller.allocationschema',
 
+    requires: [
+        'AppAnest.view.allocationschema.*'
+    ],
+
     init: function() {
         this.listen({
             store: {
@@ -133,7 +137,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     onCreateSchemaMonthly: function () {
         var me = this,
             view = me.getView(),
+            periodsearch = view.down('periodsearch'),
+            win = Ext.widget('allocationschemaprocess'),
             id = view.down('hiddenfield[name=id]').getValue();
+
+        //win.show(null,function () {
+        //    win.down('textfield[name=period]').setValue(periodsearch.getRawValue());
+        //    win.down('hiddenfield[name=periodid]').setValue(periodsearch.getValue());
+        //});
 
         Ext.Ajax.request({
             url: 'business/Class/allocationschema.php',

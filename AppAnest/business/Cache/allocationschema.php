@@ -34,7 +34,7 @@ class allocationschema extends \Smart\Data\Cache {
               and sm.shift = 'D'
               and dayofweek(sm.dutydate) between 2 and 6
               and sm.dutydate >= sp.periodof - interval 7 day
-              and sm.dutydate <  sp.periodto
+              and sm.dutydate <= sp.periodto
             order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
 
         // criando primeira semana, obtendo da ultima semana do peiodo anterior

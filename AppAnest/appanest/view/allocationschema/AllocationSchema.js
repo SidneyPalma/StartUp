@@ -166,6 +166,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         listeners: {
                                                             change: 'onChangeFilterMonthly'
                                                         }
+                                                    }, {
+                                                        disabled: true,
+                                                        xtype: 'button',
+                                                        glyph: 0xec2b,
+                                                        scale: 'medium',
+                                                        text: 'Processar Escala do Periodo',
+                                                        showSmartTheme: 'blue',
+                                                        handler: 'onCreateSchemaMonthly'
                                                     }
                                                 ]
                                             }, {
@@ -455,12 +463,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                 buttonAlign: 'center',
                                 buttons: [
                                     {
-                                        glyph: 0xe86c,
-                                        scale: 'medium',
-                                        text: 'Processar Escala',
-                                        showSmartTheme: 'blue',
-                                        handler: 'onCreateSchemaMonthly'
-                                    }, {
+                                    //    glyph: 0xec2b,
+                                    //    scale: 'medium',
+                                    //    text: 'Processar Escala',
+                                    //    showSmartTheme: 'blue',
+                                    //    handler: 'onCreateSchemaMonthly'
+                                    //}, {
                                         glyph: 0xe86c,
                                         scale: 'medium',
                                         text: 'Salvar Planejamento',

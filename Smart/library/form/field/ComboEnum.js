@@ -23,6 +23,8 @@ Ext.define( 'Smart.form.field.ComboEnum', {
     valueField: null,
     displayField: null,
 
+    filterField: null,
+
     buildCombo: function () {
         var me = this,
             hiddenNameId = me.name.replace('description','');
@@ -41,6 +43,11 @@ Ext.define( 'Smart.form.field.ComboEnum', {
         me.initConfig();
         me.buildCombo();
         me.callParent();
+
+        if(me.filterField) {
+            me.store.clearFilter();
+            me.store.filter(me.filterField.field,me.filterField.regex);
+        }
     }
 
 });

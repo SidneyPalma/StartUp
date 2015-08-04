@@ -218,7 +218,6 @@ Ext.define( 'AppAnest.person.PersonPhone', {
                 }
             }
         });
-
     }
 
 });

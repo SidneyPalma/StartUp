@@ -2,12 +2,16 @@
 
 namespace AppAnest\Setup;
 
+use AppAnest\Setup\Start;
+
 class Setup extends \Smart\Common\Coach {
 
-    public $pwd = "";
-    public $usr = "root";
-    public $dns = "mysql:host=localhost;dbname=optimal";
-
-    public $timezone = "America/Manaus";
+    public function __construct() {
+        $this->pwd = Start::getPassWord();
+        $this->usr = Start::getUserName();
+        $this->dtb = Start::getDataBase();
+        $this->tmz = Start::getTimeZone();
+        parent::__construct();
+    }
 
 }

@@ -147,11 +147,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         //});
 
         Ext.Ajax.request({
-            url: 'business/Class/allocationschema.php',
+            url: 'business/Class/schema.php',
             params: {
-                id: id,
-                action: 'select',
-                method: 'setTurningVertical'
+                action: 'selectTurningSchema',
+                periodid: periodsearch.getValue()
             },
             success: function(response){
                 var text = response.responseText;

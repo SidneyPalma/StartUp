@@ -167,7 +167,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                             change: 'onChangeFilterMonthly'
                                                         }
                                                     }, {
-                                                        disabled: true,
+                                                        //disabled: true,
                                                         xtype: 'button',
                                                         glyph: 0xec2b,
                                                         scale: 'medium',

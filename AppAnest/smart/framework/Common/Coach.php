@@ -19,9 +19,9 @@ class Coach {
 
     public $usr = "";
     public $pwd = "";
-    public $dns = "";
+    public $dtb = "";
 
-    public $timezone = "America/Sao_Paulo";
+    public $tmz = "America/Sao_Paulo";
 
     /**
      * @var string
@@ -34,9 +34,9 @@ class Coach {
     private $store = null;
 
     public function __construct() {
-        date_default_timezone_set($this->timezone);
+        date_default_timezone_set($this->tmz);
 
-        $link = array($this->dns, $this->usr, $this->pwd);
+        $link = array($this->dtb, $this->usr, $this->pwd);
 
         $this->store = new Store($link, $this->model);
     }

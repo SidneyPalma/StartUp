@@ -6,6 +6,7 @@ use AppAnest\Model\contractorunitschema as Model;
 
 class contractorunitschema extends \Smart\Data\Cache {
 
+
     public function selectCode(array $data) {
         $query = $data['query'];
         $proxy = $this->getStore()->getProxy();

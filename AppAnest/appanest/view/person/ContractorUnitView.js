@@ -35,6 +35,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
 
         Ext.create('AppAnest.store.person.ContractorSubUnit');
         Ext.create('AppAnest.store.person.ContractorUnitSchema');
+        Ext.create('AppAnest.store.person.ContractorUnitSchemaShow');
 
         me.items = [
             {
@@ -404,7 +405,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                         xtype: 'gridpanel',
                                                         name: 'unitschema',
                                                         hideHeaders: false,
-                                                        store: 'contractorunitschema',
+                                                        store: 'contractorunitschemashow',
                                                         columnsRenderer: function (value, metaData, record, rowIndex, colIndex) {
                                                             var me = this,
                                                                 cell =  '<div>' +
@@ -460,7 +461,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                         dockedItems: [
                                                             {
                                                                 xtype: 'pagingtoolbar',
-                                                                store: 'contractorunitschema',
+                                                                store: 'contractorunitschemashow',
                                                                 dock: 'bottom',
                                                                 displayInfo: true
                                                             }

@@ -48,6 +48,7 @@ $include-appanest-store-person-contractor: true;
 $include-appanest-store-person-contractorsubunit: true;
 $include-appanest-store-person-contractorunit: true;
 $include-appanest-store-person-contractorunitschema: true;
+$include-appanest-store-person-contractorunitschemashow: true;
 $include-appanest-store-person-legalentity: true;
 $include-appanest-store-person-naturalperson: true;
 $include-appanest-store-person-naturalpersonbank: true;

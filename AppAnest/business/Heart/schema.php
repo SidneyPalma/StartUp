@@ -7,13 +7,25 @@ use AppAnest\Setup\Start;
 
 class schema extends \Smart\Data\Proxy {
 
-    // Esquema Semanal
+    /**
+     * Esquema Semanal
+     *
+     * @var null
+     */
     private $schemamonthly = null;
 
-    // Mapa Giro Noturno
+    /**
+     * Mapa Giro Noturno
+     *
+     * @var null
+     */
     private $schemaweekday = null;
 
-    // Ultima semana periodo anterior
+    /**
+     * Ultima semana periodo anterior
+     *
+     * @var null
+     */
     private $schemaweekold = null;
 
     public function __construct() {
@@ -36,7 +48,7 @@ class schema extends \Smart\Data\Proxy {
         $daysweek = array(2,3,4,5,6);
         $periodid = $this->post->periodid;
 
-        // Limpando Conteúdo da Tabela Temporária, INSERIR SCHEMA
+        // Limpando Conteúdo da Tabela Temporária
         $this->exec("
                   delete from tmp_turningmonthly where id > 0;
                   alter table tmp_turningmonthly AUTO_INCREMENT = 1;");
@@ -66,7 +78,8 @@ class schema extends \Smart\Data\Proxy {
             $pdo->execute();
             $dayList = $pdo->fetchAll();
             $this->setInsertSchema($dayList);
-            $this->setUpdateSchema($dayList,$dayofweek);
+            $this->setUpdateSchema001($dayList,$dayofweek);
+            $this->setUpdateSchema002($dayList,$dayofweek);
         }
     }
 
@@ -110,7 +123,7 @@ class schema extends \Smart\Data\Proxy {
         }
     }
 
-    private function setUpdateSchema(array $dayList, $dayofweek) {
+    private function setUpdateSchema001(array $dayList, $dayofweek) {
         $lastWeek = self::searchArray($this->schemaweekold,'dayofweek',$dayofweek);
 
         $sqlUpdateSchemaMonthly = "
@@ -145,7 +158,101 @@ class schema extends \Smart\Data\Proxy {
         }
     }
 
-    public function setAllocationSchema () {
+    private function setUpdateSchema002(array $dayList, $dayofweek) {
+        $daysweek = array(2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri');
+        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek]);
+
+        $sqlUpdateSchemaMonthly = "
+                call setSchemaMonthlyUpdate (
+                    :schedulingperiodid,
+                    :naturalpersonid,
+                    :contractorunitid,
+                    '002',
+                    :dateofmonth,
+                    'N',
+                    :position
+                );";
+
+        $week = 1;
+
+        foreach($dayList as $m) {
+            $dateofmonth = $m['dateofmonth'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+            $dayWeek = $this->setTurningH($lastWeek,$week);
+            foreach($dayWeek as $d) {
+                $position = $d['position'];
+                $naturalpersonid = $d['naturalpersonid'];
+                $contractorunitid = $d['contractorunitid'];
+
+                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->execute();
+            }
+            $week++;
+            $lastWeek = $dayWeek;
+        }
+    }
+
+    private function setTurningH (array $dayWeek, $week) {
+        $returns = array();
+        $weekold = intval($dayWeek['weekold']);
+        $lastWeek = self::jsonToArray($dayWeek['schemamap']);
+        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
+        $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
+        $results = self::selectArray($lastWeek,$weeknew);
+
+        $i = 0;
+        $position = 1;
+        foreach($lastWeek as $record) {
+            $returns[$i]['position'] = $position;
+            $returns[$i]['naturalpersonid'] = intval($results[$i]);
+            $returns[$i]['contractorunitid'] = intval($record['contractorunitid']);
+            $i++;
+        }
+
+        return $returns;
+    }
+
+    private function setTurningV (array $dayWeek) {
+        $crsUnique = array();
+        $tmpDaysOfWeek = array();
+
+        // Remover duplicidades
+        foreach($dayWeek as $record) {
+            if(isset($record['position'])) unset($record['position']);
+            if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
+            $crsUnique[] = $record;
+        }
+        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
+
+        // Fazer o Giro
+        foreach($tmpUnique as $unit) {
+            $position = 1;
+            $crsDaysOfWeek = array();
+            $list = self::searchArray($dayWeek,'contractorunitid',$unit['contractorunitid']);
+
+            foreach ($list as $record) {
+                $position = count($list) == $position ? 1 : ($position+1);
+                $record['position'] = $position;
+                $crsDaysOfWeek[] = $record;
+            }
+
+            // Ordenar Unidade pela Posição
+            $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
+
+            foreach($sortedArray as $item) {
+                array_push($tmpDaysOfWeek,$item);
+            }
+        }
+
+        return $tmpDaysOfWeek;
+    }
+
+    private function setAllocationSchema () {
         $periodid = $this->post->periodid;
 
         $sqlMonthly = "
@@ -167,17 +274,13 @@ class schema extends \Smart\Data\Proxy {
 
         $sqlWeekDay = "
             select
-                asm.id,
                 asm.schemamap,
                 etl.code as weekday,
-                asm.weekold,
-                asm.weeknew,
-                :allocationschemaid as allocationschemaid,
-                etl.description as weekdaydescription
+                asm.weekold
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
-                left join allocationschemamap asm on (
+                inner join allocationschemamap asm on (
                     asm.weekday = etl.code
                     and asm.allocationschemaid = :allocationschemaid
                 )
@@ -220,41 +323,6 @@ class schema extends \Smart\Data\Proxy {
 
         $pdo->execute();
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
-    }
-
-    private function setTurningV (array $dayWeek) {
-        $crsUnique = array();
-        $tmpDaysOfWeek = array();
-
-        // Remover duplicidades
-        foreach($dayWeek as $record) {
-            if(isset($record['position'])) unset($record['position']);
-            if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
-            $crsUnique[] = $record;
-        }
-        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
-
-        // Fazer o Giro
-        foreach($tmpUnique as $unit) {
-            $position = 1;
-            $crsDaysOfWeek = array();
-            $list = self::searchArray($dayWeek,'contractorunitid',$unit['contractorunitid']);
-
-            foreach ($list as $record) {
-                $position = count($list) == $position ? 1 : ($position+1);
-                $record['position'] = $position;
-                $crsDaysOfWeek[] = $record;
-            }
-
-            // Ordenar Unidade pela Posição
-            $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
-
-            foreach($sortedArray as $item) {
-                array_push($tmpDaysOfWeek,$item);
-            }
-        }
-
-        return $tmpDaysOfWeek;
     }
 
     public function callAction() {

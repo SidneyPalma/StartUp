@@ -28,6 +28,13 @@ class schema extends \Smart\Data\Proxy {
      */
     private $schemaweekold = null;
 
+    /**
+     * Lista de Sócios para Plantões Noturnos / MAPA
+     *
+     * @var null
+     */
+    private $naturalperson = null;
+
     public function __construct() {
         $this->post = (object)$_POST;
 
@@ -41,6 +48,7 @@ class schema extends \Smart\Data\Proxy {
     // Start
     public function selectTurningSchema () {
         $this->setSchemaMonthly();
+
         return self::getResultToJson();
     }
 
@@ -160,7 +168,8 @@ class schema extends \Smart\Data\Proxy {
 
     private function setUpdateSchema002(array $dayList, $dayofweek) {
         $daysweek = array(2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri');
-        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek]);
+        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek])[0];
+        $partners = self::searchArray($this->naturalperson,'weekday',$daysweek[$dayofweek]);
 
         $sqlUpdateSchemaMonthly = "
                 call setSchemaMonthlyUpdate (
@@ -174,44 +183,52 @@ class schema extends \Smart\Data\Proxy {
                 );";
 
         $week = 1;
-
         foreach($dayList as $m) {
             $dateofmonth = $m['dateofmonth'];
-            $schedulingperiodid = $m['schedulingperiodid'];
-            $dayWeek = $this->setTurningH($lastWeek,$week);
+            $schedulingperiodid = intval($m['schedulingperiodid']);
+            $dayWeek = $this->setTurningH($lastWeek,$week, $partners);
             foreach($dayWeek as $d) {
-                $position = $d['position'];
-                $naturalpersonid = $d['naturalpersonid'];
-                $contractorunitid = $d['contractorunitid'];
+                $position = intval($d['position']);
+                $naturalpersonid = intval($d['naturalpersonid']);
+                $contractorunitid = intval($d['contractorunitid']);
 
                 $pdo = $this->prepare($sqlUpdateSchemaMonthly);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
             }
             $week++;
-            $lastWeek = $dayWeek;
         }
     }
 
-    private function setTurningH (array $dayWeek, $week) {
+    private function setTurningH (array $dayWeek, $week, $partners) {
         $returns = array();
         $weekold = intval($dayWeek['weekold']);
         $lastWeek = self::jsonToArray($dayWeek['schemamap']);
         $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
         $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
-        $results = self::selectArray($lastWeek,$weeknew);
 
         $i = 0;
         $position = 1;
+        $contractorunitid = 0;
+
         foreach($lastWeek as $record) {
+            $week = intval($record[$weeknew]);
+            $partner = self::searchArray($partners,'position',$week);
+
+            $position = ($contractorunitid == intval($record['contractorunitid'])) ? $position : 1;
+
             $returns[$i]['position'] = $position;
-            $returns[$i]['naturalpersonid'] = intval($results[$i]);
             $returns[$i]['contractorunitid'] = intval($record['contractorunitid']);
+            $returns[$i]['naturalpersonid'] = intval($partner[0]['naturalpersonid']);
+
+            $contractorunitid = intval($record['contractorunitid']);
+
             $i++;
+            $position++;
         }
 
         return $returns;
@@ -304,6 +321,14 @@ class schema extends \Smart\Data\Proxy {
               and sm.dutydate <= sp.periodto
             order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
 
+        $sqlPartner = "
+            select
+                naturalpersonid, weekday, position
+            from
+                naturalpersondistribution
+            where shift = 'P'
+            order by weekday, position";
+
         $pdo = $this->prepare($sqlMonthly);
         $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
 
@@ -323,6 +348,9 @@ class schema extends \Smart\Data\Proxy {
 
         $pdo->execute();
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
+
+        $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
+
     }
 
     public function callAction() {

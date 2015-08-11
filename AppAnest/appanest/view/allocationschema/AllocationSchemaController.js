@@ -147,6 +147,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         //});
 
         Ext.Ajax.request({
+            timeout: (60000 * 5), // cinco minutos
             url: 'business/Class/schema.php',
             params: {
                 action: 'selectTurningSchema',
@@ -154,7 +155,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             },
             success: function(response){
                 var text = response.responseText;
-                console.info(Ext.decode(text));
             }
         });
     },

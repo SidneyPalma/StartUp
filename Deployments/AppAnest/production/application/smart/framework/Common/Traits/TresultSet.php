@@ -97,6 +97,23 @@ trait TresultSet {
     }
 
     /**
+     * Pesquisa recursiva em um multidimensional array in ke=>value
+     *
+     * @param $array
+     * @param $key
+     * @return array
+     */
+    public static function selectArray ($array, $key) {
+        $results = array();
+
+        for ($x = 0; $x <= count($array)-1; $x++) {
+            $results[] = $array[$x][$key];
+        }
+
+        return $results;
+    }
+
+    /**
      * Estrutura de Retorno self::$result
      * 
      * @return json Contém a estrutura de retorno

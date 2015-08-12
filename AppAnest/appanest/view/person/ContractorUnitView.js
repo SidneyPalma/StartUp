@@ -349,7 +349,7 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                                 xtype: 'container',
                                                                 layout: 'hbox',
                                                                 defaults: {
-                                                                    allowBlank: false
+                                                                    //allowBlank: false
                                                                 },
                                                                 items: [
                                                                     {

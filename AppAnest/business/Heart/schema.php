@@ -42,231 +42,9 @@ class schema extends \Smart\Data\Proxy {
 
         parent::__construct( $link );
 
+        ini_set('max_execution_time', 600); // 10 minutos
+
         $this->setAllocationSchema();
-    }
-
-    // Start
-    public function selectTurningSchema () {
-        $this->setSchemaMonthly();
-
-        return self::getResultToJson();
-    }
-
-    private function setSchemaMonthly () {
-        $daysweek = array(2,3,4,5,6);
-        $periodid = $this->post->periodid;
-
-        // Limpando Conteúdo da Tabela Temporária
-        $this->exec("
-                  delete from tmp_turningmonthly where id > 0;
-                  alter table tmp_turningmonthly AUTO_INCREMENT = 1;");
-
-        $sqlDaysWeek = "
-            select
-                sp.id as schedulingperiodid,
-                concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dateofmonth,
-                substring(lower(dayname(concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')))),1,3) as dayname
-            from
-                ( select
-                    @row := @row + 1 as row
-                  from
-                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t1,
-                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t2,
-                    ( select @row:=-1 ) t3 limit 31
-                ) b,
-                schedulingperiod sp
-            where sp.periodid = :periodid
-              and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
-              and dayofweek(date_add(sp.periodof, interval row day)) = :dayofweek";
-
-        foreach($daysweek as $dayofweek) {
-            $pdo = $this->prepare($sqlDaysWeek);
-            $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
-            $pdo->bindValue(":dayofweek", $dayofweek, \PDO::PARAM_INT);
-            $pdo->execute();
-            $dayList = $pdo->fetchAll();
-            $this->setInsertSchema($dayList);
-            $this->setUpdateSchema001($dayList,$dayofweek);
-            $this->setUpdateSchema002($dayList,$dayofweek);
-        }
-    }
-
-    private function setInsertSchema(array $dayList) {
-        $username = Session::read('username');
-        $schemaweek = self::jsonToArray($this->schemamonthly[0]["schemaweek"]);
-
-        $sqlInsertSchemaMonthly = "
-                call setSchemaMonthlyInsert (
-                    :schedulingperiodid,
-                    :contractorunitid,
-                    :allocationschema,
-                    :dateofmonth,
-                    :shift,
-                    :subunit,
-                    :position,
-                    :username
-                );";
-
-        foreach($dayList as $a) {
-            $dayname = $a['dayname'];
-            $dateofmonth = $a['dateofmonth'];
-            $schedulingperiodid = $a['schedulingperiodid'];
-            foreach($schemaweek as $b) {
-                $shift = $b['shift'];
-                $subunit = $b['subunit'];
-                $position = $b['position'];
-                $allocationschema = $b[$dayname];
-                $contractorunitid = $b['contractorunitid'];
-                $pdo = $this->prepare($sqlInsertSchemaMonthly);
-                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-                $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
-                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
-                $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
-                $pdo->bindValue(":subunit", $subunit, \PDO::PARAM_STR);
-                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
-                $pdo->execute();
-            }
-        }
-    }
-
-    private function setUpdateSchema001(array $dayList, $dayofweek) {
-        $lastWeek = self::searchArray($this->schemaweekold,'dayofweek',$dayofweek);
-
-        $sqlUpdateSchemaMonthly = "
-                call setSchemaMonthlyUpdate (
-                    :schedulingperiodid,
-                    :naturalpersonid,
-                    :contractorunitid,
-                    '001',
-                    :dateofmonth,
-                    'D',
-                    :position
-                );";
-
-        foreach($dayList as $m) {
-            $dateofmonth = $m['dateofmonth'];
-            $schedulingperiodid = $m['schedulingperiodid'];
-            $dayWeek = $this->setTurningV($lastWeek);
-            foreach($dayWeek as $d) {
-                $position = $d['position'];
-                $naturalpersonid = $d['naturalpersonid'];
-                $contractorunitid = $d['contractorunitid'];
-
-                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
-                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
-                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
-                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
-                $pdo->execute();
-            }
-            $lastWeek = $dayWeek;
-        }
-    }
-
-    private function setUpdateSchema002(array $dayList, $dayofweek) {
-        $daysweek = array(2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri');
-        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek])[0];
-        $partners = self::searchArray($this->naturalperson,'weekday',$daysweek[$dayofweek]);
-
-        $sqlUpdateSchemaMonthly = "
-                call setSchemaMonthlyUpdate (
-                    :schedulingperiodid,
-                    :naturalpersonid,
-                    :contractorunitid,
-                    '002',
-                    :dateofmonth,
-                    'N',
-                    :position
-                );";
-
-        $week = 1;
-        foreach($dayList as $m) {
-            $dateofmonth = $m['dateofmonth'];
-            $schedulingperiodid = intval($m['schedulingperiodid']);
-            $dayWeek = $this->setTurningH($lastWeek,$week, $partners);
-            foreach($dayWeek as $d) {
-                $position = intval($d['position']);
-                $naturalpersonid = intval($d['naturalpersonid']);
-                $contractorunitid = intval($d['contractorunitid']);
-
-                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
-                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
-                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
-                $pdo->execute();
-            }
-            $week++;
-        }
-    }
-
-    private function setTurningH (array $dayWeek, $week, $partners) {
-        $returns = array();
-        $weekold = intval($dayWeek['weekold']);
-        $lastWeek = self::jsonToArray($dayWeek['schemamap']);
-        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
-        $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
-
-        $i = 0;
-        $position = 1;
-        $contractorunitid = 0;
-
-        foreach($lastWeek as $record) {
-            $week = intval($record[$weeknew]);
-            $partner = self::searchArray($partners,'position',$week);
-
-            $position = ($contractorunitid == intval($record['contractorunitid'])) ? $position : 1;
-
-            $returns[$i]['position'] = $position;
-            $returns[$i]['contractorunitid'] = intval($record['contractorunitid']);
-            $returns[$i]['naturalpersonid'] = intval($partner[0]['naturalpersonid']);
-
-            $contractorunitid = intval($record['contractorunitid']);
-
-            $i++;
-            $position++;
-        }
-
-        return $returns;
-    }
-
-    private function setTurningV (array $dayWeek) {
-        $crsUnique = array();
-        $tmpDaysOfWeek = array();
-
-        // Remover duplicidades
-        foreach($dayWeek as $record) {
-            if(isset($record['position'])) unset($record['position']);
-            if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
-            $crsUnique[] = $record;
-        }
-        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
-
-        // Fazer o Giro
-        foreach($tmpUnique as $unit) {
-            $position = 1;
-            $crsDaysOfWeek = array();
-            $list = self::searchArray($dayWeek,'contractorunitid',$unit['contractorunitid']);
-
-            foreach ($list as $record) {
-                $position = count($list) == $position ? 1 : ($position+1);
-                $record['position'] = $position;
-                $crsDaysOfWeek[] = $record;
-            }
-
-            // Ordenar Unidade pela Posição
-            $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
-
-            foreach($sortedArray as $item) {
-                array_push($tmpDaysOfWeek,$item);
-            }
-        }
-
-        return $tmpDaysOfWeek;
     }
 
     private function setAllocationSchema () {
@@ -350,7 +128,255 @@ class schema extends \Smart\Data\Proxy {
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
 
         $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
+    }
 
+    private function setSchemaMonthly () {
+        $daysweek = array(2,3,4,5,6);
+        $periodid = $this->post->periodid;
+
+        // Limpando Tabela Temporária
+        $this->exec("
+                  delete from tmp_turningmonthly where id > 0;
+                  alter table tmp_turningmonthly AUTO_INCREMENT = 1;");
+
+        $sqlDaysWeek = "
+            select
+                sp.id as schedulingperiodid,
+                concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dateofmonth,
+                substring(lower(dayname(concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')))),1,3) as dayname
+            from
+                ( select
+                    @row := @row + 1 as row
+                  from
+                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t1,
+                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t2,
+                    ( select @row:=-1 ) t3 limit 31
+                ) b,
+                schedulingperiod sp
+            where sp.periodid = :periodid
+              and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
+              and dayofweek(date_add(sp.periodof, interval row day)) = :dayofweek";
+
+        foreach($daysweek as $dayofweek) {
+            $pdo = $this->prepare($sqlDaysWeek);
+            $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
+            $pdo->bindValue(":dayofweek", $dayofweek, \PDO::PARAM_INT);
+            $pdo->execute();
+            $dayList = $pdo->fetchAll();
+            $this->setSchema000($dayList);
+            $this->setSchema001($dayList,$dayofweek);
+            $this->setSchema002($dayList,$dayofweek);
+        }
+    }
+
+    private function setTurningH (array $dayWeek, $week, $partners) {
+        $returns = array();
+        $weekold = intval($dayWeek['weekold']);
+        $lastWeek = self::jsonToArray($dayWeek['schemamap']);
+        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
+        $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
+
+        $i = 0;
+        $position = 1;
+        $contractorunitid = 0;
+
+        foreach($lastWeek as $record) {
+            $week = intval($record[$weeknew]);
+            $partner = self::searchArray($partners,'position',$week);
+
+            $position = ($contractorunitid == intval($record['contractorunitid'])) ? $position : 1;
+
+            $returns[$i]['position'] = $position;
+            $returns[$i]['contractorunitid'] = intval($record['contractorunitid']);
+            $returns[$i]['naturalpersonid'] = intval($partner[0]['naturalpersonid']);
+
+            $i++;
+            $position++;
+            $contractorunitid = intval($record['contractorunitid']);
+        }
+
+        return $returns;
+    }
+
+    private function setTurningV (array $dayWeek) {
+        $crsUnique = array();
+        $tmpDaysOfWeek = array();
+
+        // Remover duplicidades
+        foreach($dayWeek as $record) {
+            if(isset($record['position'])) unset($record['position']);
+            if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
+            $crsUnique[] = $record;
+        }
+        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
+
+        // Fazer o Giro
+        foreach($tmpUnique as $unit) {
+            $position = 1;
+            $crsDaysOfWeek = array();
+            $list = self::searchArray($dayWeek,'contractorunitid',$unit['contractorunitid']);
+
+            foreach ($list as $record) {
+                $position = count($list) == $position ? 1 : ($position+1);
+                $record['position'] = $position;
+                $crsDaysOfWeek[] = $record;
+            }
+
+            // Ordenar Unidade pela Posição
+            $sortedArray = self::sorterArray($crsDaysOfWeek,'position');
+
+            foreach($sortedArray as $item) {
+                array_push($tmpDaysOfWeek,$item);
+            }
+        }
+
+        return $tmpDaysOfWeek;
+    }
+
+    private function setSchema000 (array $dayList) {
+        $username = Session::read('username');
+        $schemaweek = self::jsonToArray($this->schemamonthly[0]["schemaweek"]);
+
+        $sqlInsertSchemaMonthly = "
+                call setSchemaMonthlyInsert (
+                    :schedulingperiodid,
+                    :contractorunitid,
+                    :allocationschema,
+                    :dateofmonth,
+                    :shift,
+                    :subunit,
+                    :position,
+                    :username
+                );";
+
+        foreach($dayList as $a) {
+            $dayname = $a['dayname'];
+            $dateofmonth = $a['dateofmonth'];
+            $schedulingperiodid = $a['schedulingperiodid'];
+
+            foreach($schemaweek as $b) {
+                $shift = $b['shift'];
+                $subunit = $b['subunit'];
+                $position = $b['position'];
+                $allocationschema = $b[$dayname];
+                $contractorunitid = $b['contractorunitid'];
+                $pdo = $this->prepare($sqlInsertSchemaMonthly);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+                $pdo->bindValue(":subunit", $subunit, \PDO::PARAM_STR);
+                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                $pdo->execute();
+            }
+        }
+    }
+
+    private function setSchema001 (array $dayList, $dayofweek) {
+        $lastWeek = self::searchArray($this->schemaweekold,'dayofweek',$dayofweek);
+
+        $sqlUpdateSchemaMonthly = "
+                call setSchemaMonthlyUpdate (
+                    :schedulingperiodid,
+                    :naturalpersonid,
+                    :contractorunitid,
+                    '001',
+                    :dateofmonth,
+                    'D',
+                    :position
+                );";
+
+        foreach($dayList as $m) {
+            $dateofmonth = $m['dateofmonth'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+            $dayWeek = $this->setTurningV($lastWeek);
+
+            foreach($dayWeek as $d) {
+                $position = $d['position'];
+                $naturalpersonid = $d['naturalpersonid'];
+                $contractorunitid = $d['contractorunitid'];
+
+                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->execute();
+            }
+            $lastWeek = $dayWeek;
+        }
+    }
+
+    private function setSchema002 (array $dayList, $dayofweek) {
+        $daysweek = array(2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri');
+        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek])[0];
+        $partners = self::searchArray($this->naturalperson,'weekday',$daysweek[$dayofweek]);
+
+        $sqlUpdateSchemaMonthly = "
+                call setSchemaMonthlyUpdate (
+                    :schedulingperiodid,
+                    :naturalpersonid,
+                    :contractorunitid,
+                    '002',
+                    :dateofmonth,
+                    'N',
+                    :position
+                );";
+
+        $week = 1;
+        foreach($dayList as $m) {
+            $dateofmonth = $m['dateofmonth'];
+            $schedulingperiodid = intval($m['schedulingperiodid']);
+            $dayWeek = $this->setTurningH($lastWeek, $week, $partners);
+
+            foreach($dayWeek as $d) {
+                $position = intval($d['position']);
+                $naturalpersonid = intval($d['naturalpersonid']);
+                $contractorunitid = intval($d['contractorunitid']);
+
+                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->execute();
+            }
+            $week++;
+        }
+    }
+
+    private function setSchema003 () {
+
+    }
+
+    private function setSchema004 () {
+
+    }
+
+    private function setSchema010 () {
+
+    }
+
+    private function setSchema011 () {
+
+    }
+
+    private function setSchema012 () {
+
+    }
+
+    private function setSchema013 () {
+
+    }
+
+    public function selectTurningSchema () {
+        $this->setSchemaMonthly();
+
+        return self::getResultToJson();
     }
 
     public function callAction() {

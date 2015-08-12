@@ -146,8 +146,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         //    win.down('hiddenfield[name=periodid]').setValue(periodsearch.getValue());
         //});
 
+        view.setLoading('Processando Escala Mensal ...');
+
         Ext.Ajax.request({
-            timeout: (60000 * 5), // cinco minutos
+            timeout: (60000 * 10), // 10 minutos
             url: 'business/Class/schema.php',
             params: {
                 action: 'selectTurningSchema',
@@ -155,6 +157,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             },
             success: function(response){
                 var text = response.responseText;
+                view.setLoading(false);
             }
         });
     },

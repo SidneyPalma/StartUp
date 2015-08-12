@@ -29,11 +29,41 @@ class schema extends \Smart\Data\Proxy {
     private $schemaweekold = null;
 
     /**
+     * Esquema Semanal Unidade/Sócio
+     *
+     * @var null
+     */
+    private $schemaunitday = null;
+
+    /**
      * Lista de Sócios para Plantões Noturnos / MAPA
      *
      * @var null
      */
     private $naturalperson = null;
+
+    private $sqlInsert = "
+                call setSchemaMonthlyInsert (
+                    :schedulingperiodid,
+                    :contractorunitid,
+                    :allocationschema,
+                    :dateofmonth,
+                    :shift,
+                    :subunit,
+                    :position,
+                    :username
+                );";
+
+    private $sqlUpdate = "
+                call setSchemaMonthlyUpdate (
+                    :schedulingperiodid,
+                    :naturalpersonid,
+                    :contractorunitid,
+                    :allocationschema,
+                    :dateofmonth,
+                    :shift,
+                    :position
+                );";
 
     public function __construct() {
         $this->post = (object)$_POST;
@@ -94,10 +124,25 @@ class schema extends \Smart\Data\Proxy {
                 inner join schedulingmonthlypartners smp on ( smp.schedulingmonthlyid = sm.id )
             where a.id = :id
               and sm.shift = 'D'
-              and dayofweek(sm.dutydate) between 2 and 6
+              -- and dayofweek(sm.dutydate) between 1 and 7
               and sm.dutydate >= sp.periodof - interval 7 day
               and sm.dutydate <= sp.periodto
             order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
+
+        $sqlUnitDay = "
+            select
+                contractorunitid,
+                naturalpersonid,
+                shift,
+                weekday,
+                position
+            from
+                contractorunitschema
+            order by
+                naturalpersonid,
+                weekday,
+                shift,
+                position";
 
         $sqlPartner = "
             select
@@ -127,11 +172,13 @@ class schema extends \Smart\Data\Proxy {
         $pdo->execute();
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
 
+        $this->schemaunitday = self::encodeUTF8($this->query($sqlUnitDay)->fetchAll());
+
         $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
     }
 
     private function setSchemaMonthly () {
-        $daysweek = array(2,3,4,5,6);
+        $daysweek = array(1,2,3,4,5,6,7);
         $periodid = $this->post->periodid;
 
         // Limpando Tabela Temporária
@@ -164,8 +211,11 @@ class schema extends \Smart\Data\Proxy {
             $pdo->execute();
             $dayList = $pdo->fetchAll();
             $this->setSchema000($dayList);
-            $this->setSchema001($dayList,$dayofweek);
-            $this->setSchema002($dayList,$dayofweek);
+
+            if($dayofweek != 1 && $dayofweek != 7) {
+                $this->setSchema001($dayList,$dayofweek);
+                $this->setSchema002($dayList,$dayofweek);
+            }
         }
     }
 
@@ -208,6 +258,7 @@ class schema extends \Smart\Data\Proxy {
             if(isset($record['naturalpersonid'])) unset($record['naturalpersonid']);
             $crsUnique[] = $record;
         }
+
         $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
 
         // Fazer o Giro
@@ -237,18 +288,6 @@ class schema extends \Smart\Data\Proxy {
         $username = Session::read('username');
         $schemaweek = self::jsonToArray($this->schemamonthly[0]["schemaweek"]);
 
-        $sqlInsertSchemaMonthly = "
-                call setSchemaMonthlyInsert (
-                    :schedulingperiodid,
-                    :contractorunitid,
-                    :allocationschema,
-                    :dateofmonth,
-                    :shift,
-                    :subunit,
-                    :position,
-                    :username
-                );";
-
         foreach($dayList as $a) {
             $dayname = $a['dayname'];
             $dateofmonth = $a['dateofmonth'];
@@ -260,7 +299,7 @@ class schema extends \Smart\Data\Proxy {
                 $position = $b['position'];
                 $allocationschema = $b[$dayname];
                 $contractorunitid = $b['contractorunitid'];
-                $pdo = $this->prepare($sqlInsertSchemaMonthly);
+                $pdo = $this->prepare($this->sqlInsert);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
@@ -277,17 +316,6 @@ class schema extends \Smart\Data\Proxy {
     private function setSchema001 (array $dayList, $dayofweek) {
         $lastWeek = self::searchArray($this->schemaweekold,'dayofweek',$dayofweek);
 
-        $sqlUpdateSchemaMonthly = "
-                call setSchemaMonthlyUpdate (
-                    :schedulingperiodid,
-                    :naturalpersonid,
-                    :contractorunitid,
-                    '001',
-                    :dateofmonth,
-                    'D',
-                    :position
-                );";
-
         foreach($dayList as $m) {
             $dateofmonth = $m['dateofmonth'];
             $schedulingperiodid = $m['schedulingperiodid'];
@@ -298,11 +326,13 @@ class schema extends \Smart\Data\Proxy {
                 $naturalpersonid = $d['naturalpersonid'];
                 $contractorunitid = $d['contractorunitid'];
 
-                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
+                $pdo = $this->prepare($this->sqlUpdate);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", '001', \PDO::PARAM_STR);
                 $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":shift", 'D', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
             }
@@ -315,17 +345,6 @@ class schema extends \Smart\Data\Proxy {
         $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek])[0];
         $partners = self::searchArray($this->naturalperson,'weekday',$daysweek[$dayofweek]);
 
-        $sqlUpdateSchemaMonthly = "
-                call setSchemaMonthlyUpdate (
-                    :schedulingperiodid,
-                    :naturalpersonid,
-                    :contractorunitid,
-                    '002',
-                    :dateofmonth,
-                    'N',
-                    :position
-                );";
-
         $week = 1;
         foreach($dayList as $m) {
             $dateofmonth = $m['dateofmonth'];
@@ -337,11 +356,13 @@ class schema extends \Smart\Data\Proxy {
                 $naturalpersonid = intval($d['naturalpersonid']);
                 $contractorunitid = intval($d['contractorunitid']);
 
-                $pdo = $this->prepare($sqlUpdateSchemaMonthly);
+                $pdo = $this->prepare($this->sqlUpdate);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", '002', \PDO::PARAM_STR);
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":shift", 'N', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
             }
@@ -350,23 +371,18 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema003 () {
-
     }
 
     private function setSchema004 () {
-
     }
 
     private function setSchema010 () {
-
     }
 
     private function setSchema011 () {
-
     }
 
     private function setSchema012 () {
-
     }
 
     private function setSchema013 () {

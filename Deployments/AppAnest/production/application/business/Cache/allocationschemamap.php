@@ -31,7 +31,6 @@ class allocationschemamap extends \Smart\Data\Cache {
                 asm.schemamap,
                 etl.code as weekday,
                 asm.weekold,
-                asm.weeknew,
                 :allocationschemaid as allocationschemaid,
                 etl.description as weekdaydescription
             from
@@ -65,10 +64,10 @@ class allocationschemamap extends \Smart\Data\Cache {
     public function selectWeekDay(array $data) {
         $id = $data['id'];
         $weekday = $data["weekday"];
-        $i_cutecost = $data["positioncute"];
         $crsContractorUnit = array();
         $tmpTurningMonthly = array();
         $turningHorizontal = array();
+        $i_cutecost = $data["positioncute"];
 
         $proxy = $this->getStore()->getProxy();
 

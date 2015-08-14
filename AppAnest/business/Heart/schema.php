@@ -8,6 +8,16 @@ use AppAnest\Setup\Start;
 class schema extends \Smart\Data\Proxy {
 
     /**
+     * Estrutura contantedo os dias da Semana
+     *
+     * @var array
+     */
+    private $daysweek = array(
+        array(1,2,3,4,5,6,7),
+        array(1=>'sat',2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri',7=>'sun')
+    );
+
+    /**
      * Esquema Semanal
      *
      * @var null
@@ -77,6 +87,17 @@ class schema extends \Smart\Data\Proxy {
         $this->setAllocationSchema();
     }
 
+    public function selectTurningSchema () {
+        $this->setSchemaMonthly();
+
+        return self::getResultToJson();
+    }
+
+    public function callAction() {
+        $action = $this->post->action;
+        return method_exists($this, $action) ? call_user_func(array($this, $action)) : $this->UNEXPECTED_COMMAND;
+    }
+
     private function setAllocationSchema () {
         $periodid = $this->post->periodid;
 
@@ -114,6 +135,9 @@ class schema extends \Smart\Data\Proxy {
 
         $sqlWeekOld = "
             select
+            	sm.shift,
+                smp.position,
+                smp.allocationschema,
                 sm.contractorunitid,
                 smp.naturalpersonid,
                 dayofweek(sm.dutydate) as dayofweek
@@ -123,11 +147,9 @@ class schema extends \Smart\Data\Proxy {
                 inner join schedulingmonthly sm on ( sm.schedulingperiodid = sp.id )
                 inner join schedulingmonthlypartners smp on ( smp.schedulingmonthlyid = sm.id )
             where a.id = :id
-              and sm.shift = 'D'
-              -- and dayofweek(sm.dutydate) between 1 and 7
               and sm.dutydate >= sp.periodof - interval 7 day
               and sm.dutydate <= sp.periodto
-            order by dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.position";
+            order by sm.shift, dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.allocationschema, smp.position";
 
         $sqlUnitDay = "
             select
@@ -139,10 +161,7 @@ class schema extends \Smart\Data\Proxy {
             from
                 contractorunitschema
             order by
-                naturalpersonid,
-                weekday,
-                shift,
-                position";
+                naturalpersonid, weekday, shift, position";
 
         $sqlPartner = "
             select
@@ -173,12 +192,11 @@ class schema extends \Smart\Data\Proxy {
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
 
         $this->schemaunitday = self::encodeUTF8($this->query($sqlUnitDay)->fetchAll());
-
         $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
     }
 
     private function setSchemaMonthly () {
-        $daysweek = array(1,2,3,4,5,6,7);
+        $dayscode = $this->daysweek[0];
         $periodid = $this->post->periodid;
 
         // Limpando Tabela Temporária
@@ -204,7 +222,7 @@ class schema extends \Smart\Data\Proxy {
               and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
               and dayofweek(date_add(sp.periodof, interval row day)) = :dayofweek";
 
-        foreach($daysweek as $dayofweek) {
+        foreach($dayscode as $dayofweek) {
             $pdo = $this->prepare($sqlDaysWeek);
             $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
             $pdo->bindValue(":dayofweek", $dayofweek, \PDO::PARAM_INT);
@@ -215,6 +233,7 @@ class schema extends \Smart\Data\Proxy {
             if($dayofweek != 1 && $dayofweek != 7) {
                 $this->setSchema001($dayList,$dayofweek);
                 $this->setSchema002($dayList,$dayofweek);
+                $this->setSchema003($dayList,$dayofweek);
             }
         }
     }
@@ -314,7 +333,9 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema001 (array $dayList, $dayofweek) {
-        $lastWeek = self::searchArray($this->schemaweekold,'dayofweek',$dayofweek);
+//        $shiftDay = self::searchArray($this->schemaweekold,'shift','D');
+        $shiftDay = self::searchArray($this->schemaweekold,'allocationschema','001');
+        $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
         foreach($dayList as $m) {
             $dateofmonth = $m['dateofmonth'];
@@ -341,9 +362,9 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema002 (array $dayList, $dayofweek) {
-        $daysweek = array(2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri');
-        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysweek[$dayofweek])[0];
-        $partners = self::searchArray($this->naturalperson,'weekday',$daysweek[$dayofweek]);
+        $daysname = $this->daysweek[1];
+        $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysname[$dayofweek])[0];
+        $partners = self::searchArray($this->naturalperson,'weekday',$daysname[$dayofweek]);
 
         $week = 1;
         foreach($dayList as $m) {
@@ -370,7 +391,34 @@ class schema extends \Smart\Data\Proxy {
         }
     }
 
-    private function setSchema003 () {
+    private function setSchema003 (array $dayList, $dayofweek) {
+        $shiftDay = self::searchArray($this->schemaweekold,'allocationschema','003');
+        $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
+
+        foreach($dayList as $m) {
+            $dateofmonth = $m['dateofmonth'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+            $dayWeek = $this->setTurningV($lastWeek);
+
+            foreach($dayWeek as $d) {
+                $shift =$d['shift'];
+                $position = $d['position'];
+                $naturalpersonid = $d['naturalpersonid'];
+                $contractorunitid = $d['contractorunitid'];
+                $allocationschema = $d['allocationschema'];
+
+                $pdo = $this->prepare($this->sqlUpdate);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->execute();
+            }
+            $lastWeek = $dayWeek;
+        }
     }
 
     private function setSchema004 () {
@@ -386,18 +434,6 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema013 () {
-
-    }
-
-    public function selectTurningSchema () {
-        $this->setSchemaMonthly();
-
-        return self::getResultToJson();
-    }
-
-    public function callAction() {
-        $action = $this->post->action;
-        return method_exists($this, $action) ? call_user_func(array($this, $action)) : $this->UNEXPECTED_COMMAND;
     }
 
 }

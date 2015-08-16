@@ -262,8 +262,8 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchemaMonthly () {
-        $dayscode = $this->daysweek['dayscode'];
         $periodid = $this->post->periodid;
+        $dayscode = $this->daysweek['dayscode'];
 
         // Limpando Tabela Temporária
         $this->exec("

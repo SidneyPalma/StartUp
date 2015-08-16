@@ -53,27 +53,53 @@ class schema extends \Smart\Data\Proxy {
     private $naturalperson = null;
 
     private $sqlInsert = "
-                call setSchemaMonthlyInsert (
-                    :schedulingperiodid,
-                    :contractorunitid,
-                    :allocationschema,
-                    :dateofmonth,
-                    :shift,
-                    :subunit,
-                    :position,
-                    :username
-                );";
+            set @schedulingperiodid = :schedulingperiodid;
+            set @contractorunitid = :contractorunitid;
+            set @allocationschema = :allocationschema;
+            set @position = :position;
+            set @dutydate = :dutydate;
+            set @username = :username;
+            set @subunit = :subunit;
+            set @shift = :shift;
+
+            insert into
+                tmp_turningmonthly
+                    ( schedulingmonthlyid, position, shift, subunit, allocationschema, username )
+            select
+                id,
+                @position as position,
+                shift,
+                @subunit as subunit,
+                @allocationschema as allocationschema,
+                @username as username
+            from
+                schedulingmonthly
+            where schedulingperiodid = @schedulingperiodid
+              and contractorunitid = @contractorunitid
+              and dutydate = @dutydate
+              and shift = @shift;";
 
     private $sqlUpdate = "
-                call setSchemaMonthlyUpdate (
-                    :schedulingperiodid,
-                    :naturalpersonid,
-                    :contractorunitid,
-                    :allocationschema,
-                    :dateofmonth,
-                    :shift,
-                    :position
-                );";
+            set @schedulingperiodid = :schedulingperiodid;
+            set @contractorunitid = :contractorunitid;
+            set @allocationschema = :allocationschema;
+            set @naturalpersonid = :naturalpersonid;
+            set @position = :position;
+            set @dutydate = :dutydate;
+            set @shift = :shift;
+
+            update
+                tmp_turningmonthly tp
+                inner join schedulingmonthly sm on (
+                        sm.schedulingperiodid = @schedulingperiodid
+                    and sm.contractorunitid = @contractorunitid
+                    and sm.dutydate = @dutydate
+                    and tp.schedulingmonthlyid = sm.id
+                    and tp.shift = @shift
+                    and tp.allocationschema = @allocationschema
+                    and tp.position = @position
+                )
+            set tp.naturalpersonid = @naturalpersonid;";
 
     private $sqlCaptar = "
             set @schedulingperiodid = :schedulingperiodid;
@@ -363,7 +389,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
                 $pdo->bindValue(":subunit", $subunit, \PDO::PARAM_STR);
@@ -392,7 +418,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", '001', \PDO::PARAM_STR);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", 'D', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
@@ -422,7 +448,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", '002', \PDO::PARAM_STR);
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", 'N', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
@@ -452,7 +478,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                $pdo->bindValue(":dateofmonth", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();

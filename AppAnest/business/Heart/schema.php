@@ -149,7 +149,6 @@ class schema extends \Smart\Data\Proxy {
         parent::__construct( $link );
 
         ini_set('max_execution_time', 600); // 10 minutos
-//        $this->setAttribute( \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
         $this->setAllocationSchema();
     }
@@ -301,6 +300,7 @@ class schema extends \Smart\Data\Proxy {
                 $this->setSchema001($dayList,$dayofweek);
                 $this->setSchema002($dayList,$dayofweek);
                 $this->setSchema003($dayList,$dayofweek);
+                $this->setSchema013($dayList,$dayofweek);
                 $this->setCaptarAll($dayList,$dayofweek);
             }
         }
@@ -372,7 +372,7 @@ class schema extends \Smart\Data\Proxy {
         return self::uniqueArray($tmpDaysOfWeek);
     }
 
-    private  function setTurning012 (array $unit, $dayofweek) {
+    private  function setTurningShiftUnit (array $unit, $dayofweek) {
         $daysname = $this->daysweek['daysname'][$dayofweek];
         $shift = $unit['shift'];
         $naturalpersonid = $unit['naturalpersonid'];
@@ -443,7 +443,7 @@ class schema extends \Smart\Data\Proxy {
                 $allocationschema = $d['allocationschema'];
 
                 if($allocationschema == '012') {
-                    $naturalpersonid = $this->setTurning012($d,$dayofweek);
+                    $naturalpersonid = $this->setTurningShiftUnit($d,$dayofweek);
                 }
 
                 $pdo = $this->prepare($this->sqlUpdate);
@@ -556,7 +556,32 @@ class schema extends \Smart\Data\Proxy {
     private function setSchema011 () {
     }
 
-    private function setSchema013 () {
+    private function setSchema013 (array $dayList, $dayofweek) {
+        $shiftDay = self::searchArray($this->schemaweekold,'allocationschema','013');
+        $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
+
+        foreach($dayList as $m) {
+            $dutydate = $m['dutydate'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+
+            foreach($lastWeek as $d) {
+                $shift = $d['shift'];
+                $position = $d['position'];
+                $contractorunitid = $d['contractorunitid'];
+                $allocationschema = $d['allocationschema'];
+                $naturalpersonid = $this->setTurningShiftUnit($d,$dayofweek);
+
+                $pdo = $this->prepare($this->sqlUpdate);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                $pdo->execute();
+            }
+        }
     }
 
 }

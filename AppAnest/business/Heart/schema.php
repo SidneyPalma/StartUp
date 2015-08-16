@@ -273,7 +273,7 @@ class schema extends \Smart\Data\Proxy {
         $sqlDaysWeek = "
             select
                 sp.id as schedulingperiodid,
-                concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dateofmonth,
+                concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dutydate,
                 substring(lower(dayname(concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')))),1,3) as dayname
             from
                 ( select
@@ -376,7 +376,7 @@ class schema extends \Smart\Data\Proxy {
 
         foreach($dayList as $a) {
             $dayname = $a['dayname'];
-            $dateofmonth = $a['dateofmonth'];
+            $dutydate = $a['dutydate'];
             $schedulingperiodid = $a['schedulingperiodid'];
 
             foreach($schemaweek as $b) {
@@ -389,7 +389,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
                 $pdo->bindValue(":subunit", $subunit, \PDO::PARAM_STR);
@@ -404,7 +404,7 @@ class schema extends \Smart\Data\Proxy {
         $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
         foreach($dayList as $m) {
-            $dateofmonth = $m['dateofmonth'];
+            $dutydate = $m['dutydate'];
             $schedulingperiodid = $m['schedulingperiodid'];
             $dayWeek = $this->setTurningV($lastWeek);
 
@@ -418,7 +418,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", '001', \PDO::PARAM_STR);
-                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", 'D', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
@@ -434,7 +434,7 @@ class schema extends \Smart\Data\Proxy {
 
         $week = 1;
         foreach($dayList as $m) {
-            $dateofmonth = $m['dateofmonth'];
+            $dutydate = $m['dutydate'];
             $schedulingperiodid = intval($m['schedulingperiodid']);
             $dayWeek = $this->setTurningH($lastWeek, $week, $partners);
 
@@ -448,7 +448,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", '002', \PDO::PARAM_STR);
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
-                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", 'N', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
@@ -462,7 +462,7 @@ class schema extends \Smart\Data\Proxy {
         $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
         foreach($dayList as $m) {
-            $dateofmonth = $m['dateofmonth'];
+            $dutydate = $m['dutydate'];
             $schedulingperiodid = $m['schedulingperiodid'];
             $dayWeek = $this->setTurningV($lastWeek);
 
@@ -478,7 +478,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
                 $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->execute();
@@ -495,7 +495,7 @@ class schema extends \Smart\Data\Proxy {
             $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
             foreach($dayList as $m) {
-                $dateofmonth = $m['dateofmonth'];
+                $dutydate = $m['dutydate'];
                 $schedulingperiodid = $m['schedulingperiodid'];
 
                 foreach($lastWeek as $d) {
@@ -507,7 +507,7 @@ class schema extends \Smart\Data\Proxy {
                     $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
                     $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                     $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                    $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                    $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
                     $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                     $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                     $pdo->execute();

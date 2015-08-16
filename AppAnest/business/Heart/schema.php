@@ -8,13 +8,13 @@ use AppAnest\Setup\Start;
 class schema extends \Smart\Data\Proxy {
 
     /**
-     * Estrutura contantedo os dias da Semana
+     * Estrutura contendo os dias da Semana
      *
      * @var array
      */
     private $daysweek = array(
-        array(1,2,3,4,5,6,7),
-        array(1=>'sat',2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri',7=>'sun')
+        'dayscode'=>array(1,2,3,4,5,6,7),
+        'daysname'=>array(1=>'sat',2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri',7=>'sun')
     );
 
     /**
@@ -74,6 +74,46 @@ class schema extends \Smart\Data\Proxy {
                     :shift,
                     :position
                 );";
+
+    private $sqlCaptar = "
+            set @schedulingperiodid = :schedulingperiodid;
+            set @contractorunitid = :contractorunitid;
+            set @allocationschema = :allocationschema;
+            set @position = :position;
+            set @dutydate = :dutydate;
+            set @shift = :shift;
+            set @schema = ( select substring(getEnum('allocationschema',@allocationschema),8,4) );
+            set @naturalpersonid = (
+                        select
+                             tt.naturalpersonid
+                        from
+                            tmp_turningmonthly tt
+                            inner join schedulingmonthly sm on (
+                                    sm.schedulingperiodid = @schedulingperiodid
+                                and sm.contractorunitid = @contractorunitid
+                                and sm.dutydate = @dutydate
+                                and sm.shift = 'D'
+                                and tt.schedulingmonthlyid = sm.id
+                                and tt.shift = sm.shift
+                                and tt.subunit = substring(@schema,1,1)
+                                and tt.position = substring(@schema,3,2)
+                            )
+                        limit 1
+                );
+
+                update
+                    tmp_turningmonthly t
+                    inner join schedulingmonthly s on (
+                            s.schedulingperiodid = @schedulingperiodid
+                        and s.contractorunitid = @contractorunitid
+                        and s.dutydate = @dutydate
+                        and s.shift = @shift
+                        and t.schedulingmonthlyid = s.id
+                        and t.shift = s.shift
+                        and t.allocationschema = @allocationschema
+                        and t.position = @position
+                    )
+                set t.naturalpersonid = @naturalpersonid;";
 
     public function __construct() {
         $this->post = (object)$_POST;
@@ -149,7 +189,7 @@ class schema extends \Smart\Data\Proxy {
             where a.id = :id
               and sm.dutydate >= sp.periodof - interval 7 day
               and sm.dutydate <= sp.periodto
-            order by sm.shift, dayofweek(sm.dutydate), sm.contractorunitid, sm.dutydate, smp.allocationschema, smp.position";
+            order by sm.shift, sm.contractorunitid, sm.dutydate, smp.allocationschema, smp.position";
 
         $sqlUnitDay = "
             select
@@ -196,7 +236,7 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchemaMonthly () {
-        $dayscode = $this->daysweek[0];
+        $dayscode = $this->daysweek['dayscode'];
         $periodid = $this->post->periodid;
 
         // Limpando Tabela Temporária
@@ -234,6 +274,7 @@ class schema extends \Smart\Data\Proxy {
                 $this->setSchema001($dayList,$dayofweek);
                 $this->setSchema002($dayList,$dayofweek);
                 $this->setSchema003($dayList,$dayofweek);
+                $this->setCaptarAll($dayList,$dayofweek);
             }
         }
     }
@@ -333,7 +374,6 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema001 (array $dayList, $dayofweek) {
-//        $shiftDay = self::searchArray($this->schemaweekold,'shift','D');
         $shiftDay = self::searchArray($this->schemaweekold,'allocationschema','001');
         $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
@@ -362,7 +402,7 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema002 (array $dayList, $dayofweek) {
-        $daysname = $this->daysweek[1];
+        $daysname = $this->daysweek['daysname'];
         $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysname[$dayofweek])[0];
         $partners = self::searchArray($this->naturalperson,'weekday',$daysname[$dayofweek]);
 
@@ -421,7 +461,33 @@ class schema extends \Smart\Data\Proxy {
         }
     }
 
-    private function setSchema004 () {
+    private function setCaptarAll (array $dayList, $dayofweek) {
+        $allocationCaptar = array('004','005','006','007','008','009');
+
+        foreach($allocationCaptar as $allocationschema) {
+            $shiftDay = self::searchArray($this->schemaweekold,'allocationschema',$allocationschema);
+            $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
+
+            foreach($dayList as $m) {
+                $dateofmonth = $m['dateofmonth'];
+                $schedulingperiodid = $m['schedulingperiodid'];
+
+                foreach($lastWeek as $d) {
+                    $shift =$d['shift'];
+                    $position = $d['position'];
+                    $contractorunitid = $d['contractorunitid'];
+
+                    $pdo = $this->prepare($this->sqlCaptar);
+                    $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                    $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                    $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                    $pdo->bindValue(":dutydate", $dateofmonth, \PDO::PARAM_STR);
+                    $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                    $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                    $pdo->execute();
+                }
+            }
+        }
     }
 
     private function setSchema010 () {

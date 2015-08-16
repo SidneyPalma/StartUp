@@ -113,21 +113,19 @@ trait TresultSet {
         return $results;
     }
 
-    public static function remove_dup($matriz) {
-        $aux_ini=array();
-        $entrega=array();
-        for($n=0;$n<count($matriz);$n++)
-        {
-            $aux_ini[]=serialize($matriz[$n]);
-        }
-        $mat=array_unique($aux_ini);
-        for($n=0;$n<count($matriz);$n++)
-        {
+    public static function uniqueArray($array)
+    {
+        $result = array_map("unserialize", array_unique(array_map("serialize", $array)));
 
-            $entrega[]=unserialize($mat[$n]);
-
+        foreach ($result as $key => $value)
+        {
+            if ( is_array($value) )
+            {
+                $result[$key] = self::uniqueArray($value);
+            }
         }
-        return $entrega;
+
+        return $result;
     }
 
     /**

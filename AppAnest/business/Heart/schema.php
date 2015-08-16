@@ -228,7 +228,7 @@ class schema extends \Smart\Data\Proxy {
             from
                 contractorunitschema
             order by
-                naturalpersonid, weekday, shift, position";
+                contractorunitid, weekday, shift, position";
 
         $sqlPartner = "
             select
@@ -346,7 +346,8 @@ class schema extends \Smart\Data\Proxy {
             $crsUnique[] = $record;
         }
 
-        $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $crsUnique)));
+        $tmpUnique = self::uniqueArray($crsUnique);
+
 
         // Fazer o Giro
         foreach($tmpUnique as $unit) {
@@ -368,7 +369,28 @@ class schema extends \Smart\Data\Proxy {
             }
         }
 
-        return $tmpDaysOfWeek;
+        return self::uniqueArray($tmpDaysOfWeek);
+    }
+
+    private  function setTurning012 (array $unit, $dayofweek) {
+        $daysname = $this->daysweek['daysname'][$dayofweek];
+        $shift = $unit['shift'];
+        $naturalpersonid = $unit['naturalpersonid'];
+        $contractorunitid = $unit['contractorunitid'];
+
+        $unitSchema = self::searchArray($this->schemaunitday,'contractorunitid',$contractorunitid);
+        $unitSchema = self::searchArray($unitSchema,'weekday',$daysname);
+        $unitSchema = self::searchArray($unitSchema,'shift',$shift);
+
+        $record = self::searchArray($unitSchema,'naturalpersonid',$naturalpersonid);
+
+        $position = $record[0]['position'];
+
+        $position = (($position+1) > count($unitSchema)) ? 1 : $position+1;
+
+        $record = self::searchArray($unitSchema,'position',$position);
+
+        return $record[0]['naturalpersonid'];
     }
 
     private function setSchema000 (array $dayList) {
@@ -413,21 +435,16 @@ class schema extends \Smart\Data\Proxy {
             $schedulingperiodid = $m['schedulingperiodid'];
             $dayWeek = $this->setTurningV($lastWeek);
 
-            print_r(self::searchArray($dayWeek,'allocationschema','012'));
-            print_r('-------------------');
-
-//            $last = self::searchArray($dayWeek,'allocationschema','012');
-//
-//            $tmpUnique = array_map("unserialize", array_unique(array_map("serialize", $last)));
-//
-//            print_r($tmpUnique);
-//            print_r('====================');
-
             foreach($dayWeek as $d) {
+                $shift = $d['shift'];
                 $position = $d['position'];
                 $naturalpersonid = $d['naturalpersonid'];
                 $contractorunitid = $d['contractorunitid'];
                 $allocationschema = $d['allocationschema'];
+
+                if($allocationschema == '012') {
+                    $naturalpersonid = $this->setTurning012($d,$dayofweek);
+                }
 
                 $pdo = $this->prepare($this->sqlUpdate);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
@@ -435,86 +452,12 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
                 $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
                 $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
-                $pdo->bindValue(":shift", 'D', \PDO::PARAM_STR);
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->execute();
             }
 
-            //$this->setSchema012($m,$dayWeek);
-
             $lastWeek = $dayWeek;
-        }
-    }
-
-    private  function setTurning012 (array $unit) {
-        $shift = $unit['shift'];
-        $dutydate = $unit['dutydate'];
-        $naturalpersonid = $unit['naturalpersonid'];
-        $contractorunitid = $unit['contractorunitid'];
-
-        $sqlSelect = "
-            select
-                cus.position, cus.naturalpersonid
-            from
-                contractorunitschema cus
-            where cus.contractorunitid = $contractorunitid
-              and cus.shift = '$shift'
-              and cus.weekday = substring(lower(dayname('$dutydate')),1,3)";
-
-//        $pdo = $this->prepare($sqlSelect);
-//        $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-//        $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
-//        $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
-//        $pdo->execute();
-
-        $unitSchema = $this->query($sqlSelect)->fetchAll();
-//
-//        $pdo->closeCursor();
-
-        $i = 0;
-        do {
-            $position = intval($unitSchema[$i]['position']);
-            $i++;
-        } while (($i < count($unitSchema)-1) || (intval($naturalpersonid) != intval($unitSchema[$i]['naturalpersonid'])));
-
-        $position = ($position+1) > count($unitSchema) ? 1 : $position+1;
-
-        $record = self::searchArray($unitSchema,'position',$position);
-
-        print_r($record);
-
-        return $naturalpersonid;
-//        return $record[0]['naturalpersonid'];
-    }
-
-    private function setSchema012 (array $m, array $dayWeek) {
-        $dutydate = $m['dutydate'];
-        $schedulingperiodid = $m['schedulingperiodid'];
-        $dutyWeek = self::searchArray($dayWeek,'allocationschema','012');
-
-        foreach($dutyWeek as $d) {
-            $shift = $d['position'];
-            $position = $d['position'];
-            $unit = $d;
-            $unit['dutydate'] = $dutydate;
-            $naturalpersonid = $d['naturalpersonid'];
-            $contractorunitid = $d['contractorunitid'];
-            $allocationschema = $d['allocationschema'];
-//            $naturalpersonid = $this->setTurning012($unit);
-
-//            $pdo = $this->prepare($this->sqlUpdate);
-//            $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-//            $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
-//            $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-//            $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-//            $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
-//            $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
-//            $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
-//            $pdo->execute();
-//            $pdo->fetchAll();
-//            $pdo->closeCursor();
-//
-//            unset($pdo);
         }
     }
 

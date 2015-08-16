@@ -348,7 +348,6 @@ class schema extends \Smart\Data\Proxy {
 
         $tmpUnique = self::uniqueArray($crsUnique);
 
-
         // Fazer o Giro
         foreach($tmpUnique as $unit) {
             $position = 1;

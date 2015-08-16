@@ -303,6 +303,8 @@ class schema extends \Smart\Data\Proxy {
                 $this->setSchema013($dayList,$dayofweek);
                 $this->setCaptarAll($dayList,$dayofweek);
             }
+
+            $this->setSchema011($dayList,$dayofweek);
         }
     }
 
@@ -552,7 +554,35 @@ class schema extends \Smart\Data\Proxy {
     private function setSchema010 () {
     }
 
-    private function setSchema011 () {
+    private function setSchema011 (array $dayList, $dayofweek) {
+        $shift010 = self::searchArray($this->schemaweekold,'allocationschema','010');
+        $shift011 = self::searchArray($this->schemaweekold,'allocationschema','011');
+
+        $shiftDay = array_merge($shift010,$shift011);
+        $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
+
+        foreach($dayList as $m) {
+            $dutydate = $m['dutydate'];
+            $schedulingperiodid = $m['schedulingperiodid'];
+
+            foreach($lastWeek as $d) {
+                $shift = $d['shift'];
+                $position = $d['position'];
+                $naturalpersonid = $d['naturalpersonid'];
+                $contractorunitid = $d['contractorunitid'];
+                $allocationschema = $d['allocationschema'];
+
+                $pdo = $this->prepare($this->sqlUpdate);
+                $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+                $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
+                $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                $pdo->execute();
+            }
+        }
     }
 
     private function setSchema013 (array $dayList, $dayofweek) {

@@ -565,6 +565,7 @@ class schema extends \Smart\Data\Proxy {
             $schedulingperiodid = $m['schedulingperiodid'];
 
             foreach($lastWeek as $d) {
+
                 $shift = $d['shift'];
                 $position = $d['position'];
                 $contractorunitid = $d['contractorunitid'];

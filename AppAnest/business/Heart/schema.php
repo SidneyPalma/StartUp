@@ -372,7 +372,7 @@ class schema extends \Smart\Data\Proxy {
         return self::uniqueArray($tmpDaysOfWeek);
     }
 
-    private  function setTurningShiftUnit (array $unit, $dayofweek) {
+    private function setTurningShiftUnit (array $unit, $dayofweek) {
         $daysname = $this->daysweek['daysname'][$dayofweek];
         $shift = $unit['shift'];
         $naturalpersonid = $unit['naturalpersonid'];

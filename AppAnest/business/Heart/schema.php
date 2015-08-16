@@ -371,7 +371,7 @@ class schema extends \Smart\Data\Proxy {
         return self::uniqueArray($tmpDaysOfWeek);
     }
 
-    private function setTurningShiftUnit (array $unit, $dayofweek) {
+    private function setShiftUnit (array $unit, $dayofweek) {
         $daysname = $this->daysweek['daysname'][$dayofweek];
         $shift = $unit['shift'];
         $naturalpersonid = $unit['naturalpersonid'];
@@ -442,7 +442,7 @@ class schema extends \Smart\Data\Proxy {
                 $allocationschema = $d['allocationschema'];
 
                 if($allocationschema == '012') {
-                    $naturalpersonid = $this->setTurningShiftUnit($d,$dayofweek);
+                    $naturalpersonid = $this->setShiftUnit($d,$dayofweek);
                 }
 
                 $pdo = $this->prepare($this->sqlUpdate);
@@ -569,7 +569,7 @@ class schema extends \Smart\Data\Proxy {
                 $position = $d['position'];
                 $contractorunitid = $d['contractorunitid'];
                 $allocationschema = $d['allocationschema'];
-                $naturalpersonid = $this->setTurningShiftUnit($d,$dayofweek);
+                $naturalpersonid = $this->setShiftUnit($d,$dayofweek);
 
                 $pdo = $this->prepare($this->sqlUpdate);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);

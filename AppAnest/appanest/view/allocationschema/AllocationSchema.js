@@ -394,7 +394,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             {
                                                 text: 'Segunda',
                                                 dataIndex: 'mondescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'mon',
                                                     xtype: 'allocationschemasearchshift',
@@ -403,7 +403,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 text: 'Terça',
                                                 dataIndex: 'tuedescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'tue',
                                                     xtype: 'allocationschemasearchshift',
@@ -412,7 +412,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 text: 'Quarta',
                                                 dataIndex: 'weddescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'wed',
                                                     xtype: 'allocationschemasearchshift',
@@ -421,7 +421,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 text: 'Quinta',
                                                 dataIndex: 'thudescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'thu',
                                                     xtype: 'allocationschemasearchshift',
@@ -430,7 +430,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 text: 'Sexta',
                                                 dataIndex: 'fridescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'fri',
                                                     xtype: 'allocationschemasearchshift',
@@ -444,7 +444,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             {
                                                 text: '<b>Sábado</b>',
                                                 dataIndex: 'satdescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'sat',
                                                     xtype: 'allocationschemasearchshift',
@@ -453,7 +453,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 text: '<b>Domingo</b>',
                                                 dataIndex: 'sundescription',
-                                                width: 120,
+                                                width: 150,
                                                 editor: {
                                                     updateField: 'sun',
                                                     xtype: 'allocationschemasearchshift',

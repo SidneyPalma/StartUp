@@ -6,7 +6,7 @@ Ext.define( 'AppAnest.view.planning.AllocationSchemaShift', {
 
     hideTrigger: true,
     matchFieldWidth: false,
-    listConfig: {  width: 150 },
+    listConfig: {  width: 160 },
 
     buildCombo: function () {
         var me = this;

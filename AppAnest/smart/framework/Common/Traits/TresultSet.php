@@ -113,6 +113,23 @@ trait TresultSet {
         return $results;
     }
 
+    public static function remove_dup($matriz) {
+        $aux_ini=array();
+        $entrega=array();
+        for($n=0;$n<count($matriz);$n++)
+        {
+            $aux_ini[]=serialize($matriz[$n]);
+        }
+        $mat=array_unique($aux_ini);
+        for($n=0;$n<count($matriz);$n++)
+        {
+
+            $entrega[]=unserialize($mat[$n]);
+
+        }
+        return $entrega;
+    }
+
     /**
      * Estrutura de Retorno self::$result
      * 

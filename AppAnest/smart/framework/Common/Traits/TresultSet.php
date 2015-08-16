@@ -113,14 +113,20 @@ trait TresultSet {
         return $results;
     }
 
+    /**
+     * Elimina elementos duplicados
+     *
+     * @param $array
+     * @return array
+     *
+     * @author http://stackoverflow.com/questions/3598298/php-remove-duplicate-values-from-multidimensional-array
+     */
     public static function uniqueArray($array)
     {
         $result = array_map("unserialize", array_unique(array_map("serialize", $array)));
 
-        foreach ($result as $key => $value)
-        {
-            if ( is_array($value) )
-            {
+        foreach ($result as $key => $value) {
+            if ( is_array($value) ) {
                 $result[$key] = self::uniqueArray($value);
             }
         }

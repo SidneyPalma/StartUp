@@ -23,6 +23,11 @@ Ext.define( 'Ext.overrides.data.Model', {
         return (errors.length === 0) ? true : false;
     },
 
+    stringToDate: function (value) {
+        var parts = value.split('/');
+        return new Date(parts[2],parts[1],parts[0]);
+    },
+
     validadeShow: function() {
         var me = this,
             listInvalids = [],

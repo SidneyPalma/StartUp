@@ -509,3 +509,9 @@
         -o-border-radius: 0px;
         border-radius: 0px;
     }
+
+    .smart-datepicker-selected {
+        border-color: white !important;
+        /*border-color: rgba(53,152,220,.4) !important;*/
+        background-color: rgba(234, 243, 250,1) !important;
+    }

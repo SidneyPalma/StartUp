@@ -15,17 +15,11 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
             name: 'position',
             type: 'int'
         }, {
-            name: 'rownumber',
-            type: 'int'
-        }, {
             name: 'contractorunitid',
             type: 'int'
         }, {
             name: 'contractorunit',
             type: 'auto'
-        }, {
-            name: 'greatest',
-            type: 'int'
         }, {
             name: 'shift',
             type: 'auto'
@@ -76,6 +70,5 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
             type: 'auto'
         }
     ]
-
 
 });

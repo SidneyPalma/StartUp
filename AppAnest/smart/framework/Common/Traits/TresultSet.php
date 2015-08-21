@@ -49,16 +49,6 @@ trait TresultSet {
     }
 
     /**
-     * Remove duplicados em um multidimensional array in key=>value
-     *
-     * @return array Contém a estrutura de retorno
-     * @author http://stackoverflow.com/questions/7134824/delete-element-from-multi-dimensional-array-based-on-key
-     */
-    public static function traverseArray($array) {
-        return array_map("unserialize", array_unique(array_map("serialize", $array)));
-    }
-
-    /**
      * Ordenar um multidimensional array in key=>value
      *
      * @return array Contém a estrutura de retorno
@@ -94,23 +84,6 @@ trait TresultSet {
         }
 
         return $new_array;
-    }
-
-    /**
-     * Pesquisa recursiva em um multidimensional array in ke=>value
-     *
-     * @param $array
-     * @param $key
-     * @return array
-     */
-    public static function selectArray ($array, $key) {
-        $results = array();
-
-        for ($x = 0; $x <= count($array)-1; $x++) {
-            $results[] = $array[$x][$key];
-        }
-
-        return $results;
     }
 
     /**

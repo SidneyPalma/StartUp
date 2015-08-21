@@ -15,7 +15,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     rowLines: false,
     columnLines: true,
     hideHeaders: false,
-    store: 'allocationschemamonthly',
+    store: 'allocationschedule',
     viewConfig: {
         loadMask: false,
         loadingText: undefined
@@ -52,12 +52,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     buildField: function () {
         var me = this;
 
-        Ext.create('AppAnest.store.allocationschema.AllocationSchemaMonthly');
-        //Ext.create('AppAnest.store.allocationschedule.AllocationSchedule');
+        Ext.create('AppAnest.store.allocationschedule.AllocationSchedule');
 
         me.columns = [
             {
-                cls: 'x-column-header-inner-dark',
+                cls: 'x-column-header-inner-dark allocationweek-border-left',
                 width: 200,
                 text: 'Unidade',
                 dataIndex: 'contractorunit',
@@ -127,66 +126,33 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             }, {
                 flex: 1,
                 text: 'SEGUNDA-FEIRA',
-                dataIndex: 'mondescription',
-                editor: {
-                    updateField: 'mon',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'mondescription'
             }, {
                 flex: 1,
                 text: 'TERÇA-FEIRA',
-                dataIndex: 'tuedescription',
-                editor: {
-                    updateField: 'tue',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'tuedescription'
             }, {
                 flex: 1,
                 text: 'QUARTA-FEIRA',
-                dataIndex: 'weddescription',
-                editor: {
-                    updateField: 'wed',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'weddescription'
             }, {
                 flex: 1,
                     text: 'QUINTA-FEIRA',
-                dataIndex: 'thudescription',
-                editor: {
-                    updateField: 'thu',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'thudescription'
             }, {
                 flex: 1,
                 text: 'SEXTA-FEIRA',
-                dataIndex: 'fridescription',
-                editor: {
-                    updateField: 'fri',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'fridescription'
             }, {
+                cls: 'x-column-header-inner-dark',
                 flex: 1,
                 text: 'SÁBADO',
-                dataIndex: 'satdescription',
-                editor: {
-                    updateField: 'sat',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'satdescription'
             }, {
+                cls: 'x-column-header-inner-dark allocationweek-border-right',
                 flex: 1,
                 text: 'DOMINGO',
-                dataIndex: 'sundescription',
-                editor: {
-                    updateField: 'sun',
-                    xtype: 'allocationschemasearchshift',
-                    name: 'allocationschemadescription'
-                }
+                dataIndex: 'sundescription'
             }
         ];
     }

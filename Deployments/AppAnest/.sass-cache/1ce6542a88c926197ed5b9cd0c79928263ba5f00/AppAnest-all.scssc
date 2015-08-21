@@ -1,7 +1,7 @@
 3.1.7 (Brainy Betty)
-96f742b3654226d6dd49a156f5ac1781a3167196
+c8ebe7bc018ae4065672009a3d4193eac3e1ce01
 o:Sass::Tree::RootNode
-:@template"$$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
+:@template"#$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
 $theme-name:  'ext-theme-crisp' !default;
 $include-appanest-application: true;
 $include-appanest-controller-app: true;
@@ -35,7 +35,7 @@ $include-appanest-person-personbank: true;
 $include-appanest-person-personlist: true;
 $include-appanest-person-personphone: true;
 $include-appanest-person-personview: true;
-$include-appanest-store-allocationschedule-allocationschedule: false;
+$include-appanest-store-allocationschedule-allocationschedule: true;
 $include-appanest-store-allocationschema-allocationschema: true;
 $include-appanest-store-allocationschema-allocationschemamap: true;
 $include-appanest-store-allocationschema-allocationschemamonthly: true;
@@ -1420,7 +1420,7 @@ $relative-image-path-for-uis: $AppAnest-resource-path;
 ;@;0;	[ ;o;;@;T;i%;i%;"'include-appanest-person-personlisto;
 ;@;0;	[ ;o;;@;T;i&;i&;"(include-appanest-person-personphoneo;
 ;@;0;	[ ;o;;@;T;i';i';"'include-appanest-person-personviewo;
-;@;0;	[ ;o;;@;F;i(;i(;"Ainclude-appanest-store-allocationschedule-allocationscheduleo;
+;@;0;	[ ;o;;@;T;i(;i(;"Ainclude-appanest-store-allocationschedule-allocationscheduleo;
 ;@;0;	[ ;o;;@;T;i);i);"=include-appanest-store-allocationschema-allocationschemao;
 ;@;0;	[ ;o;;@;T;i*;i*;"@include-appanest-store-allocationschema-allocationschemamapo;
 ;@;0;	[ ;o;;@;T;i+;i+;"Dinclude-appanest-store-allocationschema-allocationschemamonthlyo;

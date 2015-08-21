@@ -35,11 +35,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             periodof = record.toDate(record.get('periodof')),
             periodto = record.toDate(record.get('periodto')),
             periodid = form.down('hiddenfield[name=periodid]'),
-            schemamonthly = Ext.getStore('allocationschemamonthly');
+            schemamonthly = Ext.getStore('allocationschedule');
 
-        param.allocationschemaid = 5;
         param.action = 'select';
-        param.method = 'selectWeek';
+        param.method = 'selectSchedule';
 
         schemamonthly.setParams(param).load({
             scope: me,
@@ -47,18 +46,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 picker.setValue(periodof);
                 picker.setMinDate(Ext.Date.getFirstDateOfMonth(periodof));
                 picker.setMaxDate(Ext.Date.getLastDateOfMonth(periodto));
-
-                Ext.Ajax.request({
-                    timeout: (60000 * 10), // 10 minutos
-                    url: 'business/Class/schedulingmonthlypartners.php',
-                    params: {
-                        action: 'select',
-                        method: 'selectSchedule'
-                        //periodid: periodsearch.getValue()
-                    },
-                    success: function(response){
-                    }
-                });
             }
         });
     }

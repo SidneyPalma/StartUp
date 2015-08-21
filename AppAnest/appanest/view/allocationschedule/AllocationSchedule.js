@@ -7,7 +7,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
     requires: [
         'Ext.picker.Date',
         'Ext.layout.container.SegmentedButton',
-        'AppAnest.view.period.PeriodSearch'
+        'AppAnest.view.period.PeriodSearch',
+        'AppAnest.view.allocationschedule.AllocationWeek'
     ],
 
     controller: 'allocationschedule',
@@ -51,60 +52,66 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                 },
                 items: [
                     {
+                        overflowY: 'auto',
                         width: 250,
                         region: 'west',
-                        xtype: 'container',
-                        layout: 'border',
+                        xtype: 'panel',
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%',
+                            useMondaFont: true,
+                            labelStyle: 'color: blue; font-size: 14px;'
+                        },
                         items: [
                             {
-                                region: 'north',
-                                layout: 'anchor',
+                                xtype: 'periodsearch',
+                                readOnlyColor: false,
+                                fieldStyle: {
+                                    color: 'blue;',
+                                    fontSize: '16px;'
+                                },
+                                listeners: {
+                                    select: 'onSelectPeriod'
+                                }
+                            }, {
+                                cls: 'smart',
+                                xtype: 'datepicker',
+                                showToday: false
+                            }, {
+                                width: '100%',
+                                margin: '5 0 0 0',
+                                xtype: 'segmentedbutton',
                                 defaults: {
-                                    anchor: '100%'
+                                    scale: 'large',
+                                    showSmartTheme: 'red-dark',
+                                    handler: 'getCardIndex'
                                 },
                                 items: [
                                     {
-                                        xtype: 'periodsearch',
-                                        fieldStyle: {
-                                            color: 'blue;',
-                                            fontSize: '16px;'
-                                        },
-                                        listeners: {
-                                            select: 'onSelectPeriod'
-                                        }
+                                        iconCls: 'allocationschedule-day',
+                                        cardIndex: 0
+                                        //glyph: 0xe954
                                     }, {
-                                        xtype: 'datepicker',
-                                        showToday: false
+                                        iconCls: 'allocationschedule-week',
+                                        cardIndex: 1,
+                                        //glyph: 0xe899,
+                                        pressed: true
+                                    }, {
+                                        iconCls: 'allocationschedule-month',
+                                        cardIndex: 2
+                                        //glyph: 0xe898
                                     }
                                 ]
                             }, {
-                                region: 'center',
-                                layout: 'anchor',
-                                items: [
-                                    {
-                                        width: '100%',
-                                        margin: '10 0 0 0',
-                                        xtype: 'segmentedbutton',
-                                        defaults: {
-                                            scale: 'large',
-                                            showSmartTheme: 'sky',
-                                            handler: 'getCardIndex'
-                                        },
-                                        items: [
-                                            {
-                                                cardIndex: 0,
-                                                glyph: 0xe954
-                                            }, {
-                                                cardIndex: 1,
-                                                glyph: 0xe899,
-                                                pressed: true
-                                            }, {
-                                                cardIndex: 2,
-                                                glyph: 0xe898
-                                            }
-                                        ]
-                                    }
-                                ]
+                                submitValue: false,
+                                showClear: true,
+                                xtype: 'textfield',
+                                fieldLabel: 'Filtrar Unidade'
+                            }, {
+                                submitValue: false,
+                                showClear: true,
+                                xtype: 'textfield',
+                                fieldLabel: 'Filtrar Sócio'
                             }
                         ]
                     }, {
@@ -113,9 +120,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                         layout: 'border',
                         items: [
                             {
-                                region: 'north'
+                                height: 40,
+                                region: 'north',
+                                xtype: 'panel'
                             }, {
-                                region: 'center'
+                                region: 'center',
+                                xtype: 'panel',
+                                layout: 'fit',
+                                bodyStyle: 'padding: 0 0 0 10px;',
+                                items: [
+                                    {
+                                        xtype: 'allocationweek'
+                                    }
+                                ]
                             }
                         ]
                     }

@@ -12,12 +12,10 @@ class Helper extends \Smart\Data\Proxy
     private $doc = '/Smart/helper/repository/';
 
     private $usr = "root";
-    private $sch = "optimal";
-//    private $sch = "astextjs2";
+    private $sch = "optimal_coopanest";
     private $pwd = "";
 //    private $dns = "sqlsrv:server=(local);database=fgv";
-    private $dns = "mysql:host=localhost;dbname=optimal";
-//    private $dns = "mysql:host=localhost;dbname=astextjs2";
+    private $dns = "mysql:host=localhost;dbname=optimal_coopanest";
 
     public function __construct() {
 

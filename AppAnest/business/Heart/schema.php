@@ -14,7 +14,7 @@ class schema extends \Smart\Data\Proxy {
      */
     private $daysweek = array(
         'dayscode'=>array(1,2,3,4,5,6,7),
-        'daysname'=>array(1=>'sat',2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri',7=>'sun')
+        'daysname'=>array(1=>'sun',2=>'mon',3=>'tue',4=>'wed',5=>'thu',6=>'fri',7=>'sat')
     );
 
     /**

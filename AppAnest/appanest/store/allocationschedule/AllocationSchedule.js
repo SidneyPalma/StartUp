@@ -5,7 +5,7 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
 
     storeId: 'allocationschedule',
 
-    url: 'business/Class/allocationschedule.php',
+    url: 'business/Class/schedulingmonthlypartners.php',
 
     fields: [
         {

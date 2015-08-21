@@ -512,6 +512,10 @@
 
     .smart-datepicker-selected {
         border-color: white !important;
-        /*border-color: rgba(53,152,220,.4) !important;*/
-        background-color: rgba(234, 243, 250,1) !important;
+        background-color: rgba(248, 202, 0,.6) !important;
+    }
+
+    .smart .x-datepicker-selected .x-datepicker-date {
+        border-color: white !important;
+        background-color: rgba(248, 202, 0,.6);
     }

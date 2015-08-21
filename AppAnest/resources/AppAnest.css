@@ -552,3 +552,25 @@
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
+.allocationweek .x-column-header-inner {
+    background-image: none;
+    background-color: rgba(215, 245, 195, .5) !important;
+}
+
+.allocationweek .x-column-header-inner-dark {
+    background-image: none;
+    background-color: rgba(215, 245, 195, 1) !important;
+}
+
+.allocationschedule-day {
+    background: url(images/appanest/schedule-day.png) no-repeat left;
+}
+
+.allocationschedule-week {
+    background: url(images/appanest/schedule-week.png) no-repeat left;
+}
+
+.allocationschedule-month {
+    background: url(images/appanest/schedule-month.png) no-repeat left;
+}

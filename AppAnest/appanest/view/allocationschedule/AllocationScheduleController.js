@@ -8,13 +8,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.allocationschedule.*'
     ],
 
-    //minDate: new Date("8/01/2015"),// Ext.Date.getFirstDateOfMonth(new Date()),
-    //maxDate: new Date("8/31/2015") //Ext.Date.getLastDateOfMonth(new Date()),
-    //disabledDates: ['08/19/2014'], //To disable other dates if needed
-    //disabledDays: [0,1],
-    //handler: 'setPickerView'
-
-
     getCardIndex: function (btn) {
         var me = this,
             view = me.getView(),
@@ -35,17 +28,39 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     onSelectPeriod: function ( combo, record, eOpts ) {
         var me = this,
+            param = {},
             view = me.getView(),
             form = view.down('form'),
             picker = view.down('datepicker'),
-            periodid = form.down('hiddenfield[name=periodid]');
-            periodof = record.stringToDate(record.get('periodof')),
-            periodto = record.stringToDate(record.get('periodto'));
+            periodof = record.toDate(record.get('periodof')),
+            periodto = record.toDate(record.get('periodto')),
+            periodid = form.down('hiddenfield[name=periodid]'),
+            schemamonthly = Ext.getStore('allocationschemamonthly');
 
-        picker.setValue(periodof);
+        param.allocationschemaid = 5;
+        param.action = 'select';
+        param.method = 'selectWeek';
 
-        picker.setMinDate(Ext.Date.getFirstDateOfMonth(periodof));
-        picker.setMaxDate(Ext.Date.getLastDateOfMonth(periodto));
+        schemamonthly.setParams(param).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                picker.setValue(periodof);
+                picker.setMinDate(Ext.Date.getFirstDateOfMonth(periodof));
+                picker.setMaxDate(Ext.Date.getLastDateOfMonth(periodto));
+
+                Ext.Ajax.request({
+                    timeout: (60000 * 10), // 10 minutos
+                    url: 'business/Class/schedulingmonthlypartners.php',
+                    params: {
+                        action: 'select',
+                        method: 'selectSchedule'
+                        //periodid: periodsearch.getValue()
+                    },
+                    success: function(response){
+                    }
+                });
+            }
+        });
     }
 
 });

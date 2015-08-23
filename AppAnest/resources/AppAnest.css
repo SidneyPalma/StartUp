@@ -565,15 +565,15 @@
 
 .allocationweek .x-column-header-inner {
     line-height: 20px;
+    color: black !important;
     background-image: none;
     border-top: 1px solid #cecece !important;
-    background-color: rgba(0, 190, 237, .5) !important;
+    background-color: rgba(185, 233, 251, .5) !important;
 }
 
 .allocationweek .x-column-header-inner-dark {
-    color: white !important;
     background-image: none;
-    background-color: rgba(0, 190, 237, 1) !important;
+    background-color: rgba(185, 233, 251, 1) !important;
 }
 
 .allocationschedule-day {

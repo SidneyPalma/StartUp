@@ -519,3 +519,41 @@
         border-color: white !important;
         background-color: rgba(248, 202, 0,.6);
     }
+
+    /*        btn-lemon*/
+    .smart-btn-lemon {
+        background-image: none !important;
+        border-width: 1px !important;
+        border-style: solid !important;
+        background-color: rgba(242, 225, 145, .6) !important;
+        border-color: rgba(242, 225, 145, .6) !important;
+    }
+
+    .smart-btn-lemon, .x-btn-icon-el-default-toolbar-small.x-btn-glyph {
+        color: #FFFFFF !important;
+    }
+    .smart-btn-lemon, .x-btn-icon-el-default-toolbar-medium.x-btn-glyph {
+        color: #FFFFFF !important;
+    }
+
+    .x-btn-icon-el-default-small.x-btn-glyph {
+        opacity: 1 !important;
+    }
+
+    .smart-btn-lemon, .x-btn-icon-el-default-medium.x-btn-glyph {
+        opacity: 1 !important;
+    }
+
+    .smart-btn-lemon-over {
+        background-color: rgba(242, 225, 145, 1) !important;
+        border-color: rgba(242, 225, 145, 1) !important;
+    }
+
+    .smart-btn-lemon.x-btn-pressed {
+        background-color: rgba(248, 202, 0,.6) !important;
+        border-color: rgba(248, 202, 0,.6) !important;
+    }
+
+    .smart-btn-lemon.x-btn-focus, .x-btn-focus.x-btn-pressed {
+        box-shadow: 0px 0px 0px 0px inset !important;
+    }

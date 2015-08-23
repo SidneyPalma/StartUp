@@ -83,7 +83,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                 xtype: 'segmentedbutton',
                                 defaults: {
                                     scale: 'large',
-                                    showSmartTheme: 'red-dark',
+                                    showSmartTheme: 'lemon',
                                     handler: 'getCardIndex'
                                 },
                                 items: [

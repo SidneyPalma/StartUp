@@ -74,9 +74,10 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
 
         foreach($daysname as $key=>$d) {
             $i = 0;
+            $s = self::searchArray($select,'dutyname',$d);
 
             foreach($unique as $u) {
-                $search = self::searchArray($select,'dutyname',$d);
+                $search = $s;
                 $search = self::searchArray($search,'contractorunitid',$u['contractorunitid']);
                 $search = self::searchArray($search,'position',$u['position']);
                 $search = self::searchArray($search,'subunit',$u['subunit']);
@@ -89,6 +90,28 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 $n++;
             }
         }
+
+//        foreach($daysname as $key=>$d) {
+//            $i = 0;
+//            $search = self::searchArray($select,'dutyname',$d);
+//
+//            foreach($unique as $u) {
+//                $s = $search;
+//
+//                unset($u['contractorunit']);
+//
+//                $record = self::recordArray($s,$u);
+//
+//                $unique[$i]['id'] = $n;
+//
+//                if(isset($record['naturalperson'])) {
+//                    $unique[$i][$d.'description'] = $record['naturalperson'];
+//                }
+//
+//                $i++;
+//                $n++;
+//            }
+//        }
 
         try {
             self::_setRows($unique);

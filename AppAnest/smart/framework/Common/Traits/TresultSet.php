@@ -49,6 +49,21 @@ trait TresultSet {
     }
 
     /**
+     * Pesquisa recursiva em um multidimensional array multiplas chaves
+     *
+     * @return array Contém a estrutura de retorno
+     */
+    public static function recordArray ($array, $field) {
+        $results = $array;
+
+        foreach($field as $key=>$value) {
+            $results = self::searchArray($results, $key, $value);
+        }
+
+        return $results;
+    }
+
+    /**
      * Ordenar um multidimensional array in key=>value
      *
      * @return array Contém a estrutura de retorno
@@ -87,6 +102,23 @@ trait TresultSet {
     }
 
     /**
+     * Pesquisa recursiva em um multidimensional array in ke=>value
+     *
+     * @param $array
+     * @param $key
+     * @return array
+     */
+    public static function selectArray ($array, $key) {
+        $results = array();
+
+        for ($x = 0; $x <= count($array)-1; $x++) {
+            $results[] = $array[$x][$key];
+        }
+
+        return $results;
+    }
+
+    /**
      * Elimina elementos duplicados
      *
      * @param $array
@@ -94,8 +126,7 @@ trait TresultSet {
      *
      * @author http://stackoverflow.com/questions/3598298/php-remove-duplicate-values-from-multidimensional-array
      */
-    public static function uniqueArray($array)
-    {
+    public static function uniqueArray($array) {
         $result = array_map("unserialize", array_unique(array_map("serialize", $array)));
 
         foreach ($result as $key => $value) {

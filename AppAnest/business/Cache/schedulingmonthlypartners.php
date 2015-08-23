@@ -32,7 +32,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             inner join person c on ( c.id = sm.contractorunitid )
             left join person n on ( n.id = tp.naturalpersonid )
         where sp.periodid = 2
-          and sm.contractorunitid = 34
           and sm.dutydate between '2015-07-01' and '2015-07-07'
         order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
@@ -58,7 +57,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = 2
-              and sm.contractorunitid = 34
               and sm.dutydate between '2015-07-01' and '2015-07-07'
             order by sm.dutydate, cu.position, sm.contractorunitid, tp.id, tp.shift, tp.subunit, tp.position";
 
@@ -69,7 +67,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         $unique = self::encodeUTF8($proxy->query($this->sqlUnique)->fetchAll());
         $select = self::encodeUTF8($proxy->query($this->sqlSelect)->fetchAll());
 
-        $i = 0;
         $n = 1;
 
         foreach($daysname as $key=>$d) {
@@ -84,34 +81,14 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 $search = self::searchArray($search,'shift',$u['shift']);
 
                 $unique[$i]['id'] = $n;
-                $unique[$i][$d.'description'] = $search[0]['naturalperson'];
+                if(isset($search[0]['naturalperson'])) {
+                    $unique[$i][$d.'description'] = $search[0]['naturalperson'];
+                }
 
                 $i++;
                 $n++;
             }
         }
-
-//        foreach($daysname as $key=>$d) {
-//            $i = 0;
-//            $search = self::searchArray($select,'dutyname',$d);
-//
-//            foreach($unique as $u) {
-//                $s = $search;
-//
-//                unset($u['contractorunit']);
-//
-//                $record = self::recordArray($s,$u);
-//
-//                $unique[$i]['id'] = $n;
-//
-//                if(isset($record['naturalperson'])) {
-//                    $unique[$i][$d.'description'] = $record['naturalperson'];
-//                }
-//
-//                $i++;
-//                $n++;
-//            }
-//        }
 
         try {
             self::_setRows($unique);

@@ -49,13 +49,18 @@ trait TresultSet {
     }
 
     /**
-     * Remove duplicados em um multidimensional array in key=>value
+     * Pesquisa recursiva em um multidimensional array multiplas chaves
      *
      * @return array Contém a estrutura de retorno
-     * @author http://stackoverflow.com/questions/7134824/delete-element-from-multi-dimensional-array-based-on-key
      */
-    public static function traverseArray($array) {
-        return array_map("unserialize", array_unique(array_map("serialize", $array)));
+    public static function recordArray ($array, $field) {
+        $results = $array;
+
+        foreach($field as $key=>$value) {
+            $results = self::searchArray($results, $key, $value);
+        }
+
+        return $results;
     }
 
     /**
@@ -121,8 +126,7 @@ trait TresultSet {
      *
      * @author http://stackoverflow.com/questions/3598298/php-remove-duplicate-values-from-multidimensional-array
      */
-    public static function uniqueArray($array)
-    {
+    public static function uniqueArray($array) {
         $result = array_map("unserialize", array_unique(array_map("serialize", $array)));
 
         foreach ($result as $key => $value) {

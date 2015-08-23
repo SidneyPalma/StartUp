@@ -32,7 +32,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             inner join person c on ( c.id = sm.contractorunitid )
             left join person n on ( n.id = tp.naturalpersonid )
         where sp.periodid = 2
-          and sm.contractorunitid = 43
+          and sm.contractorunitid = 34
           and sm.dutydate between '2015-07-01' and '2015-07-07'
         order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
@@ -58,7 +58,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = 2
-              and sm.contractorunitid = 43
+              and sm.contractorunitid = 34
               and sm.dutydate between '2015-07-01' and '2015-07-07'
             order by sm.dutydate, cu.position, sm.contractorunitid, tp.id, tp.shift, tp.subunit, tp.position";
 

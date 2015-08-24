@@ -99,15 +99,22 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             $contractorunitid = '';
 
             foreach($unique as $u) {
+                $b = 0;
                 $search = $s;
                 $search = self::searchArray($search,'contractorunitid',$u['contractorunitid']);
                 $search = self::searchArray($search,'position',$u['position']);
                 $search = self::searchArray($search,'subunit',$u['subunit']);
                 $search = self::searchArray($search,'shift',$u['shift']);
 
-                $j =  ($contractorunitid != $u['contractorunitid']) ? $j+1 : $j;
+//                $j = ($contractorunitid != $u['contractorunitid']) ? $j+1 : $j;
+
+                if($contractorunitid != $u['contractorunitid']) {
+                    $j++;
+                    $b = 1;
+                }
 
                 $unique[$i]['id'] = $n;
+                $unique[$i]['bordertop'] = $b;
                 $unique[$i]['rownumber'] = $j;
                 $unique[$i][$d.'description'] = '...';
 

@@ -12,6 +12,10 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
             name: 'id',
             type: 'int'
         }, {
+            name: 'bordertop',
+            type: 'int',
+            defaultValue: 0
+        }, {
             name:  'rownumber',
             type: 'int'
         }, {

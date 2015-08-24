@@ -9,7 +9,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     ],
 
     startDatePicker: function(picker, date) {
-        console.info(picker.getPickerPeriod());
+        var me = this;
+
+        picker.setPickerView(picker.getPickerView());
+        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
     },
 
     onFilterContractorUnit: function ( field, newValue, oldValue, eOpts ) {
@@ -40,24 +43,25 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         );
     },
 
-
-    selectSchedule: function () {
+    selectSchedule: function (pickerView, periodView) {
         var me = this,
             param = {},
             view = me.getView(),
+            period = view.down('periodsearch'),
             schemamonthly = Ext.getStore('allocationschedule');
 
         param.action = 'select';
         param.method = 'selectSchedule';
+        param.pickerView = pickerView;
+        param.dateOf = periodView.dateOf;
+        param.dateTo = periodView.dateTo;
+        param.period = period.getValue();
 
         view.setLoading('Carregando escala ...');
 
         schemamonthly.setParams(param).load({
             scope: me,
             callback: function(records, operation, success) {
-                picker.setPickerView(picker.getPickerView());
-                picker.setMinDate(periodof);
-                picker.setMaxDate(periodto);
                 view.setLoading(false);
             }
         });
@@ -65,29 +69,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     getCardIndex: function (btn) {
         var me = this,
-            param = {},
             view = me.getView(),
-            picker = view.down('datepicker'),
-            period = view.down('periodsearch'),
-            record = period.getSelectedRecord(),
-            periodof = record.toDate(record.get('periodof')),
-            periodto = record.toDate(record.get('periodto')),
-            schemamonthly = Ext.getStore('allocationschedule');
-
-        param.action = 'select';
-        param.method = 'selectSchedule';
-
-        view.setLoading('Carregando escala ...');
-
-        schemamonthly.setParams(param).load({
-            scope: me,
-            callback: function(records, operation, success) {
-                picker.setPickerView(picker.getPickerView());
-                picker.setMinDate(periodof);
-                picker.setMaxDate(periodto);
-                view.setLoading(false);
-            }
-        });
+            picker = view.down('datepicker');
 
         switch (btn.cardIndex) {
             case 0:
@@ -100,36 +83,25 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 picker.setPickerView('vwMonth');
                 break;
         }
+
+        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {
         var me = this,
-            param = {},
             view = me.getView(),
-            form = view.down('form'),
             picker = view.down('datepicker'),
-            schedule = view.down('container[name=schedule]'),
             periodof = record.toDate(record.get('periodof')),
             periodto = record.toDate(record.get('periodto')),
-            periodid = form.down('hiddenfield[name=periodid]'),
-            schemamonthly = Ext.getStore('allocationschedule');
+            schedule = view.down('container[name=schedule]');
 
-        param.action = 'select';
-        param.method = 'selectSchedule';
+        picker.setValue(periodof);
+        picker.setMinDate(periodof);
+        picker.setMaxDate(periodto);
+        schedule.setDisabled(false);
 
-        view.setLoading('Carregando escala ...');
-
-        schemamonthly.setParams(param).load({
-            scope: me,
-            callback: function(records, operation, success) {
-                picker.setValue(periodof);
-                schedule.setDisabled(false);
-                picker.setPickerView(picker.getPickerView());
-                picker.setMinDate(periodof);
-                picker.setMaxDate(periodto);
-                view.setLoading(false);
-            }
-        });
+        picker.setPickerView(picker.getPickerView());
+        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
     }
 
 });

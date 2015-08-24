@@ -31,8 +31,8 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
             inner join person c on ( c.id = sm.contractorunitid )
             left join person n on ( n.id = tp.naturalpersonid )
-        where sp.periodid = 2
-          and sm.dutydate between '2015-07-01' and '2015-07-07'
+        where sp.periodid = :period
+          and sm.dutydate between :dateof and :dateto
         order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
     private $sqlSelect = "
@@ -56,17 +56,40 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
-            where sp.periodid = 2
-              and sm.dutydate between '2015-07-01' and '2015-07-07'
+            where sp.periodid = :period
+              and sm.dutydate between :dateof and :dateto
             order by sm.dutydate, cu.position, sm.contractorunitid, tp.id, tp.shift, tp.subunit, tp.position";
 
     public function selectSchedule(array $data) {
+        $dateOf = $data['dateOf'];
+        $dateTo = $data['dateTo'];
+        $period = $data['period'];
+        $pickerView = $data['pickerView'];
         $proxy = $this->getStore()->getProxy();
-        $daysname = $this->daysweek['daysname'];
-        $unique = self::encodeUTF8($proxy->query($this->sqlUnique)->fetchAll());
-        $select = self::encodeUTF8($proxy->query($this->sqlSelect)->fetchAll());
 
+        $pdo = $proxy->prepare($this->sqlUnique);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
+        $pdo->execute();
+        $unique = self::encodeUTF8($pdo->fetchAll());
+
+        $pdo = $proxy->prepare($this->sqlSelect);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
+        $pdo->execute();
+        $select = self::encodeUTF8($pdo->fetchAll());
+
+        unset($pdo);
+        unset($proxy);
+
+        return $this->selectView($unique,$select);
+    }
+
+    private function selectView(array $unique, array $select) {
         $n = 1;
+        $daysname = $this->daysweek['daysname'];
 
         foreach($daysname as $key=>$d) {
             $i = 0;
@@ -112,7 +135,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         }
 
         return self::getResultToJson();
-
     }
 
 }

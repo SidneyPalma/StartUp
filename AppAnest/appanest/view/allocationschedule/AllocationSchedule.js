@@ -74,44 +74,62 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                     select: 'onSelectPeriod'
                                 }
                             }, {
-                                cls: 'smart',
-                                xtype: 'datepicker',
-                                showToday: false
-                            }, {
-                                width: '100%',
-                                margin: '5 0 0 0',
-                                xtype: 'segmentedbutton',
+                                xtype: 'container',
+                                layout: 'anchor',
+                                disabled: true,
+                                name: 'schedule',
                                 defaults: {
-                                    scale: 'large',
-                                    showSmartTheme: 'lemon',
-                                    handler: 'getCardIndex'
+                                    anchor: '100%',
+                                    useMondaFont: true,
+                                    labelStyle: 'color: blue; font-size: 14px;'
                                 },
                                 items: [
                                     {
-                                        iconCls: 'allocationschedule-day',
-                                        cardIndex: 0
-                                        //glyph: 0xe954
+                                        margin: '0 0 5 0',
+                                        xtype: 'segmentedbutton',
+                                        defaults: {
+                                            scale: 'large',
+                                            showSmartTheme: 'lemon',
+                                            handler: 'getCardIndex'
+                                        },
+                                        items: [
+                                            {
+                                                iconCls: 'allocationschedule-day',
+                                                cardIndex: 0
+                                            }, {
+                                                iconCls: 'allocationschedule-week',
+                                                cardIndex: 1,
+                                                pressed: true
+                                            }, {
+                                                iconCls: 'allocationschedule-month',
+                                                cardIndex: 2
+                                            }
+                                        ]
                                     }, {
-                                        iconCls: 'allocationschedule-week',
-                                        cardIndex: 1,
-                                        //glyph: 0xe899,
-                                        pressed: true
+                                        cls: 'smart',
+                                        xtype: 'datepicker',
+                                        showToday: false,
+                                        listeners: {
+                                            select: 'startDatePicker'
+                                        }
                                     }, {
-                                        iconCls: 'allocationschedule-month',
-                                        cardIndex: 2
-                                        //glyph: 0xe898
+                                        submitValue: false,
+                                        showClear: true,
+                                        xtype: 'textfield',
+                                        fieldLabel: 'Filtrar Unidade',
+                                        listeners: {
+                                            change: 'onFilterContractorUnit'
+                                        }
+                                    }, {
+                                        submitValue: false,
+                                        showClear: true,
+                                        xtype: 'textfield',
+                                        fieldLabel: 'Filtrar Sócio',
+                                        listeners: {
+                                            change: 'onFilterNaturalPerson'
+                                        }
                                     }
                                 ]
-                            }, {
-                                submitValue: false,
-                                showClear: true,
-                                xtype: 'textfield',
-                                fieldLabel: 'Filtrar Unidade'
-                            }, {
-                                submitValue: false,
-                                showClear: true,
-                                xtype: 'textfield',
-                                fieldLabel: 'Filtrar Sócio'
                             }
                         ]
                     }, {

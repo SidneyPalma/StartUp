@@ -153,7 +153,6 @@ Ext.define( 'Ext.overrides.picker.Date', {
             eday = vDate.parseDate(eday, 'Y-m-d');
         }
         var offset = vDate.getElapsed(sday, eday);
-        //offset = Math.round(offset / (3600000 * 24));
         return Math.round(offset / (3600000 * 24));
     }
 

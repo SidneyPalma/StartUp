@@ -12,6 +12,9 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
             name: 'id',
             type: 'int'
         }, {
+            name:  'rownumber',
+            type: 'int'
+        }, {
             name: 'position',
             type: 'int'
         }, {
@@ -46,6 +49,27 @@ Ext.define( 'AppAnest.store.allocationschedule.AllocationSchedule', {
             type: 'auto'
         }, {
             name: 'sun',
+            type: 'auto'
+        }, {
+            name: 'monschema',
+            type: 'auto'
+        }, {
+            name: 'tueschema',
+            type: 'auto'
+        }, {
+            name: 'wedschema',
+            type: 'auto'
+        }, {
+            name: 'thuschema',
+            type: 'auto'
+        }, {
+            name: 'frischema',
+            type: 'auto'
+        }, {
+            name: 'satschema',
+            type: 'auto'
+        }, {
+            name: 'sunschema',
             type: 'auto'
         }, {
             name: 'mondescription',

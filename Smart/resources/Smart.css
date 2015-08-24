@@ -520,6 +520,14 @@
         background-color: rgba(248, 202, 0,.6);
     }
 
+    .smart .x-datepicker-header {
+        display: none;
+    }
+
+    .smart .x-datepicker-column-header-inner {
+        background: rgba(84, 86, 62, 0.2) !important;
+    }
+
     /*        btn-lemon*/
     .smart-btn-lemon {
         background-image: none !important;

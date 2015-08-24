@@ -61,7 +61,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             order by sm.dutydate, cu.position, sm.contractorunitid, tp.id, tp.shift, tp.subunit, tp.position";
 
     public function selectSchedule(array $data) {
-
         $proxy = $this->getStore()->getProxy();
         $daysname = $this->daysweek['daysname'];
         $unique = self::encodeUTF8($proxy->query($this->sqlUnique)->fetchAll());
@@ -71,7 +70,10 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
 
         foreach($daysname as $key=>$d) {
             $i = 0;
+            $j = 0;
             $s = self::searchArray($select,'dutyname',$d);
+
+            $contractorunitid = '';
 
             foreach($unique as $u) {
                 $search = $s;
@@ -80,8 +82,20 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 $search = self::searchArray($search,'subunit',$u['subunit']);
                 $search = self::searchArray($search,'shift',$u['shift']);
 
+                $j =  ($contractorunitid != $u['contractorunitid']) ? $j+1 : $j;
+
                 $unique[$i]['id'] = $n;
+                $unique[$i]['rownumber'] = $j;
+                $unique[$i][$d.'description'] = '...';
+
+                $contractorunitid = $u['contractorunitid'];
+
+                if(isset($search[0]['allocationschema'])) {
+                    $unique[$i][$d.'schema'] = $search[0]['allocationschema'];
+                }
+
                 if(isset($search[0]['naturalperson'])) {
+                    $unique[$i][$d] = $search[0]['naturalpersonid'];
                     $unique[$i][$d.'description'] = $search[0]['naturalperson'];
                 }
 

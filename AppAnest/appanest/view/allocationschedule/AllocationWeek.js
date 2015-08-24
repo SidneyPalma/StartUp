@@ -31,22 +31,22 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
         var metaStyle = '',
             valueDefault = value,
-            enumType = ['001','002','011'],
+            enumType = ['010','011','012','013'],
             shift = record.get('shift'),
             color = parseInt(record.get('position')) % 2 == 0,
-            field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','');
+            field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','schema');
 
         if(shift == 'N') {
             metaStyle = 'background-color: rgba(242, 243, 235, .9);';
         }
 
-        if((colIndex >= 2)&&(enumType.indexOf(record.get(field)) == -1)) {
+        if((colIndex >= 2)&&(enumType.indexOf(record.get(field)) != -1)) {
             valueDefault = '<a style="color: red;">' +valueDefault+ '</a>';
         }
 
         meta.style = metaStyle + ' line-height: 16px; color: rgba(84, 86, 62, .9);';
 
-        return valueDefault;
+        return (valueDefault) ? valueDefault : '';
     },
 
     buildField: function () {
@@ -58,12 +58,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             {
                 cls: 'x-column-header-inner-dark allocationweek-border-left',
                 width: 200,
-                text: 'Unidade',
+                text: 'UNIDADE',
                 dataIndex: 'contractorunit',
                 renderer: function (value, meta, record, rowIndex, colIndex, store) {
                     var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
                         color = parseInt(record.get('rownumber')) % 2 == 0,
-                        metaStyle = (color) ? 'color: white; background-color: rgba(84, 86, 62, .9);' : 'background-color: rgba(84, 86, 62, .4);';
+                        metaStyle = (color) ? 'color: white; background-color: rgba(84, 86, 62, .6);' : 'background-color: rgba(84, 86, 62, .4);';
 
                     meta.style = metaStyle + ' font-size: 16px; line-height: 16px; font-family: Monda;';
 
@@ -79,7 +79,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             }, {
                 cls: 'x-column-header-inner-dark',
                 width: 74,
-                text: 'Turnos',
+                text: 'TURNOS',
                 dataIndex: 'shift',
                 renderer: function (value, meta, record, rowIndex, colIndex, store) {
                     var returnShift = '',
@@ -118,10 +118,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                     }
 
                     return  '<div style="font-size: 15px;">' +
-                    returnPosition +
-                    returnShift +
-                    returnSubunit +
-                    '</div>';
+                                returnPosition +
+                                returnShift +
+                                returnSubunit +
+                            '</div>';
                 }
             }, {
                 flex: 1,

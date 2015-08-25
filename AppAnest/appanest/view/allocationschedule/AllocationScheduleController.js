@@ -8,6 +8,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.allocationschedule.*'
     ],
 
+    onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
+        console.warn(viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex);
+    },
+
     startDatePicker: function(picker, date) {
         var me = this;
 
@@ -16,16 +20,14 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onFilterContractorUnit: function ( field, newValue, oldValue, eOpts ) {
-        var me = this,
-            store = Ext.getStore('allocationschedule');
+        var store = Ext.getStore('allocationschedule');
 
         store.clearFilter();
         store.filter('contractorunit',newValue);
     },
 
     onFilterNaturalPerson: function ( field, newValue, oldValue, eOpts ) {
-        var me = this,
-            store = Ext.getStore('allocationschedule');
+        var store = Ext.getStore('allocationschedule');
 
         store.clearFilter();
         store.filterBy(
@@ -47,8 +49,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             param = {},
             view = me.getView(),
+            grid = view.down('gridpanel'),
+            dataIndex = me.getDataIndex(),
             period = view.down('periodsearch'),
-            schemamonthly = Ext.getStore('allocationschedule');
+            store = Ext.getStore('allocationschedule');
 
         param.action = 'select';
         param.method = 'selectSchedule';
@@ -59,12 +63,35 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
         view.setLoading('Carregando escala ...');
 
-        schemamonthly.setParams(param).load({
+        store.setParams(param).load({
             scope: me,
             callback: function(records, operation, success) {
                 view.setLoading(false);
+                grid.buildModel(dataIndex,pickerView);
             }
         });
+    },
+
+    getDataIndex: function () {
+        var me = this,
+            dataIndex = null,
+            view = me.getView(),
+            picker = view.down('datepicker'),
+            weekdata = [
+                'sundescription',
+                'mondescription',
+                'tuedescription',
+                'weddescription',
+                'thudescription',
+                'fridescription',
+                'satdescription'
+            ];
+
+        if(picker.getPickerView() == 'vwDay') {
+            dataIndex = weekdata[picker.getValue().getDay()];
+        }
+
+        return dataIndex;
     },
 
     getCardIndex: function (btn) {

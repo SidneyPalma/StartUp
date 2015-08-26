@@ -230,11 +230,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             store = Ext.getStore('allocationschedule');
 
         Ext.suspendLayouts();
-
         me.reconfigure(store, Ext.Array.merge(me._getGroup(),me._getField(dataIndex, pickerView)));
-
         Ext.resumeLayouts(true);
-
     },
 
     buildField: function () {

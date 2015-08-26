@@ -1,7 +1,7 @@
 Ext.define( 'Ext.overrides.picker.Date', {
     override: 'Ext.picker.Date',
 
-    value: new Date(),
+    startDay: 1,
 
     pickerView: 'vwWeek',
 
@@ -59,8 +59,8 @@ Ext.define( 'Ext.overrides.picker.Date', {
                 toNex.setDate(d);
                 break;
             case 'vwWeek':
-                toDay.setDate(d - w);
-                toNex.setDate(d + (6 - w));
+                toDay.setDate(d - w +1);
+                toNex.setDate(d + (6 - w) +1);
                 break;
             case 'vwMonth':
                 d = Ext.Date.getDaysInMonth(date);
@@ -153,6 +153,7 @@ Ext.define( 'Ext.overrides.picker.Date', {
             eday = vDate.parseDate(eday, 'Y-m-d');
         }
         var offset = vDate.getElapsed(sday, eday);
+
         return Math.round(offset / (3600000 * 24));
     }
 

@@ -2,10 +2,10 @@
 
 namespace Smart\Utils;
 
-require_once ("../../Vendor/FPDF/fpdf.php");
+use \fpdf\FPDF;
 
-class Report extends FPDF
-{	
+class Report extends FPDF {
+
     public function configStyleHeader($sizeFont = 10){
         $this->SetDrawColor(23,45,58);
         $this->SetLineWidth(0.1);

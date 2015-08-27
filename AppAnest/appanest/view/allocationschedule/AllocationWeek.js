@@ -158,64 +158,65 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
         return group;
     },
 
+    _columnText: {
+        sundescription: 'DOMINGO',
+        mondescription: 'SEGUNDA-FEIRA',
+        tuedescription: 'TERCA-FEIRA',
+        weddescription: 'QUARTA-FEIRA',
+        thudescription: 'QUINTA-FEIRA',
+        fridescription: 'SEXTA-FEIRA',
+        satdescription: 'SABADO'
+    },
+
     _getField: function (dataIndex, pickerView) {
         var me = this,
             field = [
             {
                 flex: 1,
-                text: 'SEGUNDA-FEIRA',
+                text: me._columnText['mondescription'],
                 dataIndex: 'mondescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
-                text: 'TERCA-FEIRA',
+                text: me._columnText['tuedescription'],
                 dataIndex: 'tuedescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
-                text: 'QUARTA-FEIRA',
+                text: me._columnText['weddescription'],
                 dataIndex: 'weddescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
-                text: 'QUINTA-FEIRA',
+                text: me._columnText['thudescription'],
                 dataIndex: 'thudescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
-                text: 'SEXTA-FEIRA',
+                text: me._columnText['fridescription'],
                 dataIndex: 'fridescription',
                 renderer: me.columnsRenderer
             }, {
                 cls: 'x-column-header-inner-dark',
                 flex: 1,
-                text: 'SABADO',
+                text: me._columnText['satdescription'],
                 dataIndex: 'satdescription',
                 renderer: me.columnsRenderer
             }, {
                 cls: 'x-column-header-inner-dark',
                 flex: 1,
-                text: 'DOMINGO',
+                text: me._columnText['sundescription'],
                 dataIndex: 'sundescription',
                 renderer: me.columnsRenderer
             }
         ];
 
         if(pickerView == 'vwDay') {
-            var text = {
-                sundescription: 'DOMINGO',
-                mondescription: 'SEGUNDA-FEIRA',
-                tuedescription: 'TERCA-FEIRA',
-                weddescription: 'QUARTA-FEIRA',
-                thudescription: 'QUINTA-FEIRA',
-                fridescription: 'SEXTA-FEIRA',
-                satdescription: 'SABADO'
-            };
             field = [
                 {
                     cls: 'x-column-header-inner-dark',
                     flex: 1,
-                    text: text[dataIndex],
+                    text: me._columnText[dataIndex],
                     dataIndex: dataIndex,
                     renderer: me.columnsRenderer
                 }

@@ -1,32 +1,32 @@
 {
-"_comment": "http://www.php-fig.org/psr/psr-4/",
-"_comment": "https://laracasts.com/lessons/psr-4-autoloading",
-"_comment": "https://getcomposer.org/doc/articles/scripts.md",
+  "_comment": "http://www.php-fig.org/psr/psr-4/",
+  "_comment": "https://laracasts.com/lessons/psr-4-autoloading",
+  "_comment": "https://getcomposer.org/doc/articles/scripts.md",
 
-"require" : {
-"itbz/fpdf": "dev-master",
-"phpmailer/phpmailer": "dev-master",
-"phpoffice/phpexcel": "dev-master"
-},
+  "require" : {
+    "itbz/fpdf": "dev-master",
+    "phpmailer/phpmailer": "dev-master",
+    "phpoffice/phpexcel": "dev-master"
+  },
 
-"autoload": {
+  "autoload": {
 
-"classmap": [
+    "classmap": [
 
-],
+    ],
 
-"files": [
-"vendor/phpmailer/phpmailer/class.phpmailer.php"
-],
-"psr-4": {
-"Smart\\": "framework",
-"Helper\\": "helper/controller/classes"
-}
+    "files": [
+      "vendor/phpmailer/phpmailer/class.phpmailer.php"
+    ],
+    "psr-4": {
+      "Smart\\": "framework",
+      "Helper\\": "helper/controller/classes"
+    }
 
-},
+  },
 
-"scripts": {
+  "scripts": {
 
-}
+  }
 
 }

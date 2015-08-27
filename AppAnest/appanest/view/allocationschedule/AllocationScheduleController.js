@@ -69,15 +69,15 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             callback: function(records, operation, success) {
                 view.setLoading(false);
                 grid.buildModel(dataIndex,pickerView);
-                var columns = grid.getColumnManager().getColumns();
+                var columns = grid.getColumnManager().getColumns(),
+                    dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
 
                 if(pickerView == 'vwDay') {
-                    var dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
                     columns[2].setText(grid._columnText[columns[2].dataIndex] + '<br/><span style="font-size: 18px; line-height: 24px;">' + dateOf.getDate() + '</span>');
                 } else {
                     var d = 0;
                     for (i = 2; i < days.length +2; i++) {
-                        var dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
+                        dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
                         dateOf.setDate(dateOf.getDate() + d);
                         columns[i].setText(grid._columnText[columns[i].dataIndex] + '<br/><span style="font-size: 18px; line-height: 24px;">' + dateOf.getDate() + '</span>');
                         d++;

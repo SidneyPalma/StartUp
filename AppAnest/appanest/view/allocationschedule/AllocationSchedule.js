@@ -129,6 +129,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         listeners: {
                                             change: 'onFilterNaturalPerson'
                                         }
+                                    }, {
+                                        glyph: 0xe887,
+                                        scale: 'medium',
+                                        text: 'Folha de Frequencia',
+                                        xtype: 'button',
+                                        handler: 'showReport'
                                     }
                                 ]
                             }

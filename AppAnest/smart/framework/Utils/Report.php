@@ -3,8 +3,25 @@
 namespace Smart\Utils;
 
 use \fpdf\FPDF;
+use Smart\Utils\Session;
+use Smart\Common\Traits as Traits;
 
 class Report extends FPDF {
+    use Traits\TresultSet;
+
+    public function preConstruct() {
+
+    }
+
+    public function posConstruct() {
+
+    }
+
+    public function __construct($orientation='P', $unit='mm', $size='A4') {
+        $this->preConstruct();
+        parent::__construct($orientation,$unit,$size);
+        $this->posConstruct();
+    }
 
     public function configStyleHeader($sizeFont = 10){
         $this->SetDrawColor(23,45,58);
@@ -25,7 +42,7 @@ class Report extends FPDF {
         $this->SetTextColor(23,45,58);
         $this->SetDrawColor(23,45,58);
         $this->SetLineWidth(0.1);
-        $this->SetFillColor(230, 230, 230);		
+        $this->SetFillColor(230, 230, 230);
         $this->SetFont('Arial','',$sizeFont);
     }
 
@@ -33,7 +50,7 @@ class Report extends FPDF {
         $this->SetDrawColor(23,45,58);
         $this->SetLineWidth(0.1);
         $this->SetTextColor(36,62,62); 
-        $this->SetFillColor(233, 240, 233);
+        $this->SetFillColor(252, 248, 232);
         $this->SetFont('Arial','',$sizeFont);
     }
 
@@ -84,7 +101,7 @@ class Report extends FPDF {
 
             $c[1] .= str_repeat("\n",$ln-$this->_countLine($c[1], $c[0]));
 
-            $this->MultiCell($c[0],4,$c[1],'B',$c[2],1);
+            $this->MultiCell($c[0],7,$c[1],'B',$c[2],1);
 
         }
         $this->Cell(15,5,'','',1);
@@ -92,14 +109,14 @@ class Report extends FPDF {
 
     public function loadHeader($title){
 
-        $left_margin = 25;
+        $left_margin = 60;
 
         $this->Cell($left_margin);
         $this->Cell(1,4, $title,0,1,'L',false);
-        $this->Image("../app.reportclass/iasd.jpg",15,7,18,18,"JPG");		
+        $this->Image("../../../resources/images/appanest/logo-text.png",10,7,52,14,"PNG");
     }
 
-    public function loadHeaderParams($param, $buttonLineSize = 1000){
+    public function loadHeaderParameters($param, $buttonLineSize = 1000){
 
         $this->ln(2);
 
@@ -123,9 +140,12 @@ class Report extends FPDF {
     }
 
     public function loadFooter($buttonLineSize = 1000){
-        global $passport;
+
+        date_default_timezone_set("America/Manaus");
+
+        $passport   = Session::read("username");
         $issuedOn   = "impresso em ";
-        $date       = date("m/d/Y");
+        $date       = date("d/m/Y H:i");
         $by         = ", por ";
         $page       = "pagina ";
         $of         = " de ";

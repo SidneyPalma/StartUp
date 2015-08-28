@@ -5,8 +5,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     alias: 'controller.allocationschedule',
 
     requires: [
-        'AppAnest.view.allocationschedule.*'
+        'AppAnest.view.allocationschedule.*',
+        'AppAnest.view.person.ContractorUnitSearch'
     ],
+
+    showReport: function () {
+        Ext.widget('allocationschedulereport').show();
+    },
+
+    showReportSheetFrequency: function (btn) {
+        var values = btn.up('window').down('form').getValues(),
+            reportUrl = 'business/Class/Report/SheetFrequency.php?periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}';
+        window.open(Ext.String.format(reportUrl,values.periodid,values.contractorunitid,values.subunit.substring(0, 1),values.subunit));
+    },
 
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         console.warn(viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex);

@@ -14,9 +14,12 @@ class SheetFrequency extends Report {
 
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
-        $subunit = $this->post->subunit;
+        $dateof = $this->post->dateof;
+        $dateto = $this->post->dateto;
+
         $periodid = $this->post->periodid;
         $contractorunitid = $this->post->contractorunitid;
+        $subunit = isset($this->post->subunit) ? $this->post->subunit : 'P';
 
         $this->sizeColumns = self::scaleCalc(array_sum($this->sizeColumns),190,$this->sizeColumns);
         $this->setParamTitleNames();
@@ -44,10 +47,13 @@ class SheetFrequency extends Report {
               and sm.contractorunitid = :contractorunitid
               and tp.naturalpersonid is not null
               and tp.subunit = :subunit
+              and sm.dutydate between :dateof and :dateto
             order by sm.contractorunitid, sm.dutydate, tp.shift, cu.position, tp.subunit, tp.position";
 
         $pdo = $proxy->prepare($sql);
 
+        $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateto, \PDO::PARAM_STR);
         $pdo->bindValue(":subunit", $subunit, \PDO::PARAM_STR);
         $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
         $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);

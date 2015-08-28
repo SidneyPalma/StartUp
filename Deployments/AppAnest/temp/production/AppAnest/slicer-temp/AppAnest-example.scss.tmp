@@ -60,8 +60,6 @@ $include-appanest-store-person-personphone: true;
 $include-appanest-store-shifttype-shifttype: true;
 $include-appanest-store-users-users: true;
 $include-appanest-store-users-usersmenu: true;
-$include-appanest-view-allocationschedule-allocationday: true;
-$include-appanest-view-allocationschedule-allocationmonth: true;
 $include-appanest-view-allocationschedule-allocationschedule: true;
 $include-appanest-view-allocationschedule-allocationschedulecontroller: true;
 $include-appanest-view-allocationschedule-allocationschedulereport: true;

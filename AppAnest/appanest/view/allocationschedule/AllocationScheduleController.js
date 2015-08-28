@@ -14,9 +14,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     showReportSheetFrequency: function (btn) {
-        var values = btn.up('window').down('form').getValues(),
-            reportUrl = 'business/Class/Report/SheetFrequency.php?periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}';
-        window.open(Ext.String.format(reportUrl,values.periodid,values.contractorunitid,values.subunit.substring(0, 1),values.subunit));
+        var form = btn.up('window').down('form'),
+            data = form.getValues(),
+            url = 'business/Class/Report/SheetFrequency.php?',
+            qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}';
+        if(form.isValid()) {
+            var periodid = data.periodid,
+                contractorunitid = data.contractorunitid,
+                subunit = data.subunit.substring(0,1),
+                dateof = data.dateof,
+                dateto = data.dateto;
+
+            window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunit,dateof,dateto));
+        }
     },
 
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
@@ -138,6 +148,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
 
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
+    },
+
+    onSelectPeriodReport: function ( combo, record, eOpts ) {
+        var form = combo.up('form'),
+            dateof = form.down('datefield[name=dateof]'),
+            dateto = form.down('datefield[name=dateto]'),
+            periodof = record.toDate(record.get('periodof')),
+            periodto = record.toDate(record.get('periodto'));
+
+        dateof.setValue(periodof);
+        dateto.setValue(periodto);
+        dateof.setMinValue(periodof);
+        dateto.setMaxValue(periodto);
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {

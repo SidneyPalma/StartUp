@@ -36,14 +36,41 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleReport', {
                 xtype: 'form',
                 padding: 10,
                 layout: 'anchor',
-                defaultType: 'textfield',
                 defaults: {
-                    anchor: '100%'
+                    anchor: '100%',
+                    allowBlank: false
                 },
                 items: [
                     {
+                        fieldLabel: 'Competencia',
                         name: 'periodid',
-                        xtype: 'periodsearch'
+                        xtype: 'periodsearch',
+                        listeners: {
+                            select: 'onSelectPeriodReport'
+                        }
+                    }, {
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Intervalo',
+                        layout: 'hbox',
+                        defaultType: 'datefield',
+                        defaults: {
+                            allowBlank: false
+                        },
+                        items: [
+                            {
+                                flex: 1,
+                                plugins: 'textmask',
+                                fieldLabel: 'De',
+                                name: 'dateof'
+                            }, {
+                                xtype: 'splitter'
+                            }, {
+                                flex: 1,
+                                plugins: 'textmask',
+                                fieldLabel: 'Ate',
+                                name: 'dateto'
+                            }
+                        ]
                     }, {
                         submitValue: false,
                         hiddenNameId: 'contractorunitid',

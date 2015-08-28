@@ -103,13 +103,19 @@ class SheetFrequency extends Report {
         $this->Cell(190,24, 'Folha de Frequência',0,1,'C',false);
         $this->Image("../../../resources/images/appanest/logo-text.png",10,7,52,14,"PNG");
 
+
+        $dateof = new \DateTime($this->post->dateof);
+        $dateto = new \DateTime($this->post->dateto);
         $periodof = new \DateTime($this->rows[0]['periodof']);
 
         $this->Ln(10);
-        $this->SetFont('Arial', '', 16);
+        $this->SetFont('Arial', 'B', 16);
         $this->Cell(190,6, $this->rows[0]['contractorunit'] . ' - '. $this->post->subunittext,0,1,'C',false);
 
         $this->Cell(190,6, $periodof->format( "M/Y" ),0,1,'C',false);
+
+        $this->SetFont('Arial', '', 12);
+        $this->Cell(190,6, $dateof->format( "d/m/Y" ) . ' - ' . $dateto->format( "d/m/Y" ),0,1,'C',false);
 
         $this->AddPage();
     }
@@ -142,8 +148,8 @@ class SheetFrequency extends Report {
 
         if($this->PageNo() != 1) {
             $contractorunit = $this->rows[0]['contractorunit'] .' - '.$this->post->subunittext;
-            $periodof = new \DateTime($this->rows[0]['periodof']);
-            $periodto = new \DateTime($this->rows[0]['periodto']);
+            $periodof = new \DateTime($this->post->dateof);
+            $periodto = new \DateTime($this->post->dateto);
 
             $this->configStyleHeader();
 

@@ -19,7 +19,9 @@ class Report extends FPDF {
 
     public function __construct($orientation='P', $unit='mm', $size='A4') {
         $this->preConstruct();
+
         parent::__construct($orientation,$unit,$size);
+
         $this->posConstruct();
     }
 

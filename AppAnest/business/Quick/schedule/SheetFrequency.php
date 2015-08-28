@@ -60,7 +60,6 @@ class SheetFrequency extends Report {
 
         $pdo->execute();
         $this->rows = $pdo->fetchAll();
-
     }
 
     function setParamTitleNames() {
@@ -83,16 +82,14 @@ class SheetFrequency extends Report {
         $this->SetLineWidth(0.4);
         $this->SetFont('Arial', 'B', 22);
 
-        $this->loadHeader('Observações');
-
+        $this->Cell(190,4, 'Observações',0,1,'C',false);
         $this->Cell($this->totalSizeColums,6,'','B',1,'C',0);
 
         $this->configStyleDetail();
 
-        for ($x = 0; $x <= 16; $x++) {
-            $this->Cell($this->totalSizeColums,13,'','B',1,'C');
+        for ($x = 0; $x <= 21; $x++) {
+            $this->Cell($this->totalSizeColums,10,'','B',1,'C');
         }
-
     }
 
     function SetCoverPage () {
@@ -103,10 +100,8 @@ class SheetFrequency extends Report {
         $this->Cell(190,24, 'Folha de Frequência',0,1,'C',false);
         $this->Image("../../../resources/images/appanest/logo-text.png",10,7,52,14,"PNG");
 
-
-        $dateof = new \DateTime($this->post->dateof);
-        $dateto = new \DateTime($this->post->dateto);
-        $periodof = new \DateTime($this->rows[0]['periodof']);
+        $periodof = new \DateTime($this->post->dateof);
+        $periodto = new \DateTime($this->post->dateto);
 
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 16);
@@ -115,9 +110,7 @@ class SheetFrequency extends Report {
         $this->Cell(190,6, $periodof->format( "M/Y" ),0,1,'C',false);
 
         $this->SetFont('Arial', '', 12);
-        $this->Cell(190,6, $dateof->format( "d/m/Y" ) . ' - ' . $dateto->format( "d/m/Y" ),0,1,'C',false);
-
-        $this->AddPage();
+        $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ),0,1,'C',false);
     }
 
     function setTotalSizeColums() {
@@ -144,9 +137,8 @@ class SheetFrequency extends Report {
 
         if($this->PageNo() == 1) {
             $this->SetCoverPage();
-        }
-
-        if($this->PageNo() != 1) {
+            $this->AddPage();
+        } else {
             $contractorunit = $this->rows[0]['contractorunit'] .' - '.$this->post->subunittext;
             $periodof = new \DateTime($this->post->dateof);
             $periodto = new \DateTime($this->post->dateto);
@@ -158,7 +150,7 @@ class SheetFrequency extends Report {
 
             $this->Cell(190,4, 'Folha de Frequência - ' . $periodof->format( "M/Y" ),0,1,'C',false);
 
-            $this->SetY(18);
+            $this->Ln(4);
             $this->SetFont('Arial', '', 14);
             $this->Cell(190,4, $contractorunit,0,1,'C',false);
             $this->SetFont('Arial', '', 10);
@@ -231,7 +223,6 @@ class SheetFrequency extends Report {
 
         return $temp;
     }
-
 
     function SetData() {
         $data = $this->setDutyDateShift($this->rows);

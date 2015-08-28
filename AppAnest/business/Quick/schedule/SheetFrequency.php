@@ -32,7 +32,7 @@ class SheetFrequency extends Report {
                 sp.periodof,
                 sp.periodto,
                 sm.dutydate,
-                c.shortname as contractorunit,
+                c.name as contractorunit,
                 n.shortname as naturalperson,
                 tp.shift,
                 tp.subunit
@@ -98,7 +98,7 @@ class SheetFrequency extends Report {
         $this->Cell(190,36, 'FAVOR CARIMBAR E ASSINAR',0,1,'C',false);
         $this->SetFont('Arial', 'B', 24);
         $this->Cell(190,24, 'Folha de Frequência',0,1,'C',false);
-        $this->Image("../../../resources/images/appanest/logo-text.png",10,7,52,14,"PNG");
+        $this->Image("../../../resources/images/appanest/logo-text.png",60,30,80,20,"PNG");
 
         $periodof = new \DateTime($this->post->dateof);
         $periodto = new \DateTime($this->post->dateto);
@@ -147,13 +147,13 @@ class SheetFrequency extends Report {
             $this->configStyleHeader();
 
             $this->SetLineWidth(0.4);
-            $this->SetFont('Arial', 'B', 18);
+            $this->SetFont('Arial', 'B', 14);
 
             $month = $this->translate['monthly'][ strtolower($periodof->format( "M" ))];
             $this->Cell(190,4, 'Folha de Frequência - ' . $month . $periodof->format( "/Y" ),0,1,'C',false);
 
-            $this->Ln(4);
-            $this->SetFont('Arial', '', 14);
+            $this->Ln(2);
+            $this->SetFont('Arial', '', 10);
             $this->Cell(190,4, $contractorunit,0,1,'C',false);
             $this->SetFont('Arial', '', 10);
             $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ),0,1,'C',false);
@@ -167,16 +167,16 @@ class SheetFrequency extends Report {
 
     function configHeaderDutyDate () {
         $titleColumn = $this->sizeColumns[0]+$this->sizeColumns[1]+$this->sizeColumns[2]+$this->sizeColumns[3];
-        $this->SetFont('Arial', 'B', 10);
-        $this->Cell($titleColumn,6,'Plantões Diurnos','1',0,'C',0);
-        $this->Cell($titleColumn,6,'Plantões Noturnos','1',1,'C',0);
+//        $this->SetFont('Arial', 'B', 10);
+//        $this->Cell($titleColumn,6,'Plantões Diurnos','1',0,'C',0);
+//        $this->Cell($titleColumn,6,'Plantões Noturnos','1',1,'C',0);
         $this->SetFont('Arial', 'B', 9);
-        $this->Cell($this->sizeColumns[0],6,'Planejado','B',0,'C',0);
-        $this->Cell($this->sizeColumns[1],6,'Realizado','B',0,'L',0);
+        $this->Cell($this->sizeColumns[0],6,'Diurnos','B',0,'C',0);
+        $this->Cell($this->sizeColumns[1],6,'Plantonista','B',0,'L',0);
         $this->Cell($this->sizeColumns[2],6,'','B',0,'C',0);
         $this->Cell($this->sizeColumns[3],6,'Pagar para','B',0,'L',0);
-        $this->Cell($this->sizeColumns[4],6,'Planejado','B',0,'C',0);
-        $this->Cell($this->sizeColumns[5],6,'Realizado','B',0,'L',0);
+        $this->Cell($this->sizeColumns[4],6,'Noturnos','B',0,'C',0);
+        $this->Cell($this->sizeColumns[5],6,'Plantonista','B',0,'L',0);
         $this->Cell($this->sizeColumns[6],6,'','B',0,'C',0);
         $this->Cell($this->sizeColumns[7],6,'Pagar para','B',1,'L',0);
     }
@@ -236,21 +236,20 @@ class SheetFrequency extends Report {
         $dutydate = '';
 
         foreach($data as $record) {
-            $lineColor = ($lineColor == 0) ? 1 : 0;
+            $lineColor = 0;//($lineColor == 0) ? 1 : 0;
 
             if($dutydate != $record['dutydate'] && $dutydate != '') {
                 $this->Ln(6);
             }
 
             if($dutydate != $record['dutydate']) {
-                $this->SetFont('Arial', 'B', 13);
+                $this->SetFont('Arial', 'B', 9);
                 $dutydateName = new \DateTime($record['dutydate']);
                 $month = $this->translate['monthly'][strtolower($dutydateName->format( "M" ))];
                 $day = $dutydateName->format( "d" );
                 $week = $this->translate['dayweek'][strtolower($dutydateName->format( "D" ))];
                 $this->Cell($this->sizeColumns[0],4,$week . ', '. $day. ' de ' . $month .  $dutydateName->format( "/Y" ),0,1,'L',0);
-//                $this->Cell($this->sizeColumns[0],4,$dutydateName->format( "D d M/Y" ),0,1,'L',0);
-                $this->Ln(2);
+//                $this->Ln(2);
                 $this->configHeaderDutyDate();
             }
 

@@ -107,7 +107,8 @@ class SheetFrequency extends Report {
         $this->SetFont('Arial', 'B', 16);
         $this->Cell(190,6, $this->rows[0]['contractorunit'] . ' - '. $this->post->subunittext,0,1,'C',false);
 
-        $this->Cell(190,6, $periodof->format( "M/Y" ),0,1,'C',false);
+        $month = $this->translate['monthly'][ strtolower($periodof->format( "M" ))];
+        $this->Cell(190,6, $month . $periodof->format( "/Y" ),0,1,'C',false);
 
         $this->SetFont('Arial', '', 12);
         $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ),0,1,'C',false);
@@ -148,7 +149,8 @@ class SheetFrequency extends Report {
             $this->SetLineWidth(0.4);
             $this->SetFont('Arial', 'B', 18);
 
-            $this->Cell(190,4, 'Folha de Frequência - ' . $periodof->format( "M/Y" ),0,1,'C',false);
+            $month = $this->translate['monthly'][ strtolower($periodof->format( "M" ))];
+            $this->Cell(190,4, 'Folha de Frequência - ' . $month . $periodof->format( "/Y" ),0,1,'C',false);
 
             $this->Ln(4);
             $this->SetFont('Arial', '', 14);
@@ -243,7 +245,11 @@ class SheetFrequency extends Report {
             if($dutydate != $record['dutydate']) {
                 $this->SetFont('Arial', 'B', 13);
                 $dutydateName = new \DateTime($record['dutydate']);
-                $this->Cell($this->sizeColumns[0],4,$dutydateName->format( "D d M/Y" ),0,1,'L',0);
+                $month = $this->translate['monthly'][strtolower($dutydateName->format( "M" ))];
+                $day = $dutydateName->format( "d" );
+                $week = $this->translate['dayweek'][strtolower($dutydateName->format( "D" ))];
+                $this->Cell($this->sizeColumns[0],4,$week . ', '. $day. ' de ' . $month .  $dutydateName->format( "/Y" ),0,1,'L',0);
+//                $this->Cell($this->sizeColumns[0],4,$dutydateName->format( "D d M/Y" ),0,1,'L',0);
                 $this->Ln(2);
                 $this->configHeaderDutyDate();
             }

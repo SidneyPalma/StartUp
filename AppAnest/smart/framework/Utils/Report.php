@@ -9,6 +9,33 @@ use Smart\Common\Traits as Traits;
 class Report extends FPDF {
     use Traits\TresultSet;
 
+    protected $translate = array(
+        'monthly'=>array(
+            'jan'=>'Janeiro',
+            'feb'=>'Fevereiro',
+            'mar'=>'Março',
+            'apr'=>'Abril',
+            'may'=>'Maio',
+            'jun'=>'Junho',
+            'jul'=>'Julho',
+            'aug'=>'Agosto',
+            'sep'=>'Setembro',
+            'oct'=>'Outubro',
+            'nov'=>'Novembro',
+            'dec'=>'Dezembro'
+        ),
+        'dayweek'=>array(
+            'sun'=>'Domingo',
+            'mon'=>'Segunda-Feira',
+            'tue'=>'Terça-Feira',
+            'wed'=>'Quarta-Feira',
+            'thu'=>'Quinta-Feira',
+            'fri'=>'Sexta-Feira',
+            'sat'=>'Sábado'
+        )
+    );
+
+
     public function preConstruct() {
 
     }

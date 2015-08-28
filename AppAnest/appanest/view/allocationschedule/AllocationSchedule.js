@@ -33,7 +33,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                 frame: true,
                 xtype: 'form',
 
-                glyph: 0xe9d7,
+                glyph: 0xe898,
 
                 padding: 10,
 
@@ -130,11 +130,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             change: 'onFilterNaturalPerson'
                                         }
                                     }, {
-                                        glyph: 0xe887,
-                                        scale: 'medium',
-                                        text: 'Folha de Frequencia',
-                                        xtype: 'button',
-                                        handler: 'showReport'
+                                        xtype: 'segmentedbutton',
+                                        items: [
+                                            {
+                                                scale: 'medium',
+                                                glyph: 0xe887,
+                                                text: 'Frequencia',
+                                                handler: 'showReport'
+                                            },{
+                                                scale: 'medium',
+                                                glyph: 0xe898,
+                                                text: 'Diretoria'
+                                            }
+                                        ]
                                     }
                                 ]
                             }

@@ -22,7 +22,6 @@ class SheetFrequency extends Report {
         $subunit = isset($this->post->subunit) ? $this->post->subunit : 'P';
 
         $this->sizeColumns = self::scaleCalc(array_sum($this->sizeColumns),190,$this->sizeColumns);
-        $this->setParamTitleNames();
         $this->setTotalSizeColums();
 
         $proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
@@ -62,10 +61,6 @@ class SheetFrequency extends Report {
         $this->rows = $pdo->fetchAll();
     }
 
-    function setParamTitleNames() {
-        $this->paramTitleNames = array(array('OlaMundo'),array('Cruel'));
-    }
-
     public function posConstruct() {
         $this->AliasNbPages();
         $this->AddPage();
@@ -93,6 +88,9 @@ class SheetFrequency extends Report {
     }
 
     function SetCoverPage () {
+
+        $subunittext = $this->post->subunittext;
+
         $this->Ln(60);
         $this->SetFont('Arial', 'B', 28);
         $this->Cell(190,36, 'FAVOR CARIMBAR E ASSINAR',0,1,'C',false);
@@ -105,13 +103,13 @@ class SheetFrequency extends Report {
 
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 16);
-        $this->Cell(190,6, $this->rows[0]['contractorunit'] . ' - '. $this->post->subunittext,0,1,'C',false);
+        $this->Cell(190,6, $this->rows[0]['contractorunit'],0,1,'C',false);
 
         $month = $this->translate['monthly'][ strtolower($periodof->format( "M" ))];
         $this->Cell(190,6, $month . $periodof->format( "/Y" ),0,1,'C',false);
 
         $this->SetFont('Arial', '', 12);
-        $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ),0,1,'C',false);
+        $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ) . ' - ' . $subunittext,0,1,'C',false);
     }
 
     function setTotalSizeColums() {
@@ -140,7 +138,8 @@ class SheetFrequency extends Report {
             $this->SetCoverPage();
             $this->AddPage();
         } else {
-            $contractorunit = $this->rows[0]['contractorunit'] .' - '.$this->post->subunittext;
+            $subunittext = $this->post->subunittext;
+            $contractorunit = $this->rows[0]['contractorunit'];
             $periodof = new \DateTime($this->post->dateof);
             $periodto = new \DateTime($this->post->dateto);
 
@@ -156,7 +155,7 @@ class SheetFrequency extends Report {
             $this->SetFont('Arial', '', 10);
             $this->Cell(190,4, $contractorunit,0,1,'C',false);
             $this->SetFont('Arial', '', 10);
-            $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ),0,1,'C',false);
+            $this->Cell(190,6, $periodof->format( "d/m/Y" ) . ' - ' . $periodto->format( "d/m/Y" ) .' - '. $subunittext,0,1,'C',false);
 
             $this->configStyleLabelHeader();
 
@@ -166,10 +165,6 @@ class SheetFrequency extends Report {
     }
 
     function configHeaderDutyDate () {
-        $titleColumn = $this->sizeColumns[0]+$this->sizeColumns[1]+$this->sizeColumns[2]+$this->sizeColumns[3];
-//        $this->SetFont('Arial', 'B', 10);
-//        $this->Cell($titleColumn,6,'Plantões Diurnos','1',0,'C',0);
-//        $this->Cell($titleColumn,6,'Plantões Noturnos','1',1,'C',0);
         $this->SetFont('Arial', 'B', 9);
         $this->Cell($this->sizeColumns[0],6,'Diurnos','B',0,'C',0);
         $this->Cell($this->sizeColumns[1],6,'Plantonista','B',0,'L',0);
@@ -249,7 +244,6 @@ class SheetFrequency extends Report {
                 $day = $dutydateName->format( "d" );
                 $week = $this->translate['dayweek'][strtolower($dutydateName->format( "D" ))];
                 $this->Cell($this->sizeColumns[0],4,$week . ', '. $day. ' de ' . $month .  $dutydateName->format( "/Y" ),0,1,'L',0);
-//                $this->Ln(2);
                 $this->configHeaderDutyDate();
             }
 

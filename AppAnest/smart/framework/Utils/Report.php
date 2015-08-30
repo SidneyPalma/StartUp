@@ -35,7 +35,6 @@ class Report extends FPDF {
         )
     );
 
-
     public function preConstruct() {
 
     }

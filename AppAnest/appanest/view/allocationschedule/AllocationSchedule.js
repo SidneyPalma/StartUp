@@ -140,7 +140,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             },{
                                                 scale: 'medium',
                                                 glyph: 0xe898,
-                                                text: 'Diretoria'
+                                                text: 'Diretoria',
+                                                handler: 'showCalendar'
                                             }
                                         ]
                                     }

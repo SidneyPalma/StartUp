@@ -9,6 +9,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.person.ContractorUnitSearch'
     ],
 
+    showCalendar: function () {
+        window.open('business/Class/Report/ScheduleContractUinit.php');
+    },
+
     showReport: function () {
         Ext.widget('allocationschedulereport').show();
     },
@@ -18,13 +22,13 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             data = form.getValues(),
             url = 'business/Class/Report/SheetFrequency.php?',
             qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}';
+
         if(form.isValid()) {
             var periodid = data.periodid,
                 contractorunitid = data.contractorunitid,
                 subunit = data.subunit.substring(0,1),
                 dateof = data.dateof,
                 dateto = data.dateto;
-
             window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunit,dateof,dateto));
         }
     },

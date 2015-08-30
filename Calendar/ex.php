@@ -1,51 +1,45 @@
 <?php
 require("pdfUSACalendar.php");
 
-class MyCalendar extends PDF_USA_Calendar
-{
+class MyCalendar extends PDF_USA_Calendar {
 
-function printDay($date)
-{
-	// add logic here to customize a day
-	$this->JDtoYMD($date,$year,$month,$day);
-	if ($month == 1 && $day == 10)
-		{
-		$this->SetXY($this->x, $this->y + $this->squareHeight / 2);
-		$this->SetFont("Arial", "B", 10);
-		$this->Cell($this->squareWidth,5,"Happy Birthday!", 0,0, "C");
+	function printDay($date) {
+		// add logic here to customize a day
+		$this->JDtoYMD($date,$year,$month,$day);
+		if ($month == 1 && $day == 10)  {
+			$this->SetXY($this->x, $this->y + $this->squareHeight / 2);
+			$this->SetFont("Arial", "B", 10);
+			$this->Cell($this->squareWidth,5,"Happy Birthday!", 0,0, "C");
 		}
-}
+	}
 
-function isHoliday($date)
-{
-	// insert your favorite holidays here
-	$this->JDtoYMD($date, $year, $month, $day);
-	if ($date == easter_days($year) + $this->MDYtoJD(3,21,$year))
-		{
-		$noSchool = false;
-		return "Easter";
+	function isHoliday($date) {
+		// insert your favorite holidays here
+		$this->JDtoYMD($date, $year, $month, $day);
+		if ($date == easter_days($year) + $this->MDYtoJD(3,21,$year)) {
+			$noSchool = false;
+			return "Easter";
 		}
-	if ($date == easter_days($year) + $this->MDYtoJD(3,21,$year) - 2)
-		{
-		$noSchool = false;
-		return "Good Friday";
+		if ($date == easter_days($year) + $this->MDYtoJD(3,21,$year) - 2)  {
+			$noSchool = false;
+			return "Good Friday";
 		}
-	$jewishDate = explode("/", jdtojewish(gregoriantojd($month,$day,$year)));
-	$month = $jewishDate[0];
-	$day = $jewishDate[1];
-	if ($month == 1 && $day == 1)
-		return "Rosh Hashanah";
-	if ($month == 1 && $day == 2)
-		return "Rosh Hashanah";
-	if ($month == 1 && $day == 10)
-		return "Yom Kippur";
-	if ($month == 3 && $day == 25)
-		return "Chanukkah";
-	if ($month == 8 && $day == 15)
-		return "Passover";
-	// call the base class for USA holidays
-	return parent::isHoliday($date);
-}
+		$jewishDate = explode("/", jdtojewish(gregoriantojd($month,$day,$year)));
+		$month = $jewishDate[0];
+		$day = $jewishDate[1];
+		if ($month == 1 && $day == 1)
+			return "Rosh Hashanah";
+		if ($month == 1 && $day == 2)
+			return "Rosh Hashanah";
+		if ($month == 1 && $day == 10)
+			return "Yom Kippur";
+		if ($month == 3 && $day == 25)
+			return "Chanukkah";
+		if ($month == 8 && $day == 15)
+			return "Passover";
+		// call the base class for USA holidays
+		return parent::isHoliday($date);
+	}
 
 } // class MyCalendar extends PDF_USA_Calendar
 

@@ -39,7 +39,7 @@ class ScheduleContractUinit extends Report {
     }
 
     public function setAllMarginPage($margin) {
-        $this->SetMargins($margin,$margin);
+        $this->SetMargins($margin,$margin +2);
         $this->SetAutoPageBreak(true,$margin);
     }
 
@@ -58,8 +58,6 @@ class ScheduleContractUinit extends Report {
 
     public function Header(){
         $this->configStyleHeader();
-
-        $this->SetLineWidth(0.4);
         $this->SetFont('Arial', 'B', 18);
 
         $this->Cell($this->getInternalW(),4, 'Escala da Diretoria',0,1,'C',false);
@@ -82,53 +80,56 @@ class ScheduleContractUinit extends Report {
 
     public function setDaysPrint() {
         $j = 1;
-        $this->SetFont('Times', '', 18);
-        $this->SetTextColor(250, 159, 128);
-
+        $widthColumn = $this->squareWidth;
         $y = $this->ScheduleMonth->format("Y");
         $m = $this->ScheduleMonth->format("m");
         $d = $this->daysweek[strtolower($this->ScheduleMonth->format("D"))];
 
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
 
-        foreach($this->verticalLine as $line) {
+        $this->SetFont('Times', '', 18);
+        $this->SetTextColor(250, 159, 128);
+
+        foreach($this->vLine as $line) {
 
             $this->setY($line);
             $position = intval(($this->squareHeight / 2) - 12);
 
             for ($i = $d; $i <= 7; ++$i) {
 
-                $widthColumn = $this->squareWidth * $d;
-
                 if($j <= $dm) {
+
+                    if($d != 1) {
+                        $this->Cell($widthColumn*($d-1), $position, '', 0, 0, 'L', 0);
+                        $d = 1;
+                    }
+
                     $this->Cell($widthColumn, $position, $j, 0, 0, 'L', 0);
                 }
 
                 $j++;
             }
-
-            $d=1;
         }
     }
 
     public function SetData() {
-        $y = 1;
+        $p = 1;
         $this->getHeaderColumns();
-        $year = $this->ScheduleMonth->format("Y");
-        $month = $this->ScheduleMonth->format("m");
-        $week = $this->weekInMonth($month, $year);
+        $y = $this->ScheduleMonth->format("Y");
+        $m = $this->ScheduleMonth->format("m");
+        $week = $this->weekInMonth($m, $y);
         $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week);
         $this->verticalLine = array();
 
         for ($i = 1; $i <= $week; ++$i) {
-            $this->verticalLine[] = intval($this->y);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $y,'',1,1,'C',0);
+            $this->vLine[] = intval($this->y);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
         }
 
         $this->setDaysPrint();

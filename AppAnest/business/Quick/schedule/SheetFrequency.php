@@ -68,7 +68,6 @@ class SheetFrequency extends Report {
         $this->AddPage();
         $this->SetObservation();
         $this->Output("SheetFrequency.pdf", "I");
-        ob_clean();
     }
 
     function SetObservation () {
@@ -194,27 +193,25 @@ class SheetFrequency extends Report {
             $i++;
             $j++;
 
-            if($j < count($rows)) {
-                if($record['dutydate'] != $rows[$j]['dutydate']) {
-                    foreach($data as $item) {
-                        if($item['shift'] == 'D') {
-                            $uniq[$d]['dutydate'] = $item['dutydate'];
-                            $uniq[$d]['shiftd'] = $item['naturalperson'];
-                            $d++;
-                        }
-                        if($item['shift'] == 'N') {
-                            $uniq[$n]['dutydate'] = $item['dutydate'];
-                            $uniq[$n]['shiftn'] = $item['naturalperson'];
-                            $n++;
-                        }
+            if(($j < count($rows))&&($record['dutydate'] != $rows[$j]['dutydate'])) {
+                foreach($data as $item) {
+                    if($item['shift'] == 'D') {
+                        $uniq[$d]['dutydate'] = $item['dutydate'];
+                        $uniq[$d]['shiftd'] = $item['naturalperson'];
+                        $d++;
                     }
-                    $temp = array_merge($temp,$uniq);
-                    $i = 0;
-                    $d = 0;
-                    $n = 0;
-                    $data = array();
-                    $uniq = array();
+                    if($item['shift'] == 'N') {
+                        $uniq[$n]['dutydate'] = $item['dutydate'];
+                        $uniq[$n]['shiftn'] = $item['naturalperson'];
+                        $n++;
+                    }
                 }
+                $temp = array_merge($temp,$uniq);
+                $i = 0;
+                $d = 0;
+                $n = 0;
+                $data = array();
+                $uniq = array();
             }
         }
 

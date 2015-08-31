@@ -65,6 +65,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                     cls: 'x-column-header-inner-dark',
                     width: 200,
                     text: 'UNIDADE',
+                    sortable: false,
                     dataIndex: 'contractorunit',
                     renderer: function (value, meta, record, rowIndex, colIndex, store) {
                         var bordertop = parseInt(record.get('bordertop')),
@@ -97,6 +98,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                     cls: 'x-column-header-inner-dark',
                     width: 74,
                     text: 'TURNOS',
+                    sortable: false,
                     dataIndex: 'shift',
                     renderer: function (value, meta, record, rowIndex, colIndex, store) {
                         var metaStyle = '',
@@ -173,38 +175,45 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             field = [
             {
                 flex: 1,
+                sortable: false,
                 text: me._columnText['mondescription'],
                 dataIndex: 'mondescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
+                sortable: false,
                 text: me._columnText['tuedescription'],
                 dataIndex: 'tuedescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
+                sortable: false,
                 text: me._columnText['weddescription'],
                 dataIndex: 'weddescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
+                sortable: false,
                 text: me._columnText['thudescription'],
                 dataIndex: 'thudescription',
                 renderer: me.columnsRenderer
             }, {
                 flex: 1,
+                sortable: false,
                 text: me._columnText['fridescription'],
                 dataIndex: 'fridescription',
                 renderer: me.columnsRenderer
             }, {
                 cls: 'x-column-header-inner-dark',
                 flex: 1,
+                sortable: false,
                 text: me._columnText['satdescription'],
                 dataIndex: 'satdescription',
                 renderer: me.columnsRenderer
             }, {
                 cls: 'x-column-header-inner-dark',
                 flex: 1,
+                sortable: false,
                 text: me._columnText['sundescription'],
                 dataIndex: 'sundescription',
                 renderer: me.columnsRenderer
@@ -216,6 +225,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                 {
                     cls: 'x-column-header-inner-dark',
                     flex: 1,
+                    sortable: false,
                     text: me._columnText[dataIndex],
                     dataIndex: dataIndex,
                     renderer: me.columnsRenderer

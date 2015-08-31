@@ -112,6 +112,40 @@ class ScheduleContractUinit extends Report {
         }
     }
 
+    public function setDaysShift() {
+        $j = 1;
+        $widthColumn = $this->squareWidth;
+        $y = $this->ScheduleMonth->format("Y");
+        $m = $this->ScheduleMonth->format("m");
+        $d = $this->daysweek[strtolower($this->ScheduleMonth->format("D"))];
+
+        $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
+
+        $this->SetFont('Times', '', 18);
+        $this->SetTextColor(154, 171, 167);
+
+        foreach($this->vLine as $line) {
+
+            $this->setY($line);
+            $position = intval(($this->squareHeight / 2) - 12);
+
+            for ($i = $d; $i <= 7; ++$i) {
+
+                if($j <= $dm) {
+
+                    if($d != 1) {
+                        $this->Cell($widthColumn*($d-1), $position, '', 0, 0, 'L', 0);
+                        $d = 1;
+                    }
+
+                    $this->Cell($widthColumn, $position, $j, 0, 0, 'L', 0);
+                }
+
+                $j++;
+            }
+        }
+    }
+
     public function SetData() {
         $p = 1;
         $this->vLine = array();
@@ -133,6 +167,7 @@ class ScheduleContractUinit extends Report {
         }
 
         $this->setDaysPrint();
+//        $this->setDaysShift();
     }
 
 }

@@ -122,13 +122,13 @@ class ScheduleContractUinit extends Report {
         $widthColumn = $this->squareWidth;
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
 
-        $this->SetFont('LucidaSans-Typewriter', '', 18);
-        $this->SetTextColor(154, 171, 167);
+        $this->SetFont('LucidaSans-Typewriter', '', 16);
+        $this->SetTextColor(201, 30, 73);
 
         foreach($this->vLine as $line) {
 
             $this->setY($line);
-            $position = intval(($this->squareHeight / 2) - 12);
+            $position = intval(($this->squareHeight / 2) - 15);
 
             for ($i = $d; $i <= 7; ++$i) {
 
@@ -147,7 +147,7 @@ class ScheduleContractUinit extends Report {
         }
     }
 
-    public function AddDay( &$date, &$week) {
+    public function AddDay(&$date, &$week) {
         $tmp = new \DateTime($date);
 
         $date = $tmp->format("Y-m-d");
@@ -164,13 +164,13 @@ class ScheduleContractUinit extends Report {
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
         $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - 1 days"));
 
-        $this->SetFont('LucidaSans-Typewriter','',9);
+        $this->SetFont("LucidaSans-Typewriter","",9);
         $this->SetTextColor(1, 0, 40);
 
         foreach($this->vLine as $line) {
 
             $this->setY($line);
-            $position = intval(($this->squareHeight / 2) - 12);
+            $position = intval(($this->squareHeight / 2));
 
             for ($i = $d; $i <= 7; ++$i) {
 
@@ -181,14 +181,14 @@ class ScheduleContractUinit extends Report {
                     if($d != 1) {
                         foreach($rows as $item) {
                             $this->Cell($widthColumn*($d-1), $position, '', 0, 0, 'L', 0);
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], 0, 1, 'C', 0);
+                            $this->Cell($widthColumn, 5, $item['naturalperson'], 0, 1, 'C', 0);
                         }
                         $d = 1;
                     } else {
                         $this->setY($line);
                         foreach($rows as $item) {
                             if ($week > 1) $this->Cell($widthColumn * ($week-1), $position, '', 0, 0, 'L', 0);
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], 0, 1, 'C', 0);
+                            $this->Cell($widthColumn, 5, $item['naturalperson'], 0, 1, 'C', 0);
                         }
                     }
                 }

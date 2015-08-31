@@ -46,7 +46,7 @@ class ScheduleContractUinit extends Report {
     public function getHeaderColumns() {
         $this->squareWidth = intval($this->getInternalW() / 7);
         $this->SetFont('Arial', 'B', 12);
-        $this->SetFillColor(250, 159, 128);
+        $this->SetFillColor(160, 162, 151);
         $this->Cell($this->squareWidth,8,'Segunda',1,0,'C',1);
         $this->Cell($this->squareWidth,8,'Terça',1,0,'C',1);
         $this->Cell($this->squareWidth,8,'Quarta',1,0,'C',1);
@@ -88,7 +88,7 @@ class ScheduleContractUinit extends Report {
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
 
         $this->SetFont('Times', '', 18);
-        $this->SetTextColor(250, 159, 128);
+        $this->SetTextColor(154, 171, 167);
 
         foreach($this->vLine as $line) {
 
@@ -114,12 +114,12 @@ class ScheduleContractUinit extends Report {
 
     public function SetData() {
         $p = 1;
+        $this->vLine = array();
         $this->getHeaderColumns();
         $y = $this->ScheduleMonth->format("Y");
         $m = $this->ScheduleMonth->format("m");
         $week = $this->weekInMonth($m, $y);
         $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week);
-        $this->verticalLine = array();
 
         for ($i = 1; $i <= $week; ++$i) {
             $this->vLine[] = intval($this->y);

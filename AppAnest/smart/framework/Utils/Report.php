@@ -35,6 +35,23 @@ class Report extends FPDF {
         )
     );
 
+    /**
+     * @param $month
+     * @param $year
+     * @return bool|int|string
+     * @author http://phil.lavin.me.uk/2013/02/php-find-number-of-weeks-in-a-given-month/#codesyntax_1
+     */
+    protected function weekInMonth($month, $year) {
+        $start = mktime(0, 0, 0, $month, 1, $year);
+        $end = mktime(0, 0, 0, $month, date('t', $start), $year);
+        $start_week = date('W', $start);
+        $end_week = date('W', $end);
+        if ($end_week < $start_week) {
+            return ((52 + $end_week) - $start_week) + 1;
+        }
+        return ($end_week - $start_week) + 1;
+    }
+
     public function preConstruct() {
 
     }

@@ -2,30 +2,12 @@
 
 namespace AppAnest\Quick\schedule;
 
-
 use Smart\Utils\Report;
 use AppAnest\Setup\Start;
 
 class ScheduleContractUinit extends Report {
 
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
-
-     /**
-     * @param $month
-     * @param $year
-     * @return bool|int|string
-     * @author http://phil.lavin.me.uk/2013/02/php-find-number-of-weeks-in-a-given-month/#codesyntax_1
-     */
-    private function weekInMonth($month, $year) {
-        $start = mktime(0, 0, 0, $month, 1, $year);
-        $end = mktime(0, 0, 0, $month, date('t', $start), $year);
-        $start_week = date('W', $start);
-        $end_week = date('W', $end);
-        if ($end_week < $start_week) {
-            return ((52 + $end_week) - $start_week) + 1;
-        }
-        return ($end_week - $start_week) + 1;
-    }
 
     public function preConstruct() {
         $this->ScheduleMonth = new \DateTime('2015-09-01');
@@ -68,7 +50,7 @@ class ScheduleContractUinit extends Report {
         $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
         $this->setAllMarginPage(7);
         $this->AddPage();
-        $this->SetData();
+        $this->Detail();
         $this->Output("ScheduleContractUinit.pdf", "I");
     }
 
@@ -79,16 +61,16 @@ class ScheduleContractUinit extends Report {
 
     public function getHeaderColumns(&$date,&$week) {
 
-        $this->SetFont('Arial', 'B', 10);
-        $this->SetFillColor(242, 231, 203);
+        $this->SetFont('Arial', 'B', 9);
+        $this->SetFillColor(159,198,204);
 
-        $this->Cell($this->squareWidth,5,'Segunda ' . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Terça '   . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Quarta '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Quinta '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Sexta '   . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Sábado '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
-        $this->Cell($this->squareWidth,5,'Domingo ' . $this->AddDay($date,$week)->format("d"),1,1,'C',1);
+        $this->Cell($this->squareWidth,5,'Segunda - ' . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Terça - '   . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Quarta - '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Quinta - '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Sexta - '   . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Sábado - '  . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
+        $this->Cell($this->squareWidth,5,'Domingo - ' . $this->AddDay($date,$week)->format("d"),1,1,'C',1);
     }
 
     public function Header() {
@@ -103,6 +85,35 @@ class ScheduleContractUinit extends Report {
         $this->SetFont('Arial', '', 14);
         $this->Cell($this->getInternalW(),4, 'Unidade Materno Infantil',0,1,'C',false);
         $this->Ln(2);
+    }
+
+    public function Detail() {
+        $p = 1;
+        $w = 1;
+        $this->vLine = array();
+        $this->squareWidth = intval($this->getInternalW() / 7);
+
+        $y = $this->ScheduleMonth->format("Y");
+        $m = $this->ScheduleMonth->format("m");
+        $week = $this->weekInMonth($m, $y);
+        $d = $this->daysweek[strtolower($this->ScheduleMonth->format("D"))];
+        $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week) - 5;
+        $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
+
+        for ($i = 1; $i <= $week; ++$i) {
+            $this->getHeaderColumns($date,$w);
+            $this->vLine[] = intval($this->y);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
+        }
+
+        $this->setDaysPrint($y,$m,$d);
+        $this->setDaysShift($y,$m,$d);
     }
 
     public function AddDay(&$date, &$week) {
@@ -136,7 +147,7 @@ class ScheduleContractUinit extends Report {
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
 
         $this->SetFont('LucidaSans-Typewriter', '', 16);
-        $this->SetTextColor(201, 30, 73);
+        $this->SetTextColor(205, 222, 248);
 
         foreach($this->vLine as $line) {
 
@@ -162,15 +173,14 @@ class ScheduleContractUinit extends Report {
 
     public function setDaysShift($y,$m,$d) {
         $j = 1;
+        $fill = 0;
         $week = 1;
         $widthColumn = $this->squareWidth;
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
         $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - 1 days"));
 
-
-
         $this->SetFont("LucidaSans-Typewriter","",9);
-        $this->SetTextColor(1, 0, 40);
+        $this->SetTextColor(48, 51, 50);
 
         foreach($this->vLine as $line) {
 
@@ -198,10 +208,13 @@ class ScheduleContractUinit extends Report {
                         foreach($rows as $item) {
                             if ($week > 1) $this->Cell($widthColumn * ($week-1), $position, '', 0, 0, 'L', 0);
                             if($item['shift'] == 'N') {
+                                $fill = 'T';
                                 $this->SetTextColor(201, 30, 73);
+                                $this->SetFillColor(248,246,249);
                             }
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], 0, 1, 'C', 0);
+                            $this->Cell($widthColumn, 4, $item['naturalperson'], $fill, 1, 'C', 0);
                             $this->SetTextColor(48, 51, 50);
+                            $fill = 0;
                         }
                     }
                 }
@@ -209,35 +222,6 @@ class ScheduleContractUinit extends Report {
                 $j++;
             }
         }
-    }
-
-    public function SetData() {
-        $p = 1;
-        $w = 1;
-        $this->vLine = array();
-        $this->squareWidth = intval($this->getInternalW() / 7);
-
-        $y = $this->ScheduleMonth->format("Y");
-        $m = $this->ScheduleMonth->format("m");
-        $week = $this->weekInMonth($m, $y);
-        $d = $this->daysweek[strtolower($this->ScheduleMonth->format("D"))];
-        $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week) - 5;
-        $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
-
-        for ($i = 1; $i <= $week; ++$i) {
-            $this->getHeaderColumns($date,$w);
-            $this->vLine[] = intval($this->y);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
-        }
-
-//        $this->setDaysPrint($y,$m,$d);
-        $this->setDaysShift($y,$m,$d);
     }
 
 }

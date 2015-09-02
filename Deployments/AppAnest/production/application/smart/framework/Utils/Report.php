@@ -68,6 +68,14 @@ class Report extends FPDF {
         $this->posConstruct();
     }
 
+    public function getInternalH() {
+        return $this->h - ($this->tMargin + $this->bMargin);
+    }
+
+    public function getInternalW() {
+        return $this->w - ($this->lMargin + $this->rMargin);
+    }
+
     public function configStyleHeader($sizeFont = 10){
         $this->SetDrawColor(23,45,58);
         $this->SetLineWidth(0.1);

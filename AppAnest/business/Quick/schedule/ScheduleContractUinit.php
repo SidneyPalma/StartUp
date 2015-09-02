@@ -40,7 +40,7 @@ class ScheduleContractUinit extends Report {
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = 4
-              and sm.contractorunitid = 34
+              and sm.contractorunitid in (34,43)
               and tp.naturalpersonid is not null
             order by sm.contractorunitid, sm.dutydate, tp.shift, cu.position, tp.subunit, tp.position";
 
@@ -53,7 +53,7 @@ class ScheduleContractUinit extends Report {
         $this->setAllMarginPage(7);
         $this->AddPage();
         $this->Detail();
-        $this->Output("ScheduleContractUinit.pdf", "I");
+        $this->Output("ScheduleContractUnit.pdf", "I");
     }
 
     public function setAllMarginPage($margin) {
@@ -76,52 +76,63 @@ class ScheduleContractUinit extends Report {
     }
 
     public function Header() {
-        $this->configStyleHeader();
-        $this->SetFont('Arial', 'B', 18);
-
-        $this->Cell($this->getInternalW(),4, 'Escala da Diretoria',0,1,'C',false);
-
-        $this->Ln(2);
-        $this->configStyleLabelHeader();
-
-        $this->SetFont('Arial', '', 14);
-        $this->Cell($this->getInternalW(),4, 'Unidade Materno Infantil',0,1,'C',false);
+        $this->configStyleHeader(18);
+        $year = $this->ScheduleMonth->format("Y");
+        $month = $this->translate['monthly'][strtolower($this->ScheduleMonth->format( "M" ))];
+        $this->Cell($this->getInternalW(),4, 'Escala para Diretoria - Mês: ' . $month . ' de '. $year,0,1,'C',false);
         $this->Ln(2);
     }
 
     public function Detail() {
+        $i = 0;
         $p = 1;
         $w = 1;
+        $data = array();
         $this->vLine = array();
         $this->squareWidth = intval($this->getInternalW() / 7);
+
+        foreach($this->rows as $list) {
+            $data[$i]['contractorunit'] = $list['contractorunit'];
+            $data[$i]['contractorunitid'] = $list['contractorunitid'];
+            $i++;
+        }
+
+        $data = self::uniqueArray($data);
 
         $y = $this->ScheduleMonth->format("Y");
         $m = $this->ScheduleMonth->format("m");
         $week = $this->weekInMonth($m, $y);
         $d = $this->daysweek[strtolower($this->ScheduleMonth->format("D"))];
         $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week) - 5;
-        $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
 
-        for ($i = 1; $i <= $week; ++$i) {
-            $this->getHeaderColumns($date,$w);
-            $this->vLine[] = intval($this->y);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
-            $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
+        foreach($data as $item) {
+            $this->configStyleHeader(14);
+            $this->Cell($this->getInternalW(),4, $item['contractorunit'],0,1,'C',false);
+            $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
+
+            for ($i = 1; $i <= $week; ++$i) {
+                $this->getHeaderColumns($date,$w);
+                $this->vLine[] = intval($this->y);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,0,'C',0);
+                $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
+            }
+
+            $g = $item['contractorunitid'];
+            $this->setDaysPrint($y,$m,$d);
+            $this->setDaysShift($y,$m,$d,$g);
+            $this->AddPage();
         }
-
-        $this->setDaysPrint($y,$m,$d);
-        $this->setDaysShift($y,$m,$d);
     }
 
     public function Footer() {
         date_default_timezone_set("America/Manaus");
 
-        $this->SetY(-10);
+        $this->SetY(-7);
         $this->SetTextColor(7,23,35);
         $this->SetFont('Arial','',6);
 
@@ -148,17 +159,10 @@ class ScheduleContractUinit extends Report {
         return $new;
     }
 
-    public function getInternalH() {
-        return $this->h - ($this->tMargin + $this->bMargin);
-    }
-
-    public function getInternalW() {
-        return $this->w - ($this->lMargin + $this->rMargin);
-    }
-
-    public function getShiftList($y,$m,$d) {
+    public function getShiftList($y,$m,$d,$g) {
         $date = str_pad($y,4,'0',STR_PAD_LEFT) . '-' . str_pad($m,2,'0',STR_PAD_LEFT) . '-' . str_pad($d,2,'0',STR_PAD_LEFT);
-        return self::searchArray($this->rows,'dutydate',$date);
+        $rows = self::searchArray($this->rows,'contractorunitid',$g);
+        return self::searchArray($rows,'dutydate',$date);
     }
 
     public function setDaysPrint($y,$m,$d) {
@@ -191,7 +195,7 @@ class ScheduleContractUinit extends Report {
         }
     }
 
-    public function setDaysShift($y,$m,$d) {
+    public function setDaysShift($y,$m,$d,$g) {
         $j = 1;
         $type = 0;
         $fill = 0;
@@ -211,7 +215,7 @@ class ScheduleContractUinit extends Report {
             for ($i = $d; $i <= 7; ++$i) {
 
                 $this->AddDay($date,$week);
-                $rows = $this->getShiftList($y,$m,$j);
+                $rows = $this->getShiftList($y,$m,$j,$g);
 
                 if($j <= $dm) {
                     if($d != 1) {

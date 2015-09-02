@@ -3,6 +3,7 @@
 namespace AppAnest\Quick\schedule;
 
 use Smart\Utils\Report;
+use Smart\Utils\Session;
 use AppAnest\Setup\Start;
 
 class ScheduleContractUinit extends Report {
@@ -39,7 +40,7 @@ class ScheduleContractUinit extends Report {
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = 4
-              and sm.contractorunitid = 43
+              and sm.contractorunitid = 34
               and tp.naturalpersonid is not null
             order by sm.contractorunitid, sm.dutydate, tp.shift, cu.position, tp.subunit, tp.position";
 
@@ -47,6 +48,7 @@ class ScheduleContractUinit extends Report {
     }
 
     public function posConstruct() {
+        $this->AliasNbPages();
         $this->AddFont('LucidaSans-Typewriter','','LTYPE.php');
         $this->setAllMarginPage(7);
         $this->AddPage();
@@ -116,6 +118,24 @@ class ScheduleContractUinit extends Report {
         $this->setDaysShift($y,$m,$d);
     }
 
+    public function Footer() {
+        date_default_timezone_set("America/Manaus");
+
+        $this->SetY(-10);
+        $this->SetTextColor(7,23,35);
+        $this->SetFont('Arial','',6);
+
+        $passport   = Session::read("username");
+        $issuedOn   = "impresso em ";
+        $date       = date("d/m/Y H:i");
+        $by         = ", por ";
+        $page       = "pagina ";
+        $of         = " de ";
+
+        $this->Cell(0,4, $issuedOn . $date . $by . $passport,0,0,'L');
+        $this->Cell(0,4, $page . $this->PageNo() . $of . '{nb}',0,0,'R');
+    }
+
     public function AddDay(&$date, &$week) {
         $tmp = new \DateTime($date);
 
@@ -151,7 +171,7 @@ class ScheduleContractUinit extends Report {
 
         foreach($this->vLine as $line) {
 
-            $this->setY($line);
+            $this->setY($line +40);
             $position = intval(($this->squareHeight / 2) - 15);
 
             for ($i = $d; $i <= 7; ++$i) {
@@ -173,6 +193,7 @@ class ScheduleContractUinit extends Report {
 
     public function setDaysShift($y,$m,$d) {
         $j = 1;
+        $type = 0;
         $fill = 0;
         $week = 1;
         $widthColumn = $this->squareWidth;
@@ -196,26 +217,40 @@ class ScheduleContractUinit extends Report {
                     if($d != 1) {
                         foreach($rows as $item) {
                             $this->Cell($widthColumn*($d-1), $position, '', 0, 0, 'L', 0);
+
                             if($item['shift'] == 'N') {
-                                $this->SetTextColor(201, 30, 73);
+                                $type++;
+                                $fill = 'T';
                             }
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], 0, 1, 'C', 0);
+
+                            if($item['allocationschema'] == '010') $this->SetTextColor(201, 30, 73);
+
+                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0 ), 1, 'C', 0);
                             $this->SetTextColor(48, 51, 50);
+
+                            $fill = 0;
                         }
                         $d = 1;
+                        $type = 0;
                     } else {
                         $this->setY($line);
                         foreach($rows as $item) {
-                            if ($week > 1) $this->Cell($widthColumn * ($week-1), $position, '', 0, 0, 'L', 0);
+
+                            if($week > 1) $this->Cell($widthColumn * ($week-1), $position, '', 0, 0, 'L', 0);
+
                             if($item['shift'] == 'N') {
+                                $type++;
                                 $fill = 'T';
-                                $this->SetTextColor(201, 30, 73);
-                                $this->SetFillColor(248,246,249);
                             }
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], $fill, 1, 'C', 0);
+
+                            if($item['allocationschema'] == '010') $this->SetTextColor(201, 30, 73);
+
+                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0 ), 1, 'C', 0);
                             $this->SetTextColor(48, 51, 50);
+
                             $fill = 0;
                         }
+                        $type = 0;
                     }
                 }
 

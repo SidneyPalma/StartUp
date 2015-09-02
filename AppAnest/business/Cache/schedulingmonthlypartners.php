@@ -6,7 +6,6 @@ use AppAnest\Model\schedulingmonthlypartners as Model;
 
 class schedulingmonthlypartners extends \Smart\Data\Cache {
 
-
     /**
      * Estrutura contendo os dias da Semana
      *
@@ -18,12 +17,12 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
     );
 
     private $sqlUnique = "
-        select distinct
+        select
             sm.contractorunitid,
             c.shortname as contractorunit,
-            tp.position,
             tp.shift,
-            tp.subunit
+            tp.subunit,
+            tp.position
         from
             schedulingmonthly sm
             inner join contractorunit cu on ( cu.id = sm.contractorunitid )
@@ -33,7 +32,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             left join person n on ( n.id = tp.naturalpersonid )
         where sp.periodid = :period
           and sm.dutydate between :dateof and :dateto
-        order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
+        group by cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
     private $sqlSelect = "
             select
@@ -58,34 +57,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = :period
               and sm.dutydate between :dateof and :dateto
-            order by sm.dutydate, cu.position, sm.contractorunitid, tp.id, tp.shift, tp.subunit, tp.position";
-
-    public function selectSchedule(array $data) {
-        $dateOf = $data['dateOf'];
-        $dateTo = $data['dateTo'];
-        $period = $data['period'];
-        $pickerView = $data['pickerView'];
-        $proxy = $this->getStore()->getProxy();
-
-        $pdo = $proxy->prepare($this->sqlUnique);
-        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
-        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
-        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
-        $pdo->execute();
-        $unique = self::encodeUTF8($pdo->fetchAll());
-
-        $pdo = $proxy->prepare($this->sqlSelect);
-        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
-        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
-        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
-        $pdo->execute();
-        $select = self::encodeUTF8($pdo->fetchAll());
-
-        unset($pdo);
-        unset($proxy);
-
-        return $this->selectView($unique,$select);
-    }
+            order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
     private function selectView(array $unique, array $select) {
         $n = 1;
@@ -102,11 +74,9 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 $b = 0;
                 $search = $s;
                 $search = self::searchArray($search,'contractorunitid',$u['contractorunitid']);
-                $search = self::searchArray($search,'position',$u['position']);
-                $search = self::searchArray($search,'subunit',$u['subunit']);
                 $search = self::searchArray($search,'shift',$u['shift']);
-
-//                $j = ($contractorunitid != $u['contractorunitid']) ? $j+1 : $j;
+                $search = self::searchArray($search,'subunit',$u['subunit']);
+                $search = self::searchArray($search,'position',$u['position']);
 
                 if($contractorunitid != $u['contractorunitid']) {
                     $j++;
@@ -142,6 +112,32 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         }
 
         return self::getResultToJson();
+    }
+
+    public function selectSchedule(array $data) {
+        $dateOf = $data['dateOf'];
+        $dateTo = $data['dateTo'];
+        $period = $data['period'];
+        $proxy = $this->getStore()->getProxy();
+
+        $pdo = $proxy->prepare($this->sqlUnique);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
+        $pdo->execute();
+        $unique = self::encodeUTF8($pdo->fetchAll());
+
+        $pdo = $proxy->prepare($this->sqlSelect);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_STR);
+        $pdo->execute();
+        $select = self::encodeUTF8($pdo->fetchAll());
+
+        unset($pdo);
+        unset($proxy);
+
+        return $this->selectView($unique,$select);
     }
 
 }

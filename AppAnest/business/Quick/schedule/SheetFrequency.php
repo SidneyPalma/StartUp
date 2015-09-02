@@ -37,7 +37,6 @@ class SheetFrequency extends Report {
                 tp.subunit
             from
                 schedulingmonthly sm
-                inner join contractorunit cu on ( cu.id = sm.contractorunitid )
                 inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
                 inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
@@ -47,7 +46,7 @@ class SheetFrequency extends Report {
               and tp.naturalpersonid is not null
               and tp.subunit = :subunit
               and sm.dutydate between :dateof and :dateto
-            order by sm.contractorunitid, sm.dutydate, tp.shift, cu.position, tp.subunit, tp.position";
+            order by sm.dutydate, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
         $pdo = $proxy->prepare($sql);
 
@@ -176,59 +175,49 @@ class SheetFrequency extends Report {
     }
 
     function setDutyDateShift (array $rows) {
-        $data = array();
+        $d = 0;
+        $n = 0;
+        $list = array();
         $temp = array();
         $uniq = array();
 
-        $i = 0;
-        $d = 0;
-        $n = 0;
-        $j = 0;
-
         foreach($rows as $record) {
-            $data[$i]['shift'] = $record['shift'];
-            $data[$i]['dutydate'] = $record['dutydate'];
-            $data[$i]['naturalperson'] = $record['naturalperson'];
-
-            $i++;
-            $j++;
-
-            if(($j < count($rows))&&($record['dutydate'] != $rows[$j]['dutydate'])) {
-                foreach($data as $item) {
-                    if($item['shift'] == 'D') {
-                        $uniq[$d]['dutydate'] = $item['dutydate'];
-                        $uniq[$d]['shiftd'] = $item['naturalperson'];
-                        $d++;
-                    }
-                    if($item['shift'] == 'N') {
-                        $uniq[$n]['dutydate'] = $item['dutydate'];
-                        $uniq[$n]['shiftn'] = $item['naturalperson'];
-                        $n++;
-                    }
-                }
-                $temp = array_merge($temp,$uniq);
-                $i = 0;
-                $d = 0;
-                $n = 0;
-                $data = array();
-                $uniq = array();
-            }
+            $list[]['dutydate'] = $record['dutydate'];
         }
 
-        return $temp;
+        $list = self::uniqueArray($list);
+
+        foreach($list as $key=>$val) {
+            $data = self::searchArray($rows,'dutydate',$val['dutydate']);
+
+            foreach($data as $item) {
+                if($item['shift'] == 'D') {
+                    $uniq[$d]['dutydate'] = $item['dutydate'];
+                    $uniq[$d]['shiftd'] = $item['naturalperson'];
+                    $d++;
+                }
+                if($item['shift'] == 'N') {
+                    $uniq[$n]['dutydate'] = $item['dutydate'];
+                    $uniq[$n]['shiftn'] = $item['naturalperson'];
+                    $n++;
+                }
+            }
+
+            $temp = array_merge($temp,$uniq);
+        }
+
+        return self::uniqueArray($temp);
     }
 
     function SetData() {
         $data = $this->setDutyDateShift($this->rows);
-
-        $lineColor = 1;
 
         $this->configStyleDetail();
 
         $dutydate = '';
 
         foreach($data as $record) {
-            $lineColor = 0;//($lineColor == 0) ? 1 : 0;
+            $lineColor = 0;
 
             if($dutydate != $record['dutydate'] && $dutydate != '') {
                 $this->Ln(6);

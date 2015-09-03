@@ -63,12 +63,14 @@ class Cache {
         $sql = "SELECT " .implode(',', $f). " FROM {$extend} WHERE " . implode(' OR ', $p);
 
         try {
-            
+
+            $query = '%' . $query . '%';
+
             $pdo = $proxy->prepare($sql);
             
             // set params
             foreach ($params as $key => $value) {
-                $pdo->bindValue(":$value", "$query%", \PDO::PARAM_STR);
+                $pdo->bindValue(":$value", $query, \PDO::PARAM_STR);
             }
 
             $pdo->execute();

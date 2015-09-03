@@ -67,10 +67,13 @@ class contractorunit extends \Smart\Data\Cache {
         $sql = "SELECT " .implode(',', $f). " FROM person WHERE typeperson = 'U' and ( " . implode(' OR ', $p) . " ) order by name";
 
         try {
+
+            $query = '%' . $query . '%';
+
             $pdo = $proxy->prepare($sql);
 
             foreach ($params as $key => $value) {
-                $pdo->bindValue(":$value", "$query%", \PDO::PARAM_STR);
+                $pdo->bindValue(":$value", $query, \PDO::PARAM_STR);
             }
 
             $pdo->execute();

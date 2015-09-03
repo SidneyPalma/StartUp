@@ -6,7 +6,7 @@ use Smart\Utils\Report;
 use Smart\Utils\Session;
 use AppAnest\Setup\Start;
 
-class ScheduleContractUinit extends Report {
+class DirectorShip extends Report {
 
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
 
@@ -59,7 +59,7 @@ class ScheduleContractUinit extends Report {
         $this->setAllMarginPage(7);
         $this->AddPage();
         $this->Detail();
-        $this->Output("ScheduleContractUnit.pdf", "I");
+        $this->Output("DirectorShip.pdf", "I");
     }
 
     public function setAllMarginPage($margin) {
@@ -133,8 +133,6 @@ class ScheduleContractUinit extends Report {
 
             $q++;
             $this->SetLineWidth(0.3);
-//            $this->SetDrawColor(192, 41, 66);
-//            $this->SetDash(2, 1);
             $g = $item['contractorunitid'];
             $this->setDaysPrint($y,$m,$d);
             $this->setDaysShift($y,$m,$d,$g);

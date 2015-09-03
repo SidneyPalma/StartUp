@@ -9,7 +9,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.person.ContractorUnitSearch'
     ],
 
-    showDirectorship: function (win) {
+    onShowDirectorShip: function (win) {
         var me = this,
             param = {},
             view = me.getView(),
@@ -29,10 +29,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         });
     },
 
-    showCalendar: function () {
+    showDirectorShip: function () {
         var me = this,
+            param = {},
             view = me.getView(),
             period = view.down('periodsearch'),
+            store = Ext.getStore('contractorunit'),
             win = Ext.widget('allocationscheduledirectorship');
 
         win.show(null, function() {
@@ -41,8 +43,27 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         },me);
     },
 
-    showReport: function () {
-        Ext.widget('allocationschedulereport').show();
+    showFrequencySheet: function () {
+        var me = this,
+            view = me.getView(),
+            period = view.down('periodsearch'),
+            record = period.getSelectedRecord(),
+            win = Ext.widget('allocationschedulefrequencysheet');
+
+        win.show(null, function() {
+            var dateof = win.down('datefield[name=dateof]'),
+                dateto = win.down('datefield[name=dateto]'),
+                periodof = record.toDate(record.get('periodof')),
+                periodto = record.toDate(record.get('periodto'));
+
+            dateof.setValue(periodof);
+            dateto.setValue(periodto);
+            dateof.setMinValue(periodof);
+            dateto.setMaxValue(periodto);
+
+            win.down('hiddenfield[name=periodid]').setValue(period.getValue());
+            win.down('textfield[name=period]').setValue(period.getDisplayValue());
+        },me);
     },
 
     showReportDirectorShip: function (btn) {
@@ -52,7 +73,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             grid = form.down('gridpanel'),
             data = form.getValues(),
             list = grid.getSelectionModel().getSelection(),
-            url = 'business/Class/Report/ScheduleContractUinit.php?',
+            url = 'business/Class/Report/DirectorShip.php?',
             qrp = 'periodid={0}&contractorunitlist={1}';
 
         if(list.length) {
@@ -94,30 +115,49 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
     },
 
-    onFilterContractorUnit: function ( field, newValue, oldValue, eOpts ) {
-        var store = Ext.getStore('allocationschedule');
+    onFilterSchedule: function ( field, newValue, oldValue, eOpts ) {
+        var me = this,
+            view = me.getView(),
+            store = Ext.getStore('allocationschedule'),
+            filter = view.down('radiogroup[name=filter]').getValue();
 
         store.clearFilter();
-        store.filter('contractorunit',newValue);
+
+        switch(parseInt(filter.filtertype)) {
+            case 1:
+                store.filter('contractorunit',newValue);
+                break;
+            case 2:
+                store.filterBy(
+                    function(record){
+                        var filter = record.get('mondescription').toLowerCase() + " " +
+                            record.get('tuedescription').toLowerCase() + " " +
+                            record.get('weddescription').toLowerCase() + " " +
+                            record.get('thudescription').toLowerCase() + " " +
+                            record.get('fridescription').toLowerCase() + " " +
+                            record.get('satdescription').toLowerCase() + " " +
+                            record.get('sundescription').toLowerCase();
+
+                        if (filter.indexOf(newValue.toLowerCase()) != -1) return record;
+                    }
+                );
+                break;
+        }
     },
 
-    onFilterNaturalPerson: function ( field, newValue, oldValue, eOpts ) {
-        var store = Ext.getStore('allocationschedule');
+    getDateFormated: function (date) {
+        var stringDate = '{0} de {1} de {2}',
+            monthNames = [
+                "Janeiro", "Fevereiro", "Março",
+                "Abril", "Maio", "Junho", "Julho",
+                "Agosto", "Setembro", "Outubro",
+                "Novembro", "Dezembro"
+            ],
+            day = date.getDate(),
+            monthIndex = date.getMonth(),
+            year = date.getFullYear();
 
-        store.clearFilter();
-        store.filterBy(
-            function(record){
-                var filter = record.get('mondescription').toLowerCase() + " " +
-                             record.get('tuedescription').toLowerCase() + " " +
-                             record.get('weddescription').toLowerCase() + " " +
-                             record.get('thudescription').toLowerCase() + " " +
-                             record.get('fridescription').toLowerCase() + " " +
-                             record.get('satdescription').toLowerCase() + " " +
-                             record.get('sundescription').toLowerCase();
-
-                if (filter.indexOf(newValue.toLowerCase()) != -1) return record;
-            }
-        );
+        return Ext.String.format(stringDate,day, monthNames[monthIndex], year);
     },
 
     selectSchedule: function (pickerView, periodView) {
@@ -128,7 +168,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             grid = view.down('gridpanel'),
             dataIndex = me.getDataIndex(),
             period = view.down('periodsearch'),
-            store = Ext.getStore('allocationschedule');
+            store = Ext.getStore('allocationschedule'),
+            label = view.down('label[name=labelperiod]');
 
         param.action = 'select';
         param.method = 'selectSchedule';
@@ -158,6 +199,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                         d++;
                     }
                 }
+
+                var dateOfstr = me.getDateFormated(Ext.Date.parse(periodView.dateOf, "Y-m-d"));
+                var dateTostr = me.getDateFormated(Ext.Date.parse(periodView.dateTo, "Y-m-d"));
+
+                label.setText((dateOfstr != dateTostr) ? ( dateOfstr +' - '+ dateTostr + '.'): dateOfstr);
             }
         });
     },
@@ -202,19 +248,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
 
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
-    },
-
-    onSelectPeriodReport: function ( combo, record, eOpts ) {
-        var form = combo.up('form'),
-            dateof = form.down('datefield[name=dateof]'),
-            dateto = form.down('datefield[name=dateto]'),
-            periodof = record.toDate(record.get('periodof')),
-            periodto = record.toDate(record.get('periodto'));
-
-        dateof.setValue(periodof);
-        dateto.setValue(periodto);
-        dateof.setMinValue(periodof);
-        dateto.setMaxValue(periodto);
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {

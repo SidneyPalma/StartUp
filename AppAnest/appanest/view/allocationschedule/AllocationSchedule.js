@@ -114,20 +114,22 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             select: 'startDatePicker'
                                         }
                                     }, {
-                                        submitValue: false,
-                                        showClear: true,
-                                        xtype: 'textfield',
-                                        fieldLabel: 'Filtrar Unidade',
-                                        listeners: {
-                                            change: 'onFilterContractorUnit'
-                                        }
+                                        xtype: 'radiogroup',
+                                        name: 'filter',
+                                        fieldLabel: 'Filtrar',
+                                        labelStyle: 'color: blue; font-size: 14px;',
+                                        columns: 2,
+                                        vertical: true,
+                                        items: [
+                                            { boxLabel: 'Unidade', name: 'filtertype', inputValue: 1, checked: true },
+                                            { boxLabel: 'Sócio', name: 'filtertype', inputValue: 2},
+                                        ]
                                     }, {
                                         submitValue: false,
                                         showClear: true,
                                         xtype: 'textfield',
-                                        fieldLabel: 'Filtrar Sócio',
                                         listeners: {
-                                            change: 'onFilterNaturalPerson'
+                                            change: 'onFilterSchedule'
                                         }
                                     }, {
                                         xtype: 'segmentedbutton',
@@ -136,12 +138,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                 scale: 'medium',
                                                 glyph: 0xe887,
                                                 text: 'Frequencia',
-                                                handler: 'showReport'
+                                                handler: 'showFrequencySheet'
                                             },{
                                                 scale: 'medium',
                                                 glyph: 0xe898,
                                                 text: 'Diretoria',
-                                                handler: 'showCalendar'
+                                                handler: 'showDirectorShip'
                                             }
                                         ]
                                     }
@@ -154,9 +156,21 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                         layout: 'border',
                         items: [
                             {
-                                height: 40,
+                                height: 26,
                                 region: 'north',
-                                xtype: 'panel'
+                                xtype: 'panel',
+                                items: [
+                                    {
+                                        margin: '10 0 0 10',
+                                        xtype: 'label',
+                                        text: '...',
+                                        name: 'labelperiod',
+                                        style: {
+                                            color: '#457EC5;',
+                                            fontSize: '24px;'
+                                        }
+                                    }
+                                ]
                             }, {
                                 region: 'center',
                                 xtype: 'panel',

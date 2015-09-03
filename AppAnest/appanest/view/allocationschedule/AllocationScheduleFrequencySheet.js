@@ -1,8 +1,8 @@
 //@charset ISO-8859-1
-Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleReport', {
+Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleFrequencySheet', {
     extend: 'Ext.window.Window',
 
-    xtype: 'allocationschedulereport',
+    xtype: 'allocationschedulefrequencysheet',
 
     requires: [
         'Smart.form.field.ComboSearch',
@@ -12,7 +12,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleReport', {
 
     controller: 'allocationschedule',
 
-    width: 400,
+    width: 360,
 
     title: 'Imprimir Folha de Frequencia',
 
@@ -42,12 +42,18 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleReport', {
                 },
                 items: [
                     {
+                        name: 'period',
                         fieldLabel: 'Competencia',
-                        name: 'periodid',
-                        xtype: 'periodsearch',
-                        listeners: {
-                            select: 'onSelectPeriodReport'
+                        xtype: 'textfield',
+                        readOnlyColor: false,
+                        useMondaFont: true,
+                        fieldStyle: {
+                            color: 'blue;',
+                            fontSize: '16px;'
                         }
+                    }, {
+                        name: 'periodid',
+                        xtype: 'hiddenfield'
                     }, {
                         xtype: 'fieldcontainer',
                         fieldLabel: 'Intervalo',

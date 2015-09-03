@@ -13,7 +13,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
 
     controller: 'allocationschedule',
 
-    width: 350,
+    width: 360,
 
     title: 'Imprimir Escala para Diretoria',
 
@@ -80,7 +80,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
     },
 
     listeners: {
-        show: 'showDirectorship'
+        show: 'onShowDirectorShip'
     },
 
     buttons: [

@@ -203,7 +203,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 var dateOfstr = me.getDateFormated(Ext.Date.parse(periodView.dateOf, "Y-m-d"));
                 var dateTostr = me.getDateFormated(Ext.Date.parse(periodView.dateTo, "Y-m-d"));
 
-                label.setText((dateOfstr != dateTostr) ? ( dateOfstr +' - '+ dateTostr + '.'): dateOfstr);
+                label.setText((dateOfstr != dateTostr) ? (dateOfstr +' - '+ dateTostr): dateOfstr);
             }
         });
     },

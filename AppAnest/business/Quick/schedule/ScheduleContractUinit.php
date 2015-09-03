@@ -134,7 +134,7 @@ class ScheduleContractUinit extends Report {
             $q++;
             $this->SetLineWidth(0.3);
 //            $this->SetDrawColor(192, 41, 66);
-            $this->SetDash(2, 1);
+//            $this->SetDash(2, 1);
             $g = $item['contractorunitid'];
             $this->setDaysPrint($y,$m,$d);
             $this->setDaysShift($y,$m,$d,$g);

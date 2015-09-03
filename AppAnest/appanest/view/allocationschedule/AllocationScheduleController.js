@@ -9,12 +9,62 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.person.ContractorUnitSearch'
     ],
 
+    showDirectorship: function (win) {
+        var me = this,
+            param = {},
+            view = me.getView(),
+            store = Ext.getStore('contractorunit');
+
+        param.limit = 0;
+        param.action = 'select';
+        param.method = 'selectLike';
+
+        view.setLoading('Carregando escala ...');
+
+        store.setParams(param).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                view.setLoading(false);
+            }
+        });
+    },
+
     showCalendar: function () {
-        window.open('business/Class/Report/ScheduleContractUinit.php');
+        var me = this,
+            view = me.getView(),
+            period = view.down('periodsearch'),
+            win = Ext.widget('allocationscheduledirectorship');
+
+        win.show(null, function() {
+            win.down('hiddenfield[name=periodid]').setValue(period.getValue());
+            win.down('textfield[name=period]').setValue(period.getDisplayValue());
+        },me);
     },
 
     showReport: function () {
         Ext.widget('allocationschedulereport').show();
+    },
+
+    showReportDirectorShip: function (btn) {
+        var me = this,
+            contractorunitlist = [],
+            form = btn.up('window').down('form'),
+            grid = form.down('gridpanel'),
+            data = form.getValues(),
+            list = grid.getSelectionModel().getSelection(),
+            url = 'business/Class/Report/ScheduleContractUinit.php?',
+            qrp = 'periodid={0}&contractorunitlist={1}';
+
+        if(list.length) {
+            var periodid = data.periodid;
+            Ext.each(list,function(record, index) {
+                contractorunitlist.push(parseInt(record.get('id')));
+            },me);
+            window.open(Ext.String.format(url + qrp,periodid,Ext.encode(contractorunitlist)));
+        } else {
+
+        }
+
     },
 
     showReportSheetFrequency: function (btn) {

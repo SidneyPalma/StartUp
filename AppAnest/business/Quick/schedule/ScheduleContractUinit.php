@@ -11,9 +11,12 @@ class ScheduleContractUinit extends Report {
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
 
     public function preConstruct() {
-        $this->ScheduleMonth = new \DateTime('2015-09-01');
-
         $this->post = (object) self::decodeUTF8($_REQUEST);
+
+        $periodid = $this->post->periodid;
+        $contractorunitlist = $this->post->contractorunitlist;
+
+        $list = substr($contractorunitlist, 1, -1);
 
         $proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
 
@@ -23,7 +26,7 @@ class ScheduleContractUinit extends Report {
                 sp.periodto,
                 sm.dutydate,
                 sm.contractorunitid,
-                c.shortname as contractorunit,
+                c.name as contractorunit,
                 substring(lower(dayname(sm.dutydate)),1,3) as dayname,
                 tp.position,
                 tp.naturalpersonid,
@@ -39,12 +42,15 @@ class ScheduleContractUinit extends Report {
                 inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
-            where sp.periodid = 4
-              and sm.contractorunitid in (34,43)
+            where sp.periodid = $periodid
+              and sm.contractorunitid in ($list)
               and tp.naturalpersonid is not null
-            order by sm.contractorunitid, sm.dutydate, tp.shift, cu.position, tp.subunit, tp.position";
+            order by cu.position, sm.contractorunitid, sm.dutydate, tp.shift, tp.subunit, tp.position";
 
         $this->rows = $proxy->query($sql)->fetchAll();
+
+
+        $this->ScheduleMonth = new \DateTime($this->rows[0]['periodof']);
     }
 
     public function posConstruct() {
@@ -84,6 +90,7 @@ class ScheduleContractUinit extends Report {
     }
 
     public function Detail() {
+        $q = 0;
         $i = 0;
         $p = 1;
         $w = 1;
@@ -110,6 +117,8 @@ class ScheduleContractUinit extends Report {
             $this->Cell($this->getInternalW(),4, $item['contractorunit'],0,1,'C',false);
             $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
 
+            $this->SetLineWidth(0.4);
+
             for ($i = 1; $i <= $week; ++$i) {
                 $this->getHeaderColumns($date,$w);
                 $this->vLine[] = intval($this->y);
@@ -122,17 +131,19 @@ class ScheduleContractUinit extends Report {
                 $this->Cell($this->squareWidth,$this->squareHeight + $p,'',1,1,'C',0);
             }
 
+            $q++;
+            $this->SetLineWidth(0.2);
             $g = $item['contractorunitid'];
             $this->setDaysPrint($y,$m,$d);
             $this->setDaysShift($y,$m,$d,$g);
-            $this->AddPage();
+            if(count($data) > $q) $this->AddPage();
         }
     }
 
     public function Footer() {
         date_default_timezone_set("America/Manaus");
 
-        $this->SetY(-7);
+        $this->SetY(-8);
         $this->SetTextColor(7,23,35);
         $this->SetFont('Arial','',6);
 

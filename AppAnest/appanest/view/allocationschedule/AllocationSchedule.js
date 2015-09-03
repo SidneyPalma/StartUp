@@ -132,6 +132,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             change: 'onFilterSchedule'
                                         }
                                     }, {
+                                        margin: '0 0 5 0',
                                         xtype: 'segmentedbutton',
                                         items: [
                                             {
@@ -146,6 +147,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                 handler: 'showDirectorShip'
                                             }
                                         ]
+                                    }, {
+                                        xtype: 'button',
+                                        glyph: 0xec2b,
+                                        scale: 'large',
+                                        text: 'Publicar Escala',
+                                        showSmartTheme: 'red-dark'
                                     }
                                 ]
                             }

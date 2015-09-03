@@ -64,13 +64,13 @@ class ScheduleContractUinit extends Report {
 
     public function setAllMarginPage($margin) {
         $this->SetMargins($margin,$margin +2);
-        $this->SetAutoPageBreak(true,$margin);
+        $this->SetAutoPageBreak(false,$margin);
     }
 
     public function getHeaderColumns(&$date,&$week) {
 
         $this->SetFont('Arial', 'B', 9);
-        $this->SetFillColor(159,198,204);
+        $this->SetFillColor(197, 224, 220);
 
         $this->Cell($this->squareWidth,5,'Segunda - ' . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
         $this->Cell($this->squareWidth,5,'Terça - '   . $this->AddDay($date,$week)->format("d"),1,0,'C',1);
@@ -113,7 +113,7 @@ class ScheduleContractUinit extends Report {
         $this->squareHeight = intval(( $this->getInternalH() - $this->y ) / $week) - 5;
 
         foreach($data as $item) {
-            $this->configStyleHeader(14);
+            $this->configStyleHeader(12);
             $this->Cell($this->getInternalW(),4, $item['contractorunit'],0,1,'C',false);
             $date = date("Y-m-d", strtotime($this->ScheduleMonth->format("Y-m-d"). " - $d days"));
 
@@ -132,7 +132,9 @@ class ScheduleContractUinit extends Report {
             }
 
             $q++;
-            $this->SetLineWidth(0.2);
+            $this->SetLineWidth(0.3);
+//            $this->SetDrawColor(192, 41, 66);
+            $this->SetDash(2, 1);
             $g = $item['contractorunitid'];
             $this->setDaysPrint($y,$m,$d);
             $this->setDaysShift($y,$m,$d,$g);
@@ -181,8 +183,8 @@ class ScheduleContractUinit extends Report {
         $widthColumn = $this->squareWidth;
         $dm = cal_days_in_month(CAL_GREGORIAN,$m,$y);
 
-        $this->SetFont('LucidaSans-Typewriter', '', 16);
-        $this->SetTextColor(205, 222, 248);
+        $this->SetFont('LucidaSans-Typewriter', '', 18);
+        $this->SetTextColor(229, 252, 194);
 
         foreach($this->vLine as $line) {
 
@@ -240,7 +242,7 @@ class ScheduleContractUinit extends Report {
 
                             if($item['allocationschema'] == '010') $this->SetTextColor(201, 30, 73);
 
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0 ), 1, 'C', 0);
+                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0), 1, 'C', 0);
                             $this->SetTextColor(48, 51, 50);
 
                             $fill = 0;
@@ -260,7 +262,7 @@ class ScheduleContractUinit extends Report {
 
                             if($item['allocationschema'] == '010') $this->SetTextColor(201, 30, 73);
 
-                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0 ), 1, 'C', 0);
+                            $this->Cell($widthColumn, 4, $item['naturalperson'], ($type == 1 ? $fill : 0), 1, 'C', 0);
                             $this->SetTextColor(48, 51, 50);
 
                             $fill = 0;

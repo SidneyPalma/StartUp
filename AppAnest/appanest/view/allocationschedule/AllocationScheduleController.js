@@ -6,7 +6,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     requires: [
         'AppAnest.view.allocationschedule.*',
-        'AppAnest.view.person.ContractorUnitSearch'
+        'AppAnest.view.person.ContractorUnitSearch',
+        'AppAnest.model.allocationschedule.TMP_TurningMonthly',
+        'AppAnest.store.allocationschedule.TMP_TurningMonthly'
     ],
 
     onShowDirectorShip: function (win) {
@@ -31,10 +33,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     showDirectorShip: function () {
         var me = this,
-            param = {},
             view = me.getView(),
             period = view.down('periodsearch'),
-            store = Ext.getStore('contractorunit'),
             win = Ext.widget('allocationscheduledirectorship');
 
         win.show(null, function() {
@@ -105,7 +105,15 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
-        console.warn(viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex);
+        var me = this;
+            win = Ext.widget('allocationscheduleedit', {
+                xdata: record,
+                dataIndex: viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex
+            });
+console.warn(record);
+        win.show(null,function() {
+            win.down('form').loadRecord(record);
+        });
     },
 
     startDatePicker: function(picker, date) {

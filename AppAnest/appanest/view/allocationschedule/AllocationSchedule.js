@@ -100,10 +100,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                 iconCls: 'allocationschedule-week',
                                                 cardIndex: 1,
                                                 pressed: true
-                                            }, {
-                                                disabled: true,
-                                                iconCls: 'allocationschedule-month',
-                                                cardIndex: 2
+                                            //}, {
+                                            //    iconCls: 'allocationschedule-month',
+                                            //    cardIndex: 2
                                             }
                                         ]
                                     }, {

@@ -49,7 +49,6 @@ class DirectorShip extends Report {
 
         $this->rows = $proxy->query($sql)->fetchAll();
 
-
         $this->ScheduleMonth = new \DateTime($this->rows[0]['periodof']);
     }
 

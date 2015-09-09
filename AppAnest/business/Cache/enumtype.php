@@ -11,7 +11,6 @@ class enumtype extends \Smart\Data\Cache {
         $query = $data['query'];
         $description = $type . 'description';
         $proxy = $this->getStore()->getProxy();
-
         $sql = "
             select
                 etl.code as $type,
@@ -22,6 +21,7 @@ class enumtype extends \Smart\Data\Cache {
             where et.name = :name
               and etl.description LIKE :description
             order by etl.orderby, etl.description";
+
 
         try {
             $pdo = $proxy->prepare($sql);

@@ -94,8 +94,8 @@ class schema extends \Smart\Data\Proxy {
                         sm.schedulingperiodid = @schedulingperiodid
                     and sm.contractorunitid = @contractorunitid
                     and sm.dutydate = @dutydate
-                    and tp.schedulingmonthlyid = sm.id
                     and tp.shift = @shift
+                    and tp.schedulingmonthlyid = sm.id
                     and tp.allocationschema = @allocationschema
                     and tp.position = @position
                 )
@@ -108,7 +108,6 @@ class schema extends \Smart\Data\Proxy {
             set @position = :position;
             set @dutydate = :dutydate;
             set @shift = :shift;
-            set @schema = ( select substring(getEnum('allocationschema',@allocationschema),8,4) );
             set @naturalpersonid = (
                         select
                              tt.naturalpersonid
@@ -119,10 +118,10 @@ class schema extends \Smart\Data\Proxy {
                                 and sm.contractorunitid = @contractorunitid
                                 and sm.dutydate = @dutydate
                                 and sm.shift = 'D'
-                                and tt.schedulingmonthlyid = sm.id
                                 and tt.shift = sm.shift
-                                and tt.subunit = substring(@schema,1,1)
-                                and tt.position = substring(@schema,3,2)
+                                and tt.schedulingmonthlyid = sm.id
+                                and tt.subunit = getCaptar(@allocationschema,'S')
+                                and tt.position = getCaptar(@allocationschema,'P')
                             )
                         limit 1
                 );
@@ -134,8 +133,8 @@ class schema extends \Smart\Data\Proxy {
                         and s.contractorunitid = @contractorunitid
                         and s.dutydate = @dutydate
                         and s.shift = @shift
-                        and t.schedulingmonthlyid = s.id
                         and t.shift = s.shift
+                        and t.schedulingmonthlyid = s.id
                         and t.allocationschema = @allocationschema
                         and t.position = @position
                     )
@@ -151,6 +150,24 @@ class schema extends \Smart\Data\Proxy {
         ini_set('max_execution_time', 600); // 10 minutos
 
         $this->setAllocationSchema();
+    }
+
+    public function setPublishSchedule () {
+        $periodid = $this->post->periodid;
+        $username = Session::read('username');
+
+        $sql = "
+            set @periodid = :periodid;
+            set @username = :username;
+
+            call setPublishSchedule(@periodid,@username);";
+
+        $pdo = $this->prepare($sql);
+        $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
+        $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+        $pdo->execute();
+
+        return self::getResultToJson();
     }
 
     public function selectTurningSchema () {
@@ -193,7 +210,7 @@ class schema extends \Smart\Data\Proxy {
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
                 inner join allocationschemamap asm on (
-                    asm.weekday = etl.code
+                        asm.weekday = etl.code
                     and asm.allocationschemaid = :allocationschemaid
                 )
             where et.name = 'weekday'
@@ -256,7 +273,6 @@ class schema extends \Smart\Data\Proxy {
 
         $pdo->execute();
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
-
         $this->schemaunitday = self::encodeUTF8($this->query($sqlUnitDay)->fetchAll());
         $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
     }
@@ -267,8 +283,11 @@ class schema extends \Smart\Data\Proxy {
 
         // Limpando Tabela Temporária
         $this->exec("
-                  delete from tmp_turningmonthly where id > 0;
-                  alter table tmp_turningmonthly AUTO_INCREMENT = 1;");
+                      set SQL_SAFE_UPDATES = 0;
+                      delete from tmp_turningmonthly where id > 0;
+                      alter table tmp_turningmonthly AUTO_INCREMENT = 1;
+                      set SQL_SAFE_UPDATES = 1;
+                  ");
 
         $sqlDaysWeek = "
             select
@@ -522,36 +541,7 @@ class schema extends \Smart\Data\Proxy {
         }
     }
 
-    private function setCaptarAll (array $dayList, $dayofweek) {
-        $allocationCaptar = array('004','005','006','007','008','009');
-
-        foreach($allocationCaptar as $allocationschema) {
-            $shiftDay = self::searchArray($this->schemaweekold,'allocationschema',$allocationschema);
-            $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
-
-            foreach($dayList as $m) {
-                $dutydate = $m['dutydate'];
-                $schedulingperiodid = $m['schedulingperiodid'];
-
-                foreach($lastWeek as $d) {
-                    $shift =$d['shift'];
-                    $position = $d['position'];
-                    $contractorunitid = $d['contractorunitid'];
-
-                    $pdo = $this->prepare($this->sqlCaptar);
-                    $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
-                    $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
-                    $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
-                    $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
-                    $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
-                    $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
-                    $pdo->execute();
-                }
-            }
-        }
-    }
-
-    private function setSchema010 () {
+    private function setSchema010 (array $dayList, $dayofweek) {
     }
 
     private function setSchema011 (array $dayList, $dayofweek) {
@@ -610,6 +600,35 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->execute();
+            }
+        }
+    }
+
+    private function setCaptarAll (array $dayList, $dayofweek) {
+        $allocationCaptar = array('004','005','006','007','008','009');
+
+        foreach($allocationCaptar as $allocationschema) {
+            $shiftDay = self::searchArray($this->schemaweekold,'allocationschema',$allocationschema);
+            $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
+
+            foreach($dayList as $m) {
+                $dutydate = $m['dutydate'];
+                $schedulingperiodid = $m['schedulingperiodid'];
+
+                foreach($lastWeek as $d) {
+                    $shift =$d['shift'];
+                    $position = $d['position'];
+                    $contractorunitid = $d['contractorunitid'];
+
+                    $pdo = $this->prepare($this->sqlCaptar);
+                    $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
+                    $pdo->bindValue(":contractorunitid", $contractorunitid, \PDO::PARAM_INT);
+                    $pdo->bindValue(":allocationschema", $allocationschema, \PDO::PARAM_STR);
+                    $pdo->bindValue(":dutydate", $dutydate, \PDO::PARAM_STR);
+                    $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
+                    $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
+                    $pdo->execute();
+                }
             }
         }
     }

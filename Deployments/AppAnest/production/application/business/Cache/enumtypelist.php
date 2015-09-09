@@ -11,7 +11,6 @@ class enumtypelist extends \Smart\Data\Cache {
         $start = $data['start'];
         $limit = $data['limit'];
         $proxy = $this->getStore()->getProxy();
-
         $sql = "
             SELECT
                 etl.*
@@ -20,10 +19,11 @@ class enumtypelist extends \Smart\Data\Cache {
             WHERE etl.enumtypeid = :enumtypeid
             ORDER BY orderby";
 
+
         try {
             $pdo = $proxy->prepare($sql);
 
-            $pdo->bindValue(":enumtypeid", "$query", \PDO::PARAM_INT);
+            $pdo->bindValue(":enumtypeid", $query, \PDO::PARAM_INT);
 
             $pdo->execute();
             $rows = $pdo->fetchAll();

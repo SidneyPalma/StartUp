@@ -45,7 +45,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleFrequencySheet',
                         name: 'period',
                         fieldLabel: 'Competencia',
                         xtype: 'textfield',
-                        readOnlyColor: false,
+                        readOnlyColor: true,
                         useMondaFont: true,
                         fieldStyle: {
                             color: 'blue;',

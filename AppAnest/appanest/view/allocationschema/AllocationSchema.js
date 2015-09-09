@@ -363,16 +363,16 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                     }
 
                                                     switch(subunit) {
-                                                        case 'C':
+                                                        case '003':
                                                             returnSubunit = '<div style="float: right; width: 20px; color: rgb(252, 24, 36); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-heart"></i></div>';
                                                             break;
-                                                        case 'N':
+                                                        case '005':
                                                             returnSubunit = '<div style="float: right; width: 20px; color: rgb(23, 153, 138); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-chat"></i></div>';
                                                             break;
-                                                        case 'H':
+                                                        case '004':
                                                             returnSubunit = '<div style="float: right; width: 20px; color: rgb(0, 29, 196); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-h-sigh"></i></div>';
                                                             break;
-                                                        case 'P':
+                                                        case '000':
                                                             returnSubunit = '';
                                                             break;
                                                         default:

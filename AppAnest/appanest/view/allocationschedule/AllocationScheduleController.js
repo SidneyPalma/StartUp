@@ -11,6 +11,28 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.store.allocationschedule.TMP_TurningMonthly'
     ],
 
+    startPublishSchedule: function (btn) {
+        var me = this,
+            view = me.getView(),
+            form = btn.up('window').down('form'),
+            params = form.getValues();
+
+        params.action ='setPublishSchedule';
+
+        view.setLoading('Publicando Escala Mensal ...');
+
+        Ext.Ajax.request({
+            timeout: (60000 * 10), // 10 minutos
+            url: 'business/Class/schema.php',
+            params: params,
+            success: function(response){
+                var text = response.responseText;
+                view.setLoading(false);
+                btn.up('window').close();
+            }
+        });
+    },
+
     onShowDirectorShip: function (win) {
         var me = this,
             param = {},
@@ -36,6 +58,18 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             view = me.getView(),
             period = view.down('periodsearch'),
             win = Ext.widget('allocationscheduledirectorship');
+
+        win.show(null, function() {
+            win.down('hiddenfield[name=periodid]').setValue(period.getValue());
+            win.down('textfield[name=period]').setValue(period.getDisplayValue());
+        },me);
+    },
+
+    showPublishSchedule: function (btn) {
+        var me = this,
+            view = me.getView(),
+            period = view.down('periodsearch'),
+            win = Ext.widget('publishschedule');
 
         win.show(null, function() {
             win.down('hiddenfield[name=periodid]').setValue(period.getValue());
@@ -110,7 +144,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 xdata: record,
                 dataIndex: viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex
             });
-console.warn(record);
+
         win.show(null,function() {
             win.down('form').loadRecord(record);
         });

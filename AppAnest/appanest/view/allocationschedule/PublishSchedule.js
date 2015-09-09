@@ -1,23 +1,16 @@
 //@charset ISO-8859-1
-Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
+Ext.define( 'AppAnest.view.allocationschedule.PublishSchedule', {
     extend: 'Ext.window.Window',
 
-    xtype: 'allocationscheduledirectorship',
+    xtype: 'publishschedule',
 
-    requires: [
-        'Ext.selection.CheckboxModel',
-        'Smart.form.field.ComboSearch',
-        'AppAnest.view.period.PeriodSearch',
-        'AppAnest.view.allocationschedule.AllocationWeek'
-    ],
+    requires: [],
 
     controller: 'allocationschedule',
 
-    width: 360,
+    title: 'Publicar Escala',
 
-    title: 'Imprimir Escala para Diretoria',
-
-    modal: true,
+    width: 450,
 
     layout: {
         type: 'fit'
@@ -31,8 +24,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
 
     buildItems: function () {
         var me = this;
-
-        Ext.create('AppAnest.store.person.ContractorUnit');
 
         me.items = [
             {
@@ -57,20 +48,20 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
                         name: 'periodid',
                         xtype: 'hiddenfield'
                     }, {
-                        height: 410,
-                        rowLines: false,
-                        xtype: 'gridpanel',
-                        hideHeaders: false,
-                        selModel: {
-                            selType: 'checkboxmodel'
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Proxima competencia',
+                        defaultType: 'checkboxfield',
+                        defaults: {
+                            checked: true,
+                            readOnly: true
                         },
-                        store: 'contractorunit',
-                        columns: [
+                        items: [
                             {
-                                sortable: false,
-                                text: '<span style="font-size: 16px;">Marcar todas as Unidades </span>',
-                                dataIndex: 'shortname',
-                                flex: 1
+                                name: 'transportschema',
+                                boxLabel: 'Transportar Esquema de Calculo'
+                            }, {
+                                name: 'transportmap',
+                                boxLabel: 'Transportar Mapa Mensal'
                             }
                         ]
                     }
@@ -79,14 +70,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
         ]
     },
 
-    listeners: {
-        show: 'onShowDirectorShip'
-    },
-
     buttons: [
         {
-            text: 'Imprimir',
-            handler: 'showReportDirectorShip'
+            text: 'Confirmar',
+            handler: 'startPublishSchedule'
         }, {
             text: 'Fechar',
             handler: function (btn) {

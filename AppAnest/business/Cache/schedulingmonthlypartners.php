@@ -67,7 +67,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             from
                 schedulingmonthly sm
                 inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-                inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
+                inner join schedulingmonthlypartners tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
             where sp.periodid = :period
             group by sm.dutydate, sm.contractorunitid";
@@ -83,7 +83,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             schedulingmonthly sm
             inner join contractorunit cu on ( cu.id = sm.contractorunitid )
             inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-            inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
+            inner join schedulingmonthlypartners tp on ( tp.schedulingmonthlyid = sm.id )
             inner join person c on ( c.id = sm.contractorunitid )
             left join person n on ( n.id = tp.naturalpersonid )
         where sp.periodid = :period
@@ -108,7 +108,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                 schedulingmonthly sm
                 inner join contractorunit cu on ( cu.id = sm.contractorunitid )
                 inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-                inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
+                inner join schedulingmonthlypartners tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
             where sp.periodid = :period

@@ -151,7 +151,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         glyph: 0xec2b,
                                         scale: 'large',
                                         text: 'Publicar Escala',
-                                        showSmartTheme: 'red-dark'
+                                        showSmartTheme: 'red-dark',
+                                        handler: 'showPublishSchedule'
                                     }
                                 ]
                             }

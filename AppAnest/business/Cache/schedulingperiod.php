@@ -7,29 +7,35 @@ use AppAnest\Model\schedulingperiod as Model;
 class schedulingperiod extends \Smart\Data\Cache {
 
     public function selectLike(array $data) {
-        $query = $data['query'];
         $start = $data['start'];
         $limit = $data['limit'];
+        $status = $data['status'];
+        $params = $data['params'];
         $proxy = $this->getStore()->getProxy();
+
+        $params = ( $params == 'all' ) ? "or sp.status != :status" : "";
 
         $sql = "
             select
-                sp.*,
-                p.year,
-                p.month
+                sp.id,
+                sp.year,
+                sp.month,
+                sp.periodof,
+                sp.periodto,
+                sp.status
             from
                 schedulingperiod sp
-                inner join period p on ( p.id = sp.periodid )";
+            where sp.status = :status
+              $params
+            order by sp.year desc, sp.month desc";
 
         try {
-            //$pdo = $proxy->prepare($sql);
+            $pdo = $proxy->prepare($sql);
 
-            //$pdo->bindValue(":shift", "$query%", \PDO::PARAM_STR);
+            $pdo->bindValue(":status", $status, \PDO::PARAM_STR);
 
-            //$pdo->execute();
-            //$rows = $pdo->fetchAll();
-
-            $rows = $proxy->query($sql)->fetchAll();
+            $pdo->execute();
+            $rows = $pdo->fetchAll();
 
             self::_setRows($rows);
             self::_setPage($start,$limit);

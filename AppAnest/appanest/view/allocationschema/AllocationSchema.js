@@ -14,7 +14,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
         'AppAnest.store.allocationschema.AllocationSchema',
         'AppAnest.store.allocationschema.AllocationSchemaMap',
         'AppAnest.store.allocationschema.AllocationSchemaMonthly',
-        'AppAnest.store.allocationschema.AllocationSchemaWeekDay'
+        'AppAnest.store.allocationschema.AllocationSchemaWeekDay',
+        'AppAnest.view.allocationschedule.SchedulingPeriodSearch'
     ],
 
     controller: 'allocationschema',
@@ -85,14 +86,17 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                 },
                                 items: [
                                     {
-                                        xtype: 'periodsearch',
+                                        status: 'A',
+                                        params: '',
+                                        xtype: 'schedulingperiodsearch',
                                         readOnlyColor: false,
                                         fieldStyle: {
                                             color: 'blue;',
                                             fontSize: '16px;'
                                         },
                                         listeners: {
-                                            select: 'onSelectPeriod'
+                                            select: 'onSelectPeriod',
+                                            beforequery: 'onBeforeQuery'
                                         }
                                     }, {
                                         xtype: 'radiogroup',
@@ -140,7 +144,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         name: 'id'
                                                     }, {
                                                         xtype: 'hiddenfield',
-                                                        name: 'periodid'
+                                                        name: 'schedulingperiodid'
                                                     }, {
                                                         xtype: 'hiddenfield',
                                                         name: 'schemaweek'

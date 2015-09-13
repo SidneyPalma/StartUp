@@ -48,6 +48,9 @@ Ext.define( 'AppAnest.view.allocationschedule.PublishSchedule', {
                         name: 'periodid',
                         xtype: 'hiddenfield'
                     }, {
+                        name: 'status',
+                        xtype: 'hiddenfield'
+                    }, {
                         xtype: 'fieldcontainer',
                         fieldLabel: 'Proxima competencia',
                         defaultType: 'checkboxfield',

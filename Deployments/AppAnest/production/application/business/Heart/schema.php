@@ -182,7 +182,7 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setAllocationSchema () {
-        $periodid = $this->post->periodid;
+        $periodid = $this->post->schedulingperiodid;
 
         $sqlMonthly = "
             select
@@ -193,13 +193,13 @@ class schema extends \Smart\Data\Proxy {
                         b.id
                     from
                         allocationschema b
-                        inner join period q on ( q.id = b.periodid )
+                        inner join schedulingperiod q on ( q.id = b.schedulingperiodid )
                     where date( concat(q.year,'-',q.month,'-',1) ) = adddate(date( concat(p.year,'-',p.month,'-',1) ), interval -1 month)
                 ) as schemaold
             from
                 allocationschema a
-                inner join period p on ( p.id = a.periodid )
-            where a.periodid = :periodid";
+                inner join schedulingperiod p on ( p.id = a.schedulingperiodid )
+            where a.schedulingperiodid = :periodid";
 
         $sqlWeekDay = "
             select
@@ -226,7 +226,7 @@ class schema extends \Smart\Data\Proxy {
                 dayofweek(sm.dutydate) as dayofweek
             from
                 allocationschema a
-                inner join schedulingperiod sp on ( sp.periodid = a.periodid )
+                inner join schedulingperiod sp on ( sp.id = a.schedulingperiodid )
                 inner join schedulingmonthly sm on ( sm.schedulingperiodid = sp.id )
                 inner join schedulingmonthlypartners smp on ( smp.schedulingmonthlyid = sm.id )
             where a.id = :id
@@ -284,7 +284,7 @@ class schema extends \Smart\Data\Proxy {
         // Limpando Tabela Temporária
         $this->exec("
                       set SQL_SAFE_UPDATES = 0;
-                      delete from tmp_turningmonthly where id > 0;
+                      delete from tmp_turningmonthly;
                       alter table tmp_turningmonthly AUTO_INCREMENT = 1;
                       set SQL_SAFE_UPDATES = 1;
                   ");
@@ -303,7 +303,7 @@ class schema extends \Smart\Data\Proxy {
                     ( select @row:=-1 ) t3 limit 31
                 ) b,
                 schedulingperiod sp
-            where sp.periodid = :periodid
+            where sp.id = :periodid
               and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
               and dayofweek(date_add(sp.periodof, interval row day)) = :dayofweek";
 

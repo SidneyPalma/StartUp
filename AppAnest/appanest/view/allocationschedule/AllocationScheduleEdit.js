@@ -5,6 +5,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
     xtype: 'allocationscheduleedit',
 
     requires: [
+        'AppAnest.view.person.NaturalPersonSearch',
+        'AppAnest.view.person.ContractorUnitSearch'
     ],
 
     controller: 'allocationschedule',
@@ -19,10 +21,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
 
     buttons: [
         {
-            text: 'Salvar'
-            //handler: 'showReportDirectorShip'
+            showSmartTheme: 'red-dark',
+            text: 'Salvar',
+            handler: 'updateAllocationSchedule'
         }, {
             text: 'Fechar',
+            showSmartTheme: 'green',
             handler: function (btn) {
                 btn.up('window').close();
             }
@@ -33,6 +37,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
         var me = this;
         me.buildItems();
         me.callParent();
+    },
+
+    listeners: {
+        show: 'onShowAllocationScheduleEdit'
     },
 
     buildItems: function () {
@@ -51,12 +59,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         xtype: 'hiddenfield',
                         name: 'id'
                     }, {
-                        width: 100,
+                        xtype: 'hiddenfield',
+                        name: 'releasetype'
+                    }, {
+                        anchor: '',
+                        width: 150,
                         useMondaFont: true,
-                        readOnlyColor: true,
+                        readOnlyColor: false,
                         fieldStyle: {
+                            textAlign: 'center',
                             color: 'blue;',
-                            fontSize: '16px;'
+                            fontSize: '20px;'
                         },
                         fieldLabel: 'Data',
                         xtype: 'datefield',
@@ -67,7 +80,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         layout: 'hbox',
                         defaults: {
                             useMondaFont: true,
-                            readOnlyColor: true,
+                            readOnlyColor: false,
                             fieldStyle: {
                                 color: 'blue;',
                                 fontSize: '16px;'
@@ -76,9 +89,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         items: [
                             {
                                 flex: 2,
+                                pageSize: 0,
                                 name:  'contractorunit',
                                 fieldLabel: 'Unidade',
-                                xtype: 'textfield'
+                                xtype: 'naturalpersonsearch',
+                                store: 'AppAnest.store.person.ContractorUnit'
                             }, {
                                 xtype: 'splitter'
                             }, {
@@ -88,8 +103,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                                 submitValue: false,
                                 hiddenNameId: 'subunit',
                                 xtype: 'combosearch',
+                                name: 'subunitdescription',
                                 store: 'AppAnest.store.person.ContractorSubUnit',
-                                valueField: 'subunitdescription',
                                 displayField: 'subunitdescription'
                             }, {
                                 xtype: 'splitter'
@@ -105,7 +120,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         layout: 'hbox',
                         defaults: {
                             useMondaFont: true,
-                            readOnlyColor: true,
+                            readOnlyColor: false,
                             fieldStyle: {
                                 color: 'blue;',
                                 fontSize: '16px;'
@@ -114,8 +129,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         items: [
                             {
                                 flex: 1,
+                                pageSize: 0,
+                                allowBlank: false,
                                 fieldLabel: 'Plantonista',
-                                xtype: 'textfield'
+                                name: 'naturalperson',
+                                xtype: 'naturalpersonsearch'
                             }, {
                                 xtype: 'splitter'
                             }, {
@@ -129,12 +147,21 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                                 width: 90,
                                 name: 'position',
                                 fieldLabel: 'Posicao',
-                                xtype: 'textfield'
+                                xtype: 'numberfield'
                             }
                         ]
                     }, {
-                        xtype: 'textareafield',
-                        fieldLabel: 'Observacoes'
+                        useMondaFont: true,
+                        fieldLabel: 'Observacao',
+                        allowBlank: false,
+                        xtype: 'textfield',
+                        name: 'observation'
+                    }, {
+                        height: 180,
+                        useMondaFont: true,
+                        xtype: 'displayfield',
+                        name: 'observationlog',
+                        fieldLabel: 'Historico'
                     }
                 ]
             }

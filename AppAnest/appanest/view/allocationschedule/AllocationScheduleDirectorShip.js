@@ -57,6 +57,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
                         name: 'periodid',
                         xtype: 'hiddenfield'
                     }, {
+                        name: 'status',
+                        xtype: 'hiddenfield'
+                    }, {
                         height: 410,
                         rowLines: false,
                         xtype: 'gridpanel',

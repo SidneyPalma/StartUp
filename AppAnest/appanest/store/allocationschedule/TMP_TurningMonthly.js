@@ -5,7 +5,9 @@ Ext.define( 'AppAnest.store.allocationschedule.TMP_TurningMonthly', {
 
     storeId: 'tmp_turningmonthly',
 
-    url: 'business/Class/tmp_turningmonthly.php',
+    //url: 'business/Class/tmp_turningmonthly.php',
+
+    url: 'business/Class/schedulingmonthlypartners.php',
 
     model: 'AppAnest.model.allocationschedule.TMP_TurningMonthly'
 

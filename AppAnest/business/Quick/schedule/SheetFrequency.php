@@ -10,6 +10,12 @@ class SheetFrequency extends Report {
 
     private $sizeColumns = array(30,30,4,30,30,30,4,30);
 
+    private function setTableSchedule ($status, $sql) {
+        $tablename = ($status == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+
+        return str_replace("_tablename_", $tablename, $sql);
+    }
+
     public function preConstruct() {
 
         $this->post = (object) self::decodeUTF8($_REQUEST);
@@ -17,6 +23,7 @@ class SheetFrequency extends Report {
         $dateof = $this->post->dateof;
         $dateto = $this->post->dateto;
 
+        $status = $this->post->status;
         $periodid = $this->post->periodid;
         $contractorunitid = $this->post->contractorunitid;
         $subunit = isset($this->post->subunit) ? $this->post->subunit : 'P';
@@ -38,15 +45,17 @@ class SheetFrequency extends Report {
             from
                 schedulingmonthly sm
                 inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-                inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
+                inner join _tablename_ tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
-            where sp.periodid = :periodid
+            where sp.id = :periodid
               and sm.contractorunitid = :contractorunitid
               and tp.naturalpersonid is not null
               and tp.subunit = :subunit
               and sm.dutydate between :dateof and :dateto
             order by sm.dutydate, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
+
+        $sql = $this->setTableSchedule($status,$sql);
 
         $pdo = $proxy->prepare($sql);
 

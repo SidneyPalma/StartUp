@@ -1,5 +1,12 @@
-Ext.define( 'AppAnest.model.period.Period', {
-    extend: 'Ext.data.Model',
+//@charset ISO-8859-1
+Ext.define( 'AppAnest.store.allocationschedule.SchedulingPeriod', {
+    extend: 'Smart.data.StoreBase',
+
+    alias: 'store.SchedulingPeriod',
+
+    storeId: 'schedulingperiod',
+
+    url: 'business/Class/schedulingperiod.php',
 
     fields: [
         {

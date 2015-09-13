@@ -6,7 +6,7 @@ Ext.define( 'AppAnest.store.period.Period', {
 
     storeId: 'period',
 
-    url: 'business/Class/period.php',
+    url: 'business/Class/schedulingperiod.php',
 
     model: 'AppAnest.model.period.Period',
 

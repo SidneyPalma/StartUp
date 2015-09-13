@@ -10,9 +10,16 @@ class DirectorShip extends Report {
 
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
 
+    private function setTableSchedule ($status, $sql) {
+        $tablename = ($status == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+
+        return str_replace("_tablename_", $tablename, $sql);
+    }
+
     public function preConstruct() {
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
+        $status = $this->post->status;
         $periodid = $this->post->periodid;
         $contractorunitlist = $this->post->contractorunitlist;
 
@@ -39,13 +46,15 @@ class DirectorShip extends Report {
                 schedulingmonthly sm
                 inner join contractorunit cu on ( cu.id = sm.contractorunitid )
                 inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-                inner join tmp_turningmonthly tp on ( tp.schedulingmonthlyid = sm.id )
+                inner join _tablename_ tp on ( tp.schedulingmonthlyid = sm.id )
                 inner join person c on ( c.id = sm.contractorunitid )
                 left join person n on ( n.id = tp.naturalpersonid )
-            where sp.periodid = $periodid
+            where sp.id = $periodid
               and sm.contractorunitid in ($list)
               and tp.naturalpersonid is not null
             order by cu.position, sm.contractorunitid, sm.dutydate, tp.shift, tp.subunit, tp.position";
+
+        $sql = $this->setTableSchedule($status,$sql);
 
         $this->rows = $proxy->query($sql)->fetchAll();
 

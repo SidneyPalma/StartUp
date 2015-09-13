@@ -37,7 +37,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         schema.getLayout().setActiveItem(newValue.type);
         allocationschemap.getLayout().setActiveItem(newValue.type);
 
-        view.down('periodsearch').setReadOnlyColor(newValue.type == 1);
+        view.down('schedulingperiodsearch').setReadOnlyColor(newValue.type == 1);
 
         switch (newValue.type) {
             case 0:
@@ -81,13 +81,23 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         me.onSearchAlter(field, newValue, oldValue, eOpts);
     },
 
+    onBeforeQuery: function ( queryPlan, eOpts ) {
+        var combo = queryPlan.combo,
+            store = combo.store;
+
+        store.setParams({
+            status: combo.status,
+            params: combo.params
+        });
+    },
+
     onSelectPeriod: function ( combo, record, eOpts ) {
         var me = this,
             param = {},
             view = me.getView(),
             schema = view.down('container[name=schema]'),
             form = view.down('form[name=schemamonthly]'),
-            periodid = form.down('hiddenfield[name=periodid]'),
+            periodid = form.down('hiddenfield[name=schedulingperiodid]'),
             allocationschema = Ext.getStore('allocationschema'),
             schemamonthly = view.down('gridpanel[name=schemamonthly]');
 
@@ -137,14 +147,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     onCreateSchemaMonthly: function () {
         var me = this,
             view = me.getView(),
-            periodsearch = view.down('periodsearch'),
+            schedulingperiodsearch = view.down('schedulingperiodsearch'),
             win = Ext.widget('allocationschemaprocess'),
             id = view.down('hiddenfield[name=id]').getValue();
-
-        //win.show(null,function () {
-        //    win.down('textfield[name=period]').setValue(periodsearch.getRawValue());
-        //    win.down('hiddenfield[name=periodid]').setValue(periodsearch.getValue());
-        //});
 
         view.setLoading('Processando Escala Mensal ...');
 
@@ -153,7 +158,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             url: 'business/Class/schema.php',
             params: {
                 action: 'selectTurningSchema',
-                periodid: periodsearch.getValue()
+                periodid: schedulingperiodsearch.getValue()
             },
             success: function(response){
                 var text = response.responseText;

@@ -26,7 +26,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             url: 'business/Class/schema.php',
             params: params,
             success: function(response){
-                var text = response.responseText;
                 view.setLoading(false);
                 btn.up('window').close();
             }
@@ -56,31 +55,43 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     showDirectorShip: function () {
         var me = this,
             view = me.getView(),
-            period = view.down('periodsearch'),
+            period = view.down('schedulingperiodsearch'),
             win = Ext.widget('allocationscheduledirectorship');
 
         win.show(null, function() {
+            win.down('hiddenfield[name=status]').setValue(period.status);
             win.down('hiddenfield[name=periodid]').setValue(period.getValue());
             win.down('textfield[name=period]').setValue(period.getDisplayValue());
         },me);
     },
 
-    showPublishSchedule: function (btn) {
+    showPublishSchedule: function () {
         var me = this,
             view = me.getView(),
-            period = view.down('periodsearch'),
+            period = view.down('schedulingperiodsearch'),
             win = Ext.widget('publishschedule');
 
-        win.show(null, function() {
-            win.down('hiddenfield[name=periodid]').setValue(period.getValue());
-            win.down('textfield[name=period]').setValue(period.getDisplayValue());
-        },me);
+        if(period.status == 'P') {
+            Ext.Msg.show({
+                title:'Publicando Escala!',
+                message: 'A escala atual ja esta no status de publicada!',
+                buttons: Ext.Msg.CANCEL,
+                icon: Ext.Msg.WARNING
+            });
+        } else {
+            win.show(null, function() {
+                win.down('hiddenfield[name=status]').setValue(period.status);
+                win.down('hiddenfield[name=periodid]').setValue(period.getValue());
+                win.down('textfield[name=period]').setValue(period.getDisplayValue());
+            },me);
+
+        }
     },
 
     showFrequencySheet: function () {
         var me = this,
             view = me.getView(),
-            period = view.down('periodsearch'),
+            period = view.down('schedulingperiodsearch'),
             record = period.getSelectedRecord(),
             win = Ext.widget('allocationschedulefrequencysheet');
 
@@ -108,46 +119,121 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             data = form.getValues(),
             list = grid.getSelectionModel().getSelection(),
             url = 'business/Class/Report/DirectorShip.php?',
-            qrp = 'periodid={0}&contractorunitlist={1}';
+            qrp = 'periodid={0}&contractorunitlist={1}&status={2}';
 
         if(list.length) {
-            var periodid = data.periodid;
+            var status = data.status,
+                periodid = data.periodid;
+
             Ext.each(list,function(record, index) {
                 contractorunitlist.push(parseInt(record.get('id')));
             },me);
-            window.open(Ext.String.format(url + qrp,periodid,Ext.encode(contractorunitlist)));
+
+            window.open(Ext.String.format(url + qrp,periodid,Ext.encode(contractorunitlist),status));
         } else {
 
         }
-
     },
 
     showReportSheetFrequency: function (btn) {
-        var form = btn.up('window').down('form'),
+        var me = this,
+            view = me.getView(),
+            form = btn.up('window').down('form'),
             data = form.getValues(),
+            period = view.down('schedulingperiodsearch'),
             url = 'business/Class/Report/SheetFrequency.php?',
-            qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}';
+            qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}&status={2}';
 
         if(form.isValid()) {
-            var periodid = data.periodid,
+            var status = data.status,
+                periodid = data.periodid,
                 contractorunitid = data.contractorunitid,
                 subunit = data.subunit.substring(0,1),
                 dateof = data.dateof,
                 dateto = data.dateto;
-            window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunit,dateof,dateto));
+            window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunit,dateof,dateto,status));
         }
+    },
+
+    updateAllocationSchedule: function (btn) {
+        var me = this,
+            view = btn.up('window'),
+            form = view.down('form');
+    },
+
+    onShowAllocationScheduleEdit: function (view) {
+        var me = this;
+
+        view.down('form').loadRecord(view.xdata);
+
+        me.setReadOnlyFields(view.down('form'),'E');
+    },
+
+    setReadOnlyFields: function (form, type) {
+        var me = this,
+            fields = [
+                'dutydate',
+                'position',
+                'contractorunit',
+                'shiftdescription',
+                'subunitdescription',
+                'allocationschemadescription'
+            ];
+
+        Ext.each(fields,function (field) {
+            form.getForm().findField(field).setReadOnlyColor(true);
+        });
     },
 
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var me = this;
-            win = Ext.widget('allocationscheduleedit', {
-                xdata: record,
-                dataIndex: viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex
-            });
+            param = {},
+            view = me.getView(),
+            store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly'),
+            dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
 
-        win.show(null,function() {
-            win.down('form').loadRecord(record);
+        view.setLoading('Carregando edicao da escala ...');
+
+        param = {
+            query: record.get(dataIndex),
+            action: 'select',
+            method: 'selectCode',
+            dataIndex: dataIndex,
+            rows: Ext.encode(record.data)
+        };
+
+        store.setParams(param).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                view.setLoading(false);
+                Ext.widget('allocationscheduleedit', {
+                    xdata: records[0],
+                    dataIndex: dataIndex
+                }).show();
+            }
         });
+
+        //Ext.Ajax.request({
+        //    url: 'business/Class/schedulingmonthlypartners.php',
+        //    params: {
+        //        query: record.get(dataIndex),
+        //        action: 'select',
+        //        method: 'selectCode',
+        //        dataIndex: dataIndex,
+        //        rows: Ext.encode(record.data)
+        //    },
+        //    success: function(response) {
+        //        var object = Ext.decode(response.responseText),
+        //            result = Ext.create('AppAnest.model.allocationschedule.TMP_TurningMonthly',object.rows[0]);
+        //
+        //        view.setLoading(false);
+        //
+        //        Ext.widget('allocationscheduleedit', {
+        //            xdata: result,
+        //            dataIndex: dataIndex
+        //        }).show();
+        //    }
+        //});
     },
 
     startDatePicker: function(picker, date) {
@@ -209,10 +295,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             days = [0,1,2,3,4,5,6],
             grid = view.down('gridpanel'),
             dataIndex = me.getDataIndex(),
-            period = view.down('periodsearch'),
             store = Ext.getStore('allocationschedule'),
+            period = view.down('schedulingperiodsearch'),
             label = view.down('label[name=labelperiod]');
 
+        param.status = period.status;
         param.action = 'select';
         param.method = 'selectSchedule';
         param.pickerView = pickerView;
@@ -284,12 +371,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             case 1:
                 picker.setPickerView('vwWeek');
                 break;
-            case 2:
-                picker.setPickerView('vwMonth');
-                break;
         }
 
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
+    },
+
+    onBeforeQuery: function ( queryPlan, eOpts ) {
+        var combo = queryPlan.combo,
+            store = combo.store;
+
+        store.setParams({
+            status: combo.status,
+            params: combo.params
+        });
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {

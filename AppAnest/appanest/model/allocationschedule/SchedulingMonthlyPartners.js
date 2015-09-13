@@ -1,4 +1,4 @@
-Ext.define( 'AppAnest.model.allocationschedule.TMP_TurningMonthly', {
+Ext.define( 'AppAnest.model.allocationschedule.SchedulingMonthlyPartners', {
     extend: 'Ext.data.Model',
 
     fields: [
@@ -12,13 +12,7 @@ Ext.define( 'AppAnest.model.allocationschedule.TMP_TurningMonthly', {
             name: 'naturalpersonid',
             type: 'int'
         }, {
-            name: 'naturalperson',
-            type: 'auto'
-        }, {
-            name: 'contractorunitid',
-            type: 'int'
-        }, {
-            name: 'contractorunit',
+            name: 'shortname',
             type: 'auto'
         }, {
             name: 'position',
@@ -49,9 +43,6 @@ Ext.define( 'AppAnest.model.allocationschedule.TMP_TurningMonthly', {
             type: 'auto'
         }, {
             name: 'username',
-            type: 'auto'
-        }, {
-            name: 'observation',
             type: 'auto'
         }
     ]

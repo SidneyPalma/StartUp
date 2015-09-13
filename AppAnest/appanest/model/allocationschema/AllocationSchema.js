@@ -6,7 +6,7 @@ Ext.define( 'AppAnest.model.allocationschema.AllocationSchema', {
             name: 'id',
             type: 'int'
         }, {
-            name: 'periodid',
+            name: 'schedulingperiodid',
             type: 'int'
         }, {
             name: 'description',

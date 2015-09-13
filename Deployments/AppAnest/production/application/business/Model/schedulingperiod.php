@@ -15,10 +15,16 @@ class schedulingperiod extends \Smart\Data\Model {
     private $id;
 
     /**
-     * @Policy {"nullable":false}
+     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"integer", "policy":true}
      */
-    private $periodid;
+    private $year;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $month;
 
     /**
      * @Policy {"nullable":false}
@@ -57,16 +63,32 @@ class schedulingperiod extends \Smart\Data\Model {
     /**
      * @return type integer
      */
-    public function getPeriodid() {
-        return $this->periodid;
+    public function getYear() {
+        return $this->year;
     }
 
     /**
-     * @param type $periodid
+     * @param type $year
      * @return \AppAnest\Model\schedulingperiod
      */
-    public function setPeriodid($periodid) {
-        $this->periodid = $periodid;
+    public function setYear($year) {
+        $this->year = $year;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getMonth() {
+        return $this->month;
+    }
+
+    /**
+     * @param type $month
+     * @return \AppAnest\Model\schedulingperiod
+     */
+    public function setMonth($month) {
+        $this->month = $month;
         return $this;
     }
 

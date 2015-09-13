@@ -7,8 +7,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
     requires: [
         'Ext.picker.Date',
         'Ext.layout.container.SegmentedButton',
-        'AppAnest.view.period.PeriodSearch',
-        'AppAnest.view.allocationschedule.AllocationWeek'
+        'AppAnest.view.allocationschedule.SchedulingPeriodSearch'
     ],
 
     controller: 'allocationschedule',
@@ -64,14 +63,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                         },
                         items: [
                             {
-                                xtype: 'periodsearch',
+                                status: 'P',
+                                params: '',
+                                xtype: 'schedulingperiodsearch',
                                 readOnlyColor: false,
                                 fieldStyle: {
                                     color: 'blue;',
                                     fontSize: '16px;'
                                 },
                                 listeners: {
-                                    select: 'onSelectPeriod'
+                                    select: 'onSelectPeriod',
+                                    beforequery: 'onBeforeQuery'
                                 }
                             }, {
                                 xtype: 'container',

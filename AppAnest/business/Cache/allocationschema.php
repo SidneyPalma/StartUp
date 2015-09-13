@@ -14,18 +14,17 @@ class allocationschema extends \Smart\Data\Cache {
         $sql = "
             select
                 a.id,
-                a.periodid,
+                a.schedulingperiodid,
                 a.schemaweek,
                 a.description,
                 a.observation,
-                p.year,
-                p.month,
-                concat(lpad(p.year,4,'0'),'-',lpad(p.month,2,'0'),'-','01') as periodof,
-                last_day(concat(lpad(p.year,4,'0'),'-',lpad(p.month,2,'0'),'-','01')) as periodto
+                a.year,
+                a.month,
+                a.periodof,
+                a.periodto
             from
-                period p
-                inner join allocationschema a on ( a.periodid = p.id )
-            order by p.year, p.month";
+                allocationschema a
+            order by a.year, a.month";
 
         try {
             $rows = $proxy->query($sql)->fetchAll();
@@ -48,14 +47,14 @@ class allocationschema extends \Smart\Data\Cache {
         $sql = "
             select
                 a.id,
-                a.periodid,
+                a.schedulingperiodid,
                 a.username,
                 a.schemaweek,
                 a.description,
                 a.observation
             from
                 allocationschema a
-            where periodid = :personid";
+            where a.schedulingperiodid = :personid";
 
         try {
             $pdo = $proxy->prepare($sql);

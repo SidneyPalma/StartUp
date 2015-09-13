@@ -18,7 +18,7 @@ class allocationschema extends \Smart\Data\Model {
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true}
      */
-    private $periodid;
+    private $schedulingperiodid;
 
     /**
      * @Policy {"nullable":true, "length":80}
@@ -63,16 +63,16 @@ class allocationschema extends \Smart\Data\Model {
     /**
      * @return type integer
      */
-    public function getPeriodid() {
-        return $this->periodid;
+    public function getSchedulingperiodid() {
+        return $this->schedulingperiodid;
     }
 
     /**
-     * @param type $periodid
+     * @param type $schedulingperiodid
      * @return \AppAnest\Model\allocationschema
      */
-    public function setPeriodid($periodid) {
-        $this->periodid = $periodid;
+    public function setSchedulingperiodid($schedulingperiodid) {
+        $this->schedulingperiodid = $schedulingperiodid;
         return $this;
     }
 

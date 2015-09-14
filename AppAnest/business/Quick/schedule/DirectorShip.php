@@ -8,10 +8,14 @@ use AppAnest\Setup\Start;
 
 class DirectorShip extends Report {
 
+    private $proxy;
+
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
 
-    private function setTableSchedule ($status, $sql) {
-        $tablename = ($status == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+    private function setTableSchedule ($period, $sql) {
+        $rows = $this->proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+
+        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }
@@ -25,7 +29,7 @@ class DirectorShip extends Report {
 
         $list = substr($contractorunitlist, 1, -1);
 
-        $proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
+        $this->proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
 
         $sql = "
             select
@@ -54,9 +58,9 @@ class DirectorShip extends Report {
               and tp.naturalpersonid is not null
             order by cu.position, sm.contractorunitid, sm.dutydate, tp.shift, tp.subunit, tp.position";
 
-        $sql = $this->setTableSchedule($status,$sql);
+        $sql = $this->setTableSchedule($periodid,$sql);
 
-        $this->rows = $proxy->query($sql)->fetchAll();
+        $this->rows = $this->proxy->query($sql)->fetchAll();
 
         $this->ScheduleMonth = new \DateTime($this->rows[0]['periodof']);
     }

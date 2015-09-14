@@ -4,14 +4,20 @@ namespace AppAnest\Quick\schedule;
 
 
 use Smart\Utils\Report;
+use Smart\Utils\Session;
 use AppAnest\Setup\Start;
 
 class SheetFrequency extends Report {
 
+    private $proxy;
+
     private $sizeColumns = array(30,30,4,30,30,30,4,30);
 
-    private function setTableSchedule ($status, $sql) {
-        $tablename = ($status == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+    private function setTableSchedule ($period, $sql) {
+
+        $rows = $this->proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+
+        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }
@@ -28,10 +34,10 @@ class SheetFrequency extends Report {
         $contractorunitid = $this->post->contractorunitid;
         $subunit = isset($this->post->subunit) ? $this->post->subunit : 'P';
 
+        $this->proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
+
         $this->sizeColumns = self::scaleCalc(array_sum($this->sizeColumns),190,$this->sizeColumns);
         $this->setTotalSizeColums();
-
-        $proxy = new \Smart\Data\Proxy(array(Start::getDataBase(), Start::getUserName(), Start::getPassWord()));
 
         $sql = "
             select
@@ -55,9 +61,9 @@ class SheetFrequency extends Report {
               and sm.dutydate between :dateof and :dateto
             order by sm.dutydate, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
-        $sql = $this->setTableSchedule($status,$sql);
+        $sql = $this->setTableSchedule($periodid,$sql);
 
-        $pdo = $proxy->prepare($sql);
+        $pdo = $this->proxy->prepare($sql);
 
         $pdo->bindValue(":dateof", $dateof, \PDO::PARAM_STR);
         $pdo->bindValue(":dateto", $dateto, \PDO::PARAM_STR);

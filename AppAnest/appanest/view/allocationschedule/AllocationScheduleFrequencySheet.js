@@ -86,13 +86,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleFrequencySheet',
                         valueField: 'id',
                         displayField: 'shortname'
                     }, {
+                        xtype: 'comboenum',
                         fieldLabel: 'SubUnidade',
-                        submitValue: false,
-                        hiddenNameId: 'subunit',
-                        xtype: 'combosearch',
-                        store: 'AppAnest.store.person.ContractorSubUnit',
-                        valueField: 'subunitdescription',
-                        displayField: 'subunitdescription'
+                        name: 'subunitdescription'
                     }
                 ]
             }

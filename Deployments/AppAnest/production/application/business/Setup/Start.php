@@ -7,7 +7,7 @@ class Start {
     private static $pwd = "";
     private static $usr = "root";
     private static $tmz = "America/Manaus";
-    private static $dtb = "mysql:host=localhost;dbname=optimal_coopanest";
+    private static $dtb = "mysql:host=localhost;dbname=coopanest";
 
     public static function getPassWord() {
         return self::$pwd;

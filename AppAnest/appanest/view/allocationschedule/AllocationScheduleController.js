@@ -144,14 +144,16 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             url = 'business/Class/Report/SheetFrequency.php?',
             qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}&status={2}';
 
+        data.subunittext = form.down('comboenum[name=subunitdescription]').getRawValue();
+
         if(form.isValid()) {
             var status = data.status,
                 periodid = data.periodid,
                 contractorunitid = data.contractorunitid,
-                subunit = data.subunit.substring(0,1),
+                subunit = data.subunit,
                 dateof = data.dateof,
                 dateto = data.dateto;
-            window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunit,dateof,dateto,status));
+            window.open(Ext.String.format(url + qrp,periodid,contractorunitid,subunit,data.subunittext,dateof,dateto,status));
         }
     },
 

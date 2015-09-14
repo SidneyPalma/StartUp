@@ -26,12 +26,12 @@ Ext.define( 'AppAnest.model.person.ContractorSubUnit', {
             name: 'shiftstotal',
             type: 'int'
         }
-    ],
-
-    business: [
-        { type: 'presence', field: 'contractorunitid' },
-        { type: 'presence', field: 'subunit' }
     ]
+
+    //business: [
+    //    { type: 'presence', field: 'contractorunitid' },
+    //    { type: 'presence', field: 'subunit' }
+    //]
 
     //fields: [
     //    { name: 'id', type: 'int', unique: true }

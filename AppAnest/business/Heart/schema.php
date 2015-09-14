@@ -80,6 +80,8 @@ class schema extends \Smart\Data\Proxy {
               and shift = @shift;";
 
     private $sqlUpdate = "
+            set SQL_SAFE_UPDATES = 0;
+
             set @schedulingperiodid = :schedulingperiodid;
             set @contractorunitid = :contractorunitid;
             set @allocationschema = :allocationschema;
@@ -99,9 +101,13 @@ class schema extends \Smart\Data\Proxy {
                     and tp.allocationschema = @allocationschema
                     and tp.position = @position
                 )
-            set tp.naturalpersonid = @naturalpersonid;";
+            set tp.naturalpersonid = @naturalpersonid;
+
+            set SQL_SAFE_UPDATES = 1;";
 
     private $sqlCaptar = "
+            set SQL_SAFE_UPDATES = 0;
+
             set @schedulingperiodid = :schedulingperiodid;
             set @contractorunitid = :contractorunitid;
             set @allocationschema = :allocationschema;
@@ -138,7 +144,9 @@ class schema extends \Smart\Data\Proxy {
                         and t.allocationschema = @allocationschema
                         and t.position = @position
                     )
-                set t.naturalpersonid = @naturalpersonid;";
+                set t.naturalpersonid = @naturalpersonid;
+
+                set SQL_SAFE_UPDATES = 1;";
 
     public function __construct() {
         $this->post = (object)$_POST;
@@ -322,7 +330,6 @@ class schema extends \Smart\Data\Proxy {
                 $this->setSchema013($dayList,$dayofweek);
                 $this->setCaptarAll($dayList,$dayofweek);
             }
-
             $this->setSchema011($dayList,$dayofweek);
         }
     }
@@ -452,6 +459,7 @@ class schema extends \Smart\Data\Proxy {
 
         foreach($dayList as $m) {
             $dutydate = $m['dutydate'];
+
             $schedulingperiodid = $m['schedulingperiodid'];
             $dayWeek = $this->setTurningV($lastWeek);
 
@@ -475,7 +483,6 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->execute();
-                print_r($pdo->queryString);
             }
 
             $lastWeek = $dayWeek;

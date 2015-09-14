@@ -241,6 +241,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             param = {},
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
             store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly'),
             dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
 
@@ -254,6 +255,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             query: record.get(dataIndex),
             action: 'select',
             method: 'selectCode',
+            period: period.getValue(),
             dataIndex: dataIndex,
             rows: Ext.encode(record.data)
         };

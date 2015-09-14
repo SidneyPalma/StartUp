@@ -119,6 +119,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
 
     public function selectCode(array $data) {
         $query = $data['query'];
+        $period = $data['period'];
         $dataIndex = $data['dataIndex'];
         $username = Session::read('username');
         $proxy = $this->getStore()->getProxy();
@@ -147,11 +148,14 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                     getEnum('releasetype',smp.releasetype) as releasetypedescription,
                     getEnum('allocationschema',smp.allocationschema) as allocationschemadescription
                 from
-                    schedulingmonthlypartners smp
+                    _tablename_ smp
                     inner join schedulingmonthly sm on ( sm.id = smp.schedulingmonthlyid )
                     inner join person p on ( p.id = smp.naturalpersonid )
                     inner join person cu on ( cu.id = sm.contractorunitid )
                 where smp.id = :id";
+
+        $sql = $this->setTableSchedule($period,$sql);
+
 
         if($data['rows'][$dataIndex . 'description'] == '...') {
             $shift = $data['rows']['shift'];
@@ -264,7 +268,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                     $unique[$i][$d.'schema'] = $search[0]['allocationschema'];
                 }
                 if(isset($search[0]['naturalperson'])) {
-//                    $unique[$i][$d] = $search[0]['id'];
                     $unique[$i][$d.'description'] = $search[0]['naturalperson'];
                 }
 

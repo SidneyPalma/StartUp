@@ -212,8 +212,12 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
-    private function setTableSchedule ($status, $sql) {
-        $tablename = ($status == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+    private function setTableSchedule ($period, $sql) {
+        $proxy = $this->getStore()->getProxy();
+
+        $rows = $proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+
+        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }
@@ -309,7 +313,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         $proxy = $this->getStore()->getProxy();
 
         if($picker == 'vwMonth') {
-            $sqlMonthly = $this->setTableSchedule($status,$this->sqlMonthly);
+            $sqlMonthly = $this->setTableSchedule($period,$this->sqlMonthly);
             $pdo = $proxy->prepare($sqlMonthly);
             $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
             $pdo->execute();
@@ -317,7 +321,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             $return = $this->selectMonth($result,$data);
         } else {
 
-            $sqlUnique = $this->setTableSchedule($status,$this->sqlUnique);
+            $sqlUnique = $this->setTableSchedule($period,$this->sqlUnique);
             $pdo = $proxy->prepare($sqlUnique);
             $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
             $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
@@ -325,7 +329,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             $pdo->execute();
             $unique = self::encodeUTF8($pdo->fetchAll());
 
-            $sqlSelect = $this->setTableSchedule($status,$this->sqlSelect);
+            $sqlSelect = $this->setTableSchedule($period,$this->sqlSelect);
             $pdo = $proxy->prepare($sqlSelect);
             $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
             $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);

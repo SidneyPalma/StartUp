@@ -63,8 +63,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                         },
                         items: [
                             {
-                                status: 'P',
-                                params: '',
+                                status: 'A',
+                                params: 'all',
                                 xtype: 'schedulingperiodsearch',
                                 readOnlyColor: false,
                                 fieldStyle: {

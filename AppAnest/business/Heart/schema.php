@@ -182,7 +182,7 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setAllocationSchema () {
-        $periodid = $this->post->schedulingperiodid;
+        $periodid = $this->post->periodid;
 
         $sqlMonthly = "
             select
@@ -475,6 +475,7 @@ class schema extends \Smart\Data\Proxy {
                 $pdo->bindValue(":position", $position, \PDO::PARAM_INT);
                 $pdo->bindValue(":shift", $shift, \PDO::PARAM_STR);
                 $pdo->execute();
+                print_r($pdo->queryString);
             }
 
             $lastWeek = $dayWeek;

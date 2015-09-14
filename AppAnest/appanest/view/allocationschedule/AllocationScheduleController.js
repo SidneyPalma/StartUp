@@ -219,7 +219,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                         viewTable.setLoading('Removendo o registro...');
                         Ext.Ajax.request({
                             scope: me,
-                            url: viewTable.store.getUrl(),
+                            url: 'business/Class/tmp_turningmonthly.php',
                             params: {
                                 action: 'select',
                                 method: 'updateNaruralPerson',

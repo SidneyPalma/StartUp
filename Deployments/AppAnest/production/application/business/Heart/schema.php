@@ -228,9 +228,9 @@ class schema extends \Smart\Data\Proxy {
             select
             	sm.shift,
                 smp.position,
-                smp.allocationschema,
                 sm.contractorunitid,
                 smp.naturalpersonid,
+                smp.allocationschema,
                 dayofweek(sm.dutydate) as dayofweek
             from
                 allocationschema a
@@ -238,7 +238,7 @@ class schema extends \Smart\Data\Proxy {
                 inner join schedulingmonthly sm on ( sm.schedulingperiodid = sp.id )
                 inner join schedulingmonthlypartners smp on ( smp.schedulingmonthlyid = sm.id )
             where a.id = :id
-              and sm.dutydate >= sp.periodto - interval 7 day
+              and sm.dutydate >= sp.periodto - interval 6 day
               and sm.dutydate <= sp.periodto
             order by sm.shift, sm.contractorunitid, sm.dutydate, smp.allocationschema, smp.position";
 

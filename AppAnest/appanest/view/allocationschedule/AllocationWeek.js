@@ -25,6 +25,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
     listeners: {
         cellclick: 'onCellClick',
+        cellkeydown: 'onCellKeyDown',
         celldblclick: 'onScheduleCelldDlclick'
     },
 

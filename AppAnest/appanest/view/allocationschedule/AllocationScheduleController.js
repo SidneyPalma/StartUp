@@ -189,8 +189,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 'position',
                 'contractorunit',
                 'shiftdescription',
-                'subunitdescription',
-                'allocationschemadescription'
+                'subunitdescription'
+                //'allocationschemadescription'
             ];
 
         Ext.each(fields,function (field) {
@@ -202,7 +202,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             param = {},
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex;
+
+        if(status == 'P') {
+            return false;
+        }
+
+        if(cellIndex < 2) {
+            return false;
+        }
 
         if((record.get(dataIndex) == "...")||(!record.get(dataIndex.replace("description","")))) {
             return false;
@@ -237,13 +247,30 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
+    onCellKeyDown: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
+        var me = this;
+
+        if (e.getKey() === e.ENTER) {
+            me.onScheduleCelldDlclick(viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts);
+        }
+    },
+
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
         var me = this,
             param = {},
             view = me.getView(),
             period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly'),
             dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
+
+        if(status == 'P') {
+            return false;
+        }
+
+        if(cellIndex < 2) {
+            return false;
+        }
 
         if(!record.get(dataIndex.replace("description",""))) {
             return false;

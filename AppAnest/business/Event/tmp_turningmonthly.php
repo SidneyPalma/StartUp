@@ -2,6 +2,8 @@
 
 namespace AppAnest\Event;
 
+use Smart\Utils\Session;
+
 class tmp_turningmonthly extends \Smart\Data\Event {
 
     /**

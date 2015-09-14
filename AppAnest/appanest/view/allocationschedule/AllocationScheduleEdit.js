@@ -139,6 +139,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                             }, {
                                 xtype: 'splitter'
                             }, {
+                                allowBlank: false,
                                 width: 250,
                                 fieldLabel: 'Atribuicao',
                                 xtype: 'comboenum',

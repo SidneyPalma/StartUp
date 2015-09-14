@@ -159,6 +159,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             view = btn.up('window'),
             form = view.down('form');
+
+        me._success = function (batch, options) {
+            var namturalperson = view.down('naturalpersonsearch[name=naturalperson]').getRawValue();
+            view.zdata.set(view.dataIndex + 'description',namturalperson);
+            view.zdata.commit();
+            view.close();
+        }
+
+        me.setModuleData('tmp_turningmonthly');
+        me.setModuleForm(form);
+        me.updateRecord();
     },
 
     onShowAllocationScheduleEdit: function (view) {
@@ -185,12 +196,55 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         });
     },
 
+    onCellClick: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {
+        var me = this,
+            param = {},
+            view = me.getView(),
+            dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex;
+
+        if((record.get(dataIndex) == "...")||(!record.get(dataIndex.replace("description","")))) {
+            return false;
+        }
+
+        if (e.ctrlKey === true) {
+            Ext.Msg.show({
+                title:'Removendo Socio agendado!',
+                message: 'Confirma a remocao deste socio agendado?',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.QUESTION,
+                fn: function(btn) {
+                    if (btn === 'yes') {
+                        viewTable.setLoading('Removendo o registro...');
+                        Ext.Ajax.request({
+                            scope: me,
+                            url: viewTable.store.getUrl(),
+                            params: {
+                                action: 'select',
+                                method: 'updateNaruralPerson',
+                                query: record.get(dataIndex.replace("description",""))
+                            },
+                            callback: function(options, success, response) {
+                                viewTable.setLoading(false);
+                                record.set(dataIndex,'...');
+                                record.commit();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    },
+
     onScheduleCelldDlclick: function (viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {
-        var me = this;
+        var me = this,
             param = {},
             view = me.getView(),
             store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly'),
             dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
+
+        if(!record.get(dataIndex.replace("description",""))) {
+            return false;
+        }
 
         view.setLoading('Carregando edicao da escala ...');
 
@@ -208,32 +262,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 view.setLoading(false);
                 Ext.widget('allocationscheduleedit', {
                     xdata: records[0],
+                    zdata: record,
                     dataIndex: dataIndex
                 }).show();
             }
         });
-
-        //Ext.Ajax.request({
-        //    url: 'business/Class/schedulingmonthlypartners.php',
-        //    params: {
-        //        query: record.get(dataIndex),
-        //        action: 'select',
-        //        method: 'selectCode',
-        //        dataIndex: dataIndex,
-        //        rows: Ext.encode(record.data)
-        //    },
-        //    success: function(response) {
-        //        var object = Ext.decode(response.responseText),
-        //            result = Ext.create('AppAnest.model.allocationschedule.TMP_TurningMonthly',object.rows[0]);
-        //
-        //        view.setLoading(false);
-        //
-        //        Ext.widget('allocationscheduleedit', {
-        //            xdata: result,
-        //            dataIndex: dataIndex
-        //        }).show();
-        //    }
-        //});
     },
 
     startDatePicker: function(picker, date) {

@@ -53,6 +53,9 @@ Ext.define( 'AppAnest.model.allocationschedule.TMP_TurningMonthly', {
         }, {
             name: 'observation',
             type: 'auto'
+        }, {
+            name: 'observationlog',
+            type: 'auto'
         }
     ]
 

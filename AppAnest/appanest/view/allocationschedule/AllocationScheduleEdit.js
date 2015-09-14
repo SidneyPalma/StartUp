@@ -90,6 +90,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                             {
                                 flex: 2,
                                 pageSize: 0,
+                                hiddenNameId: 'contractorunitid',
                                 name:  'contractorunit',
                                 fieldLabel: 'Unidade',
                                 xtype: 'naturalpersonsearch',
@@ -133,6 +134,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                                 allowBlank: false,
                                 fieldLabel: 'Plantonista',
                                 name: 'naturalperson',
+                                hiddenNameId: 'naturalpersonid',
                                 xtype: 'naturalpersonsearch'
                             }, {
                                 xtype: 'splitter'
@@ -158,10 +160,14 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
                         name: 'observation'
                     }, {
                         height: 180,
-                        useMondaFont: true,
                         xtype: 'displayfield',
                         name: 'observationlog',
-                        fieldLabel: 'Historico'
+                        fieldLabel: 'Historico',
+                        useMondaFont: true,
+                        fieldStyle: {
+                            color: '#C02942;',
+                            fontSize: '16px;'
+                        }
                     }
                 ]
             }

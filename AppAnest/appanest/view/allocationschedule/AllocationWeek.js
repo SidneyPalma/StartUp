@@ -24,17 +24,25 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     },
 
     listeners: {
+        cellclick: 'onCellClick',
         celldblclick: 'onScheduleCelldDlclick'
     },
 
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
-        var metaStyle = '',
+        var me = this,
+            metaStyle = '',
             valueDefault = value,
             shift = record.get('shift'),
             enumType = ['010','011','012','013'],
             bordertop = parseInt(record.get('bordertop')),
             color = parseInt(record.get('position')) % 2 == 0,
-            field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','schema');
+            field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','schema'),
+            cell =  '<div>' +
+                        '<div style="float: left; width: 90%;">{0}</div>' +
+                        '<div style="float: left; width: 10%;" class="show-item">' +
+                            '<i class="icon-cancel-circled"></i>' +
+                        '</div>' +
+                    '</div>';
 
         if(shift == 'N') {
             metaStyle = 'background-color: rgba(242, 243, 235, .9);';
@@ -56,7 +64,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
         meta.style = metaStyle;
 
-        return (valueDefault) ? valueDefault : '';
+        //return (valueDefault) ? valueDefault : '';
+        return (value !== '...') ? Ext.String.format(cell,valueDefault) : '';
     },
 
     _getGroup: function () {

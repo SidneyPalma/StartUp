@@ -15,7 +15,7 @@ class tmp_turningmonthly extends \Smart\Data\Model {
     private $id;
 
     /**
-     * @Policy {"nullable":true}
+     * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true}
      */
     private $schedulingmonthlyid;
@@ -39,7 +39,7 @@ class tmp_turningmonthly extends \Smart\Data\Model {
     private $shift;
 
     /**
-     * @Policy {"nullable":false, "length":1}
+     * @Policy {"nullable":false, "length":3}
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $subunit;
@@ -61,6 +61,12 @@ class tmp_turningmonthly extends \Smart\Data\Model {
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $username;
+
+    /**
+     * @Policy {"nullable":true, "length":65535}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $observation;
 
     /**
      * @return type integer
@@ -203,6 +209,22 @@ class tmp_turningmonthly extends \Smart\Data\Model {
      */
     public function setUsername($username) {
         $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * @param type $observation
+     * @return \AppAnest\Model\tmp_turningmonthly
+     */
+    public function setObservation($observation) {
+        $this->observation = $observation;
         return $this;
     }
 

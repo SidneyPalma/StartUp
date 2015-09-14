@@ -139,6 +139,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
                     smp.allocationschema,
                     smp.releasetype,
                     smp.username,
+                    smp.observation as observationlog,
                     p.shortname as naturalperson,
                     cu.shortname as contractorunit,
                     getEnum('shift',smp.shift) as shiftdescription,
@@ -164,7 +165,7 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
 
             $sql = "
                 select
-                    null as id,
+                    $query as id,
                     $contractorunitid as contractorunitid,
                     '$contractorunit' as contractorunit,
                     $schedulingmonthlyid as schedulingmonthlyid,
@@ -193,6 +194,20 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         }
 
         self::_setRows($rows);
+
+        return self::getResultToJson();
+    }
+
+
+    public function updateNaruralPerson (array $data)  {
+        $query = $data['query'];
+        $proxy = $this->getStore()->getProxy();
+
+        $pdo = $proxy->prepare("update schedulingmonthlypartners set naturalpersonid = null where id = :id");
+
+        $pdo->bindValue(":id", $query, \PDO::PARAM_INT);
+
+        $pdo->execute();
 
         return self::getResultToJson();
     }

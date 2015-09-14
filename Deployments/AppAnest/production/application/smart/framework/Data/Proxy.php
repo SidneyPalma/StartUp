@@ -173,6 +173,7 @@ class Proxy extends \PDO {
                 }
             }
         }
+
         return $commit;
     }
 

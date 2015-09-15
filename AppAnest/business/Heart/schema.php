@@ -321,6 +321,7 @@ class schema extends \Smart\Data\Proxy {
             $pdo->bindValue(":dayofweek", $dayofweek, \PDO::PARAM_INT);
             $pdo->execute();
             $dayList = $pdo->fetchAll();
+
             $this->setSchema000($dayList);
 
             if($dayofweek != 1 && $dayofweek != 7) {
@@ -330,6 +331,7 @@ class schema extends \Smart\Data\Proxy {
                 $this->setSchema013($dayList,$dayofweek);
                 $this->setCaptarAll($dayList,$dayofweek);
             }
+
             $this->setSchema011($dayList,$dayofweek);
         }
     }

@@ -15,6 +15,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleEdit', {
 
     width: 650,
 
+    modal: true,
+
     layout: {
         type: 'fit'
     },

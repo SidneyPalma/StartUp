@@ -45,6 +45,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 break;
             case 1:
                 schemaweekday.store.removeAll();
+                view.down('numberfield[name=weekmax]').reset();
+                view.down('numberfield[name=weekold]').reset();
+                view.down('numberfield[name=weeknew]').reset();
+
                 Ext.suspendLayouts();
                 schemaweekday.reconfigure(schemaweekday.store, []);
                 Ext.resumeLayouts(true);

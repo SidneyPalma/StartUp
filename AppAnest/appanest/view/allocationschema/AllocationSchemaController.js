@@ -585,7 +585,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 me.setWeekDayData(schemaweekday);
 
-                view.down('numberfield[name=weekmax]').setValue(record.get('weekmax'));
                 view.down('numberfield[name=weekold]').setValue(record.get('weekold'));
                 view.down('numberfield[name=weeknew]').setValue(record.get('weeknew'));
 
@@ -611,6 +610,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 }
             });
         }
+
     }
 
 });

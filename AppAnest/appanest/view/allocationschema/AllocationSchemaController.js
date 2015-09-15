@@ -250,8 +250,16 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             return false;
         }
 
+        if(view.down('form').isValid() === false) {
+            Smart.Msg.warning(Smart.Msg.invalidFields());
+            return false;
+        }
+
         Smart.Msg.question("Confirma salvar o planejamento deste MAPA? <br/> <br/>" + information, function(btn) {
             if (btn === 'yes') {
+                var weekmax = view.down('numberfield[name=weekmax]'),
+                    weekold = view.down('numberfield[name=weekold]'),
+                    weeknew = view.down('numberfield[name=weeknew]');
 
                 store.clearFilter();
 
@@ -267,6 +275,11 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                     if (model.get('isselected')) {
                         model.set('schemamap',Ext.encode(list));
                         model.set('id',( model.get('id').length == 0 ? '' : model.get('id') ));
+
+                        model.set('weekmax',weekmax.getValue());
+                        model.set('weekold',weekold.getValue());
+                        model.set('weeknew',weeknew.getValue());
+
                         model.store.sync({
                             success: function (batch, options) {
                                 var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
@@ -438,7 +451,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 var fields = [], i,
                     dutyamount = store.getCount(),
                     weekold = parseInt(model.get('weekold')),
-                    weeknew = (weekold+1) > dutyamount ? 1 : weekold+1;
+                    weeknew = parseInt(model.get('weeknew'));
 
                 for (i = 1; i <= dutyamount; i++) {
                     fields.push({
@@ -473,6 +486,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 return fields;
             };
+
+        view.down('numberfield[name=weekmax]').setValue(store.getCount());
+        view.down('numberfield[name=weeknew]').setMaxValue(store.getCount());
 
         Ext.suspendLayouts();
 
@@ -569,8 +585,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 me.setWeekDayData(schemaweekday);
 
-                view.down('hiddenfield[name=weekold]').setValue(record.get('weekold'));
-                //view.down('numberfield[name=weeknew]').setValue(record.get('weeknew'));
+                view.down('numberfield[name=weekmax]').setValue(record.get('weekmax'));
+                view.down('numberfield[name=weekold]').setValue(record.get('weekold'));
+                view.down('numberfield[name=weeknew]').setValue(record.get('weeknew'));
 
                 return false;
             }

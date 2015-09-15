@@ -214,6 +214,7 @@ class schema extends \Smart\Data\Proxy {
                 asm.schemamap,
                 etl.code as weekday,
                 asm.weekold
+                asm.weeknew
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
@@ -338,9 +339,12 @@ class schema extends \Smart\Data\Proxy {
 
     private function setTurningH (array $dayWeek, $week, $partners) {
         $returns = array();
-        $weekold = intval($dayWeek['weekold']);
+        $weekmax = intval($dayWeek['weekmax']);
+        $weeknew = intval($dayWeek['weeknew']);
         $lastWeek = self::jsonToArray($dayWeek['schemamap']);
-        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
+//        $weekold = intval($dayWeek['weekold']);
+//        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
+        $weeks = (($weeknew + $week) > $weekmax) ? 1 : ($weeknew + $week);
         $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
 
         $i = 0;
@@ -497,7 +501,7 @@ class schema extends \Smart\Data\Proxy {
         $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysname[$dayofweek])[0];
         $partners = self::searchArray($this->naturalperson,'weekday',$daysname[$dayofweek]);
 
-        $week = 1;
+        $week = 0;
         foreach($dayList as $m) {
             $dutydate = $m['dutydate'];
             $schedulingperiodid = intval($m['schedulingperiodid']);

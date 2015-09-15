@@ -30,14 +30,16 @@ class allocationschemamap extends \Smart\Data\Cache {
                 asm.id,
                 asm.schemamap,
                 etl.code as weekday,
+                asm.weekmax,
                 asm.weekold,
+                asm.weeknew,
                 :allocationschemaid as allocationschemaid,
                 etl.description as weekdaydescription
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )
                 left join allocationschemamap asm on (
-                    asm.weekday = etl.code
+                        asm.weekday = etl.code
                     and asm.allocationschemaid = :allocationschemaid
                 )
             where et.name = 'weekday'
@@ -353,9 +355,10 @@ class allocationschemamap extends \Smart\Data\Cache {
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(30);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(22);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(05);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(22);
 
         $i = 3;
+
         // Unidades, Posições
         foreach ($rows as $record => $fields) {
             $objPHPExcel->getActiveSheet()

@@ -1,7 +1,7 @@
 3.1.7 (Brainy Betty)
-c05ea0b79cb72a959f07a5b2533eaccec5ab50fd
+c4fd194c3adbdcb9777455056fc399837837610b
 o:Sass::Tree::RootNode
-:@template"P$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
+:@template"M$image-search-path: 'C:/BomSenso/StartUp/AppAnest/../Deployments/AppAnest/production/application/resources';
 $theme-name:  'ext-theme-crisp' !default;
 $include-appanest-application: true;
 $include-appanest-controller-app: true;
@@ -1076,8 +1076,8 @@ $include-extthemeneptune-toolbar-toolbar: true;
 $include-smart-buttonexporter: false;
 $include-smart-cookie: false;
 $include-smart-format: false;
-$include-smart-message: false;
-$include-smart-msg: false;
+$include-smart-message: true;
+$include-smart-msg: true;
 $include-smart-protect: false;
 $include-smart-report: false;
 $include-smart-resource: true;
@@ -1113,7 +1113,7 @@ $include-smart-plugins-textmask: true;
 $include-smart-plugins-treefilter: true;
 $include-smart-util-cookie: false;
 $include-smart-util-format: false;
-$include-smart-util-message: false;
+$include-smart-util-message: true;
 $include-smart-util-protect: false;
 $include-smart-util-report: false;
 $include-smart-util-resource: true;
@@ -2477,8 +2477,8 @@ $relative-image-path-for-uis: $AppAnest-resource-path;
 ;@;0;	[ ;o;;@;F;i1;i1;"!include-smart-buttonexportero;
 ;@;0;	[ ;o;;@;F;i2;i2;"include-smart-cookieo;
 ;@;0;	[ ;o;;@;F;i3;i3;"include-smart-formato;
-;@;0;	[ ;o;;@;F;i4;i4;"include-smart-messageo;
-;@;0;	[ ;o;;@;F;i5;i5;"include-smart-msgo;
+;@;0;	[ ;o;;@;T;i4;i4;"include-smart-messageo;
+;@;0;	[ ;o;;@;T;i5;i5;"include-smart-msgo;
 ;@;0;	[ ;o;;@;F;i6;i6;"include-smart-protecto;
 ;@;0;	[ ;o;;@;F;i7;i7;"include-smart-reporto;
 ;@;0;	[ ;o;;@;T;i8;i8;"include-smart-resourceo;
@@ -2514,7 +2514,7 @@ $relative-image-path-for-uis: $AppAnest-resource-path;
 ;@;0;	[ ;o;;@;T;iV;iV;"%include-smart-plugins-treefiltero;
 ;@;0;	[ ;o;;@;F;iW;iW;"include-smart-util-cookieo;
 ;@;0;	[ ;o;;@;F;iX;iX;"include-smart-util-formato;
-;@;0;	[ ;o;;@;F;iY;iY;"include-smart-util-messageo;
+;@;0;	[ ;o;;@;T;iY;iY;"include-smart-util-messageo;
 ;@;0;	[ ;o;;@;F;iZ;iZ;"include-smart-util-protecto;
 ;@;0;	[ ;o;;@;F;i[;i[;"include-smart-util-reporto;
 ;@;0;	[ ;o;;@;T;i\;i\;" include-smart-util-resourceo;

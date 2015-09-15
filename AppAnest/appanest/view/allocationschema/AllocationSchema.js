@@ -237,31 +237,39 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                             cellclick: 'onCellClick',
                                                             celldblclick: 'onCellDblClick'
                                                         }
-                                                    //}, {
-                                                        //xtype: 'fieldcontainer',
-                                                        //layout: 'hbox',
-                                                        //fieldLabel: 'Marcadores',
-                                                        //labelStyle: 'color: blue; font-size: 14px;',
-                                                        //defaultType: 'numberfield',
-                                                        //defaults: {
-                                                        //    hideTrigger: true,
-                                                        //    useMondaFont: true,
-                                                        //    submitValue: false,
-                                                        //    readOnlyColor: true
-                                                        //},
-                                                        //items: [
-                                                        //    {
-                                                        //        flex: 1,
-                                                        //        name: 'weekold',
-                                                        //        fieldLabel: 'Anterior'
-                                                        //    }, {
-                                                        //        xtype: 'splitter'
-                                                        //    }, {
-                                                        //        flex: 1,
-                                                        //        name: 'weeknew',
-                                                        //        fieldLabel: 'Atual'
-                                                        //    }
-                                                        //]
+                                                    }, {
+                                                        xtype: 'fieldcontainer',
+                                                        layout: 'hbox',
+                                                        fieldLabel: 'Marcadores Semanais',
+                                                        labelStyle: 'color: blue; font-size: 14px;',
+                                                        defaultType: 'numberfield',
+                                                        defaults: {
+                                                            allowBlank: false,
+                                                            hideTrigger: true,
+                                                            useMondaFont: true,
+                                                            readOnlyColor: true
+                                                        },
+                                                        items: [
+                                                            {
+                                                                flex: 1,
+                                                                name: 'weekmax',
+                                                                fieldLabel: 'MAX'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                name: 'weekold',
+                                                                fieldLabel: 'OLD'
+                                                            }, {
+                                                                xtype: 'splitter'
+                                                            }, {
+                                                                flex: 1,
+                                                                minValue: 1,
+                                                                name: 'weeknew',
+                                                                fieldLabel: 'NEW',
+                                                                readOnlyColor: false
+                                                            }
+                                                        ]
                                                     }
                                                 ]
                                             }

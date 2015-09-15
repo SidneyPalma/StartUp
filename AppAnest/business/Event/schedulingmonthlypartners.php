@@ -2,8 +2,6 @@
 
 namespace AppAnest\Event;
 
-use Smart\Utils\Session;
-
 class schedulingmonthlypartners extends \Smart\Data\Event {
 
     /**

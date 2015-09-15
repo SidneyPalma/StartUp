@@ -37,6 +37,7 @@ class tmp_turningmonthly extends \Smart\Data\Event {
 
         $observation = "$observationNew <br/> $date - $username <br/> <br/> $observationOld";
 
+        $model->setReleasetype('M');
         $model->setObservation($observation);
     }
 

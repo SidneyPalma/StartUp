@@ -211,7 +211,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         $dateOf = $data['dateOf'];
         $dateTo = $data['dateTo'];
         $period = $data['period'];
-        $status = $data['status'];
         $picker = $data['pickerView'];
         $proxy = $this->getStore()->getProxy();
 

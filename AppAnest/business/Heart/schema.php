@@ -493,6 +493,7 @@ class schema extends \Smart\Data\Proxy {
 
     private function setSchema002 (array $dayList, $dayofweek) {
         $daysname = $this->daysweek['daysname'];
+
         $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysname[$dayofweek])[0];
         $partners = self::searchArray($this->naturalperson,'weekday',$daysname[$dayofweek]);
 

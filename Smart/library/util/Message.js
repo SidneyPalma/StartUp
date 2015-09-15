@@ -4,10 +4,6 @@ Ext.define( 'Smart.util.Message', {
 
     alternateClassName: ['Smart.Msg', 'Smart.Message'],
 
-    requires: [
-        'Ext.MessageBox'
-    ],
-
     get: function (id, msg) {
         return msg;
 //        return Smart.App.getName()+'.'+msg;

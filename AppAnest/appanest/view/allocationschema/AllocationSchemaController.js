@@ -5,6 +5,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     alias: 'controller.allocationschema',
 
     requires: [
+        'Smart.util.Message',
         'AppAnest.view.allocationschema.*'
     ],
 
@@ -147,96 +148,143 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     onCreateSchemaMonthly: function () {
         var me = this,
             view = me.getView(),
-            schedulingperiodsearch = view.down('schedulingperiodsearch'),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             win = Ext.widget('allocationschemaprocess'),
-            id = view.down('hiddenfield[name=id]').getValue();
+            id = view.down('hiddenfield[name=id]').getValue(),
+            warning = 'Todos os dados do processsamento anterior serao perdidos!';
 
-        view.setLoading('Processando Escala Mensal ...');
+        if(status == 'P') {
+            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+            return false;
+        }
 
-        Ext.Ajax.request({
-            timeout: (60000 * 10), // 10 minutos
-            url: 'business/Class/schema.php',
-            params: {
-                action: 'selectTurningSchema',
-                periodid: schedulingperiodsearch.getValue()
-            },
-            success: function(response){
-                var text = response.responseText;
-                view.setLoading(false);
+        Smart.Msg.question("Confirma o processamento desta escala? <br/> <br/>" + warning, function(btn) {
+            if (btn === 'yes') {
+
+                view.setLoading('Processando Escala Mensal ...');
+
+                Ext.Ajax.request({
+                    timeout: (60000 * 10), // 10 minutos
+                    url: 'business/Class/schema.php',
+                    params: {
+                        action: 'selectTurningSchema',
+                        periodid: period.getValue()
+                    },
+                    success: function(response){
+                        view.setLoading(false);
+                    }
+                });
+
             }
         });
+
     },
 
     onUpdateSchemaMonthly: function () {
+
         var me = this,
             list = [],
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             form = view.down('form[name=schemamonthly]'),
             schema = Ext.getStore('allocationschema'),
-            schemamonthly = Ext.getStore('allocationschemamonthly');
+            schemamonthly = Ext.getStore('allocationschemamonthly'),
+            information = 'Este planejamento sera usado no processamento da escala!';
 
-
-        schemamonthly.clearFilter();
-        schemamonthly.each(function(record,index) {
-            list.push(record.data);
-        },me);
-
-        form.down('hiddenfield[name=schemaweek]').setValue(Ext.encode(list));
-
-        me.setModuleData(schema);
-        me.setModuleForm(form);
-
-        me._success = function (frm, action) {
-            var record = frm.getRecord(),
-                result = schema.findRecord('id',record.get('id'));
-
-            view.down('radiogroup').down('#type1').setDisabled(false);
-            form.down('hiddenfield[name=id]').setValue(record.get('id'));
-            result.set('schemaweek',record.get('schemaweek'));
-            result.commit();
+        if(status == 'P') {
+            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+            return false;
         }
 
-        me._failure = function (frm, action) {
-        }
+        Smart.Msg.question("Confirma salvar o planejamento desta escala? <br/> <br/>" + information, function(btn) {
+            if (btn === 'yes') {
 
-        me.updateModule();
+                schemamonthly.clearFilter();
+                schemamonthly.each(function(record,index) {
+                    list.push(record.data);
+                },me);
+
+                form.down('hiddenfield[name=schemaweek]').setValue(Ext.encode(list));
+
+                me.setModuleData(schema);
+                me.setModuleForm(form);
+
+                me._success = function (frm, action) {
+                    var record = frm.getRecord(),
+                        result = schema.findRecord('id',record.get('id'));
+
+                    view.down('radiogroup').down('#type1').setDisabled(false);
+                    form.down('hiddenfield[name=id]').setValue(record.get('id'));
+                    result.set('schemaweek',record.get('schemaweek'));
+                    result.commit();
+                }
+
+                me._failure = function (frm, action) {
+                }
+
+                me.updateModule();
+
+            }
+        });
     },
 
     onUpdateSchemaWeekDay: function () {
         var me = this,
             list = [],
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             grid = view.down('gridpanel[name=schemamonthlymap]'),
-            store = Ext.getStore('allocationschemaweekday');
+            store = Ext.getStore('allocationschemaweekday'),
+            information = 'Este planejamento sera usado no processamento da escala!';
 
-        store.clearFilter();
-
-        if ( store.getCount() == 0) {
+        if(status == 'P') {
+            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
             return false;
         }
 
-        store.each(function(record,index) {
-            list.push(record.data);
-        },me);
+        if(store.getCount() == 0) {
+            Smart.Msg.attention("Nao ha um MAPA selecionado para salvar no planejamento!");
+            return false;
+        }
 
-        grid.store.each(function(model,index) {
-            if (model.get('isselected')) {
-                model.set('schemamap',Ext.encode(list));
-                model.set('id',( model.get('id').length == 0 ? '' : model.get('id') ));
-                model.store.sync({
-                    success: function (batch, options) {
-                        var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+        Smart.Msg.question("Confirma salvar o planejamento deste MAPA? <br/> <br/>" + information, function(btn) {
+            if (btn === 'yes') {
 
-                        if((options.operations.create)&&(resultSet !== null) && (resultSet.success)) {
-                            var opr = batch.getOperations()[0],
-                                rec = opr.getRecords()[0];
-                            model.set('id',rec.get('id'));
-                            model.commit();
-                        }
+                store.clearFilter();
+
+                if ( store.getCount() == 0) {
+                    return false;
+                }
+
+                store.each(function(record,index) {
+                    list.push(record.data);
+                },me);
+
+                grid.store.each(function(model,index) {
+                    if (model.get('isselected')) {
+                        model.set('schemamap',Ext.encode(list));
+                        model.set('id',( model.get('id').length == 0 ? '' : model.get('id') ));
+                        model.store.sync({
+                            success: function (batch, options) {
+                                var resultSet = batch.getOperations().length !== 0 ? batch.operations[0].getResultSet() : null;
+
+                                if((options.operations.create)&&(resultSet !== null) && (resultSet.success)) {
+                                    var opr = batch.getOperations()[0],
+                                        rec = opr.getRecords()[0];
+                                    model.set('id',rec.get('id'));
+                                    model.commit();
+                                }
+                            }
+                        });
                     }
-                });
+                },me);
+
             }
-        },me);
+        });
+
     },
 
     selectAllocationSchema: function(combo, record, eOpts) {
@@ -252,10 +300,13 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     },
 
     onAllocationSchemaBeforeEdit: function (editor, context, eOpts) {
-        var fixed = [2, 3, 4, 5, 6, 7, 8],
+        var me = this,
+            fixed = [2, 3, 4, 5, 6, 7, 8],
             items = editor.getEditor().items,
             field = context.field.replace('description',''),
             lists = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+
 
         Ext.each(fixed, function (value, index) {
             var weekday = parseInt(context.record.get(lists[index]));
@@ -268,41 +319,71 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     onDeleteMonthly: function () {
         var me = this,
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             id = view.down('hiddenfield[name=id]').getValue(),
             schema = Ext.getStore('allocationschema'),
             record = schema.findRecord('id',id),
-            schemamonthly = Ext.getStore('allocationschemamonthly');
+            schemamonthly = Ext.getStore('allocationschemamonthly'),
+            warning = 'Todos os MAPAS criados serao perdidos!';
 
-        if(record) {
-            record.set('schemaweek',null);
-            record.store.sync({
-                success: function (batch, options) {
-                    record.commit();
-                    schemamonthly.load();
-                    view.down('radiogroup').down('#type1').setDisabled(true);
-                }
-            });
+        if(status == 'P') {
+            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+            return false;
         }
+
+        Smart.Msg.question("Confirma limpar o planejamento da escala? <br/> <br/>" + warning, function(btn) {
+            if (btn === 'yes') {
+
+                if(record) {
+                    record.set('schemaweek',null);
+                    record.store.sync({
+                        success: function (batch, options) {
+                            record.commit();
+                            schemamonthly.load();
+                            view.down('radiogroup').down('#type1').setDisabled(true);
+                        }
+                    });
+                }
+
+            }
+        });
+
     },
 
     onDeleteWeekDay: function () {
         var me = this,
             view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             grid = view.down('gridpanel[name=schemamonthlymap]'),
-            weekdayStore = view.down('gridpanel[name=schemaweekday]').getStore();
+            weekdayStore = view.down('gridpanel[name=schemaweekday]').getStore(),
+            warning = 'Todos os dados criados deste MAPA serao perdidos!';
 
-        grid.store.each(function(model,index) {
-            if ((model.get('isselected'))&&(model.get('id').length != 0)) {
-                model.set('schemamap','');
-                model.store.sync({
-                    success: function (batch, options) {
-                        weekdayStore.removeAll();
-                        model.set('isselected',false);
-                        model.commit();
+        if(status == 'P') {
+            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+            return false;
+        }
+
+        Smart.Msg.question("Confirma limpar o planejamento do MAPA? <br/> <br/>" + warning, function(btn) {
+            if (btn === 'yes') {
+
+                grid.store.each(function(model,index) {
+                    if ((model.get('isselected'))&&(model.get('id').length != 0)) {
+                        model.set('schemamap','');
+                        model.store.sync({
+                            success: function (batch, options) {
+                                weekdayStore.removeAll();
+                                model.set('isselected',false);
+                                model.commit();
+                            }
+                        });
                     }
-                });
+                },me);
+
             }
-        },me);
+        });
+
     },
 
     onCellDblClickWeekDay: function ( viewTable, td, cellIndex, record, tr, rowIndex, e, eOpts ) {

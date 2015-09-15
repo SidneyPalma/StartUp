@@ -87,7 +87,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                 items: [
                                     {
                                         status: 'A',
-                                        params: '',
+                                        params: 'all',
                                         xtype: 'schedulingperiodsearch',
                                         readOnlyColor: false,
                                         fieldStyle: {
@@ -171,7 +171,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                             change: 'onChangeFilterMonthly'
                                                         }
                                                     }, {
-                                                        //disabled: true,
                                                         xtype: 'button',
                                                         glyph: 0xec2b,
                                                         scale: 'medium',
@@ -470,15 +469,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                 buttonAlign: 'center',
                                 buttons: [
                                     {
-                                    //    glyph: 0xec2b,
-                                    //    scale: 'medium',
-                                    //    text: 'Processar Escala',
-                                    //    showSmartTheme: 'blue',
-                                    //    handler: 'onCreateSchemaMonthly'
-                                    //}, {
                                         glyph: 0xe86c,
                                         scale: 'medium',
-                                        text: 'Salvar Planejamento',
+                                        text: 'Salvar Escala',
                                         showSmartTheme: 'red-dark',
                                         handler: 'onUpdateSchemaMonthly'
                                     }, {
@@ -513,7 +506,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                     {
                                         glyph: 0xe86c,
                                         scale: 'medium',
-                                        text: 'Salvar Planejamento',
+                                        text: 'Salvar Mapa',
                                         showSmartTheme: 'red-dark',
                                         handler: 'onUpdateSchemaWeekDay'
                                     }, {

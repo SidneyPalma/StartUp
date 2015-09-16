@@ -363,8 +363,8 @@ class Schedule extends \Smart\Data\Proxy {
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(14);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(18);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(02);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(02);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(1.8);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(1.8);
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
@@ -451,10 +451,6 @@ class Schedule extends \Smart\Data\Proxy {
 
             $tmp = isset($rows[$i]['contractorunit']) ? $rows[$i]['contractorunit'] : '';
 
-//            // Turno
-//            $objPHPExcel->getActiveSheet()
-//                ->setSharedStyle($sharedStyle1, "B$j:C$j");
-
             $objPHPExcel->getActiveSheet()
                 ->setSharedStyle($sharedStyle2, "A$j:J$j")
                 ->getStyle("D$j:J$j")->applyFromArray($fontStyle2);
@@ -473,6 +469,10 @@ class Schedule extends \Smart\Data\Proxy {
 
                 unset($objDrawing);
             }
+
+            // Turno
+            $objPHPExcel->getActiveSheet()
+                ->setSharedStyle($sharedStyle5, "B$j:C$j");
 
             // Noturnos
             if($record['shift'] == 'N') {
@@ -521,6 +521,7 @@ class Schedule extends \Smart\Data\Proxy {
 
                 unset($objDrawing);
             }
+
             // Merge nas Unidades
             if($contractorunit !== $tmp) {
 

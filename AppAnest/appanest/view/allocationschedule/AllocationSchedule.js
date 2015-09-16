@@ -138,9 +138,16 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         items: [
                                             {
                                                 scale: 'medium',
+                                                xtype: 'splitbutton',
                                                 glyph: 0xe887,
-                                                text: 'Frequencia',
-                                                handler: 'showFrequencySheet'
+                                                text: 'Folha',
+                                                handler: 'showFrequencySheet',
+                                                menu: [
+                                                    {
+                                                        handler: 'showselectSchedule',
+                                                        text: 'Gerar arquivo da Escala Mensal'
+                                                    }
+                                                ]
                                             },{
                                                 scale: 'medium',
                                                 glyph: 0xe898,

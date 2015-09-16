@@ -88,6 +88,15 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
+    showselectSchedule: function () {
+        var me = this,
+            view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            record = period.getSelectedRecord();
+
+        window.open('business/Class/Report/Schedule.php?action=selectSchedule&period='+record.get('id'));
+    },
+
     showFrequencySheet: function () {
         var me = this,
             view = me.getView(),

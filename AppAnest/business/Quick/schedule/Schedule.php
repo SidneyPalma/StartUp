@@ -562,6 +562,11 @@ class Schedule extends \Smart\Data\Proxy {
             // Destacar turnos especiais ($featured(array)))
             foreach($daysname as $key=>$d) {
                 $schema = $d . "schema";
+                if(isset($record[$schema]) && ($record[$schema] == '010')) {
+                    $coll = $colls[$d];
+                    $objPHPExcel->getActiveSheet()
+                        ->setCellValue($coll . $j,$record[$d . "description"] . '*');
+                }
                 if(isset($record[$schema]) && in_array($record[$schema], $featured)) {
                     $coll = $colls[$d];
                     $objPHPExcel->getActiveSheet()

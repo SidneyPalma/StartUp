@@ -226,7 +226,15 @@ class Schedule extends \Smart\Data\Proxy {
     }
 
     private function setScheduleWeek (&$objPHPExcel,$rows,$week,$dateof) {
+        $featured = array('010','012','013');
+        $daysname = $this->daysweek['daysname'];
         $index = str_pad(($week+1),2,"0",STR_PAD_LEFT);
+        $colls = array(
+            "mon"=>"D", "tue"=>"E", "wed"=>"F",
+            "thu"=>"G", "fri"=>"H",
+            "sat"=>"I", "sun"=>"J"
+        );
+
         $objPHPExcel->createSheet(NULL);
         $objPHPExcel->setActiveSheetIndex($week);
         $objPHPExcel->getActiveSheet()->setTitle("SEMANA$index");
@@ -341,6 +349,12 @@ class Schedule extends \Smart\Data\Proxy {
             )
         );
         $fontStyle3 = array(
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '033649'),
+                'size'  => 9,
+                'name'  => 'Calibri'
+            ),
             'alignment' => array(
                 'vertical'      => PHPExcel_Style_Alignment::VERTICAL_CENTER,
                 'horizontal'    => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
@@ -544,6 +558,20 @@ class Schedule extends \Smart\Data\Proxy {
                 $old = $i+1;
 
             }
+
+            // Destacar turnos especiais ($featured(array)))
+            foreach($daysname as $key=>$d) {
+                $schema = $d . "schema";
+                if(isset($record[$schema]) && in_array($record[$schema], $featured)) {
+                    $coll = $colls[$d];
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle($coll . $j)->applyFromArray($fontStyle3);
+                }
+            }
+
+            // Merge Colunas LG
+            $objPHPExcel->getActiveSheet()
+                ->mergeCells("B$j:C$j");
 
             $i++;
         }

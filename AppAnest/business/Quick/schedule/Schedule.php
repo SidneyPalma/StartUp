@@ -412,6 +412,7 @@ class Schedule extends \Smart\Data\Proxy {
         $i = 1;
 
         $old = $i;
+        $new = $i;
 
         $schedule_sun = imagecreatefrompng('../../../resources/images/appanest/schedule_sun.png');
         $schedule_moon = imagecreatefrompng('../../../resources/images/appanest/schedule_moon.png');
@@ -527,6 +528,11 @@ class Schedule extends \Smart\Data\Proxy {
 
                 $cells = "A" . ($old+1) . ":A" . ($i+1);
 
+                // Alternando cores das linhas
+                if($new % 2 == 0) {
+                    $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle5, $cells);
+                }
+
                 $objPHPExcel->getActiveSheet()
                     ->mergeCells($cells)
                     ->getStyle($cells)
@@ -534,7 +540,9 @@ class Schedule extends \Smart\Data\Proxy {
                     ->getAlignment()
                     ->setWrapText(true);
 
+                $new++;
                 $old = $i+1;
+
             }
 
             $i++;
@@ -542,9 +550,9 @@ class Schedule extends \Smart\Data\Proxy {
 
         // Estilos
         $objPHPExcel->getActiveSheet()
+            ->setSharedStyle($sharedStyle1, "A$j")
             ->setSharedStyle($sharedStyle1, "A1:J1")
             ->getStyle("A1:J1")->applyFromArray($fontStyle1);
-
     }
 
 }

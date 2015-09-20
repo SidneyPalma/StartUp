@@ -12,7 +12,13 @@ Ext.define( 'AppAnest.model.allocationschedule.SchedulingMonthlyPartners', {
             name: 'naturalpersonid',
             type: 'int'
         }, {
-            name: 'shortname',
+            name: 'naturalperson',
+            type: 'auto'
+        }, {
+            name: 'contractorunitid',
+            type: 'int'
+        }, {
+            name: 'contractorunit',
             type: 'auto'
         }, {
             name: 'position',
@@ -42,7 +48,16 @@ Ext.define( 'AppAnest.model.allocationschedule.SchedulingMonthlyPartners', {
             name: 'releasetypedescription',
             type: 'auto'
         }, {
+            name: 'shifthours',
+            type: 'int'
+        }, {
             name: 'username',
+            type: 'auto'
+        }, {
+            name: 'observation',
+            type: 'auto'
+        }, {
+            name: 'observationlog',
             type: 'auto'
         }
     ]

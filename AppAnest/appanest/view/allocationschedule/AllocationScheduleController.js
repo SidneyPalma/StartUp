@@ -219,6 +219,26 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         form.down('hiddenfield[name=releasetype]').setValue('M');
     },
 
+    onShowAllocationScheduleScore: function (view) {
+        var me = this,
+            form = view.down('form'),
+            fields = [
+                'dutydate',
+                'position',
+                'naturalperson',
+                'contractorunit',
+                'shiftdescription',
+                'subunitdescription',
+                'allocationschemadescription'
+            ];
+
+        form.loadRecord(view.xdata);
+
+        Ext.each(fields,function (field) {
+            form.getForm().findField(field).setReadOnlyColor(true);
+        });
+    },
+
     onShowAllocationScheduleNew: function (view) {
         var me = this,
             form = view.down('form'),
@@ -287,13 +307,15 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                     }
                 });
             } else {
-                Ext.widget('allocationschedulenew', {
-                    xdata: record,
-                    dataIndex: dataIndex
-                }).show(null, function() {
-                    this.down('datefield[name=dutydate]').setMinValue(period.foundRecord().get('periodof'));
-                    this.down('datefield[name=dutydate]').setMaxValue(period.foundRecord().get('periodto'));
-                });
+                if(parseInt(record.get('bordertop')) == 1) {
+                    Ext.widget('allocationschedulenew', {
+                        xdata: record,
+                        dataIndex: dataIndex
+                    }).show(null, function() {
+                        this.down('datefield[name=dutydate]').setMinValue(period.foundRecord().get('periodof'));
+                        this.down('datefield[name=dutydate]').setMaxValue(period.foundRecord().get('periodto'));
+                    });
+                }
             }
 
         }
@@ -313,12 +335,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             view = me.getView(),
             period = view.down('schedulingperiodsearch'),
             status = period.foundRecord().get('status'),
-            store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly'),
             dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
-
-        if(status == 'P') {
-            return false;
-        }
 
         if(cellIndex < 2) {
             return false;
@@ -328,28 +345,62 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             return false;
         }
 
-        view.setLoading('Carregando edicao da escala ...');
+        if(status == 'P') {
+            view.setLoading('Carregando edicao da escala ...');
 
-        param = {
-            query: record.get(dataIndex),
-            action: 'select',
-            method: 'selectCode',
-            period: period.getValue(),
-            dataIndex: dataIndex,
-            rows: Ext.encode(record.data)
-        };
+            param = {
+                query: record.get(dataIndex),
+                action: 'select',
+                method: 'selectCode',
+                period: period.getValue(),
+                dataIndex: dataIndex,
+                rows: Ext.encode(record.data)
+            };
 
-        store.setParams(param).load({
-            scope: me,
-            callback: function(records, operation, success) {
-                view.setLoading(false);
-                Ext.widget('allocationscheduleedit', {
-                    xdata: records[0],
-                    zdata: record,
-                    dataIndex: dataIndex
-                }).show();
-            }
-        });
+            var storeScore = Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyScore');
+            var storePartners = Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyPartners');
+
+            storePartners.setParams(param).load({
+                scope: me,
+                callback: function(records, operation, success) {
+                    view.setLoading(false);
+                    Ext.widget('allocationschedulescore', {
+                        xdata: records[0],
+                        zdata: record,
+                        dataIndex: dataIndex
+                    }).show(null,function() {
+
+                    });
+                }
+            });
+        }
+
+        if(status == 'A') {
+            view.setLoading('Carregando edicao da escala ...');
+
+            param = {
+                query: record.get(dataIndex),
+                action: 'select',
+                method: 'selectCode',
+                period: period.getValue(),
+                dataIndex: dataIndex,
+                rows: Ext.encode(record.data)
+            };
+
+            var storeTurning = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly');
+
+            storeTurning.setParams(param).load({
+                scope: me,
+                callback: function(records, operation, success) {
+                    view.setLoading(false);
+                    Ext.widget('allocationscheduleedit', {
+                        xdata: records[0],
+                        zdata: record,
+                        dataIndex: dataIndex
+                    }).show();
+                }
+            });
+        }
     },
 
     startDatePicker: function(picker, date) {

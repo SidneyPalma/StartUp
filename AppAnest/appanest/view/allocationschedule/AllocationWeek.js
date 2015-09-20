@@ -41,7 +41,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             cell =  '<div>' +
                         '<div style="float: left; width: 90%;">{0}</div>' +
                         '<div style="float: left; width: 10%;" class="delete-item">' +
-                            '<i class="icon-cancel-circled"></i>' +
+                            '<i class="icon-cancel-squared"></i>' +
                         '</div>' +
                     '</div>';
 

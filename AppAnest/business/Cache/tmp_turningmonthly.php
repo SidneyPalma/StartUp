@@ -28,12 +28,11 @@ class tmp_turningmonthly extends \Smart\Data\Cache {
 
         $sql = "
                 select
-                    sm.id,
+                    smp.id,
                     sm.schedulingperiodid,
                     sm.contractorunitid,
                     sm.dutydate,
                     sm.shift,
-                    smp.id,
                     smp.schedulingmonthlyid,
                     smp.naturalpersonid,
                     smp.position,

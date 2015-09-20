@@ -40,7 +40,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','schema'),
             cell =  '<div>' +
                         '<div style="float: left; width: 90%;">{0}</div>' +
-                        '<div style="float: left; width: 10%;" class="show-item">' +
+                        '<div style="float: left; width: 10%;" class="delete-item">' +
                             '<i class="icon-cancel-circled"></i>' +
                         '</div>' +
                     '</div>';
@@ -81,7 +81,13 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                         var bordertop = parseInt(record.get('bordertop')),
                             color = parseInt(record.get('rownumber')) % 2 == 0,
                             first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
-                            metaStyle = (color) ? 'background-color: rgba(185, 233, 251, .8);' : 'background-color: rgba(185, 233, 251, .3);';
+                            metaStyle = (color) ? 'background-color: rgba(185, 233, 251, .8);' : 'background-color: rgba(185, 233, 251, .3);',
+                            cell =  '<div>' +
+                                        '<div style="float: left; width: 90%;">{0}</div>' +
+                                        '<div style="float: left; width: 10%;" class="insert-item">' +
+                                            '<i class="icon-plus-squared"></i>' +
+                                        '</div>' +
+                                    '</div>';
 
                         if (first) {
                             var i = rowIndex + 1;
@@ -102,7 +108,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
                         meta.style = metaStyle;
 
-                        return first ? value : '';
+                        //return first ? value : '';
+                        return (first) ? Ext.String.format(cell,value) : '';
                     }
                 }, {
                     cls: 'x-column-header-inner-dark',
@@ -159,10 +166,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                         }
 
                         return  '<div style="font-size: 15px;">' +
-                            returnPosition +
-                            returnShift +
-                            returnSubunit +
-                            '</div>';
+                                    returnPosition +
+                                    returnShift +
+                                    returnSubunit +
+                                '</div>';
                     }
                 }
             ];

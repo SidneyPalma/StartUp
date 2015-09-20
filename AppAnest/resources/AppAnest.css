@@ -1,3 +1,14 @@
+.insert-item:hover {
+    cursor: pointer;
+    color: rgba(23, 153, 138,1);
+}
+
+.insert-item {
+    line-height: 15px;
+    color: rgba(23, 153, 138,.3);
+}
+
+
 .show-item {
     color: rgba(138, 155, 15, .3);
 }
@@ -7,8 +18,12 @@
     color: rgba(138, 155, 15, 1);
 }
 
+.delete-item {
+    color: rgba(252, 24, 36,.3);
+}
+
 .delete-item:hover {
-    color: #FB3C4A;
+    color: rgba(252, 24, 36,1);
     cursor: pointer;
 }
 

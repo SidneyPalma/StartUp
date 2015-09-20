@@ -183,28 +183,59 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         me.updateRecord();
     },
 
-    onShowAllocationScheduleEdit: function (view) {
-        var me = this;
+    insertAllocationSchedule: function (btn) {
+        var me = this,
+            view = btn.up('window'),
+            form = view.down('form'),
+            store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly');
 
-        view.down('form').loadRecord(view.xdata);
+        me._success = function (batch, options) {
+            view.close();
+            Ext.getStore('allocationschedule').load();
+        }
 
-        me.setReadOnlyFields(view.down('form'),'E');
+        me.setModuleData(store);
+        me.setModuleForm(form);
+        me.updateModule();
     },
 
-    setReadOnlyFields: function (form, type) {
+    onShowAllocationScheduleEdit: function (view) {
         var me = this,
+            form = view.down('form'),
             fields = [
                 'dutydate',
                 'position',
                 'contractorunit',
                 'shiftdescription',
                 'subunitdescription'
-                //'allocationschemadescription'
             ];
+
+        form.loadRecord(view.xdata);
 
         Ext.each(fields,function (field) {
             form.getForm().findField(field).setReadOnlyColor(true);
         });
+
+        form.down('hiddenfield[name=releasetype]').setValue('M');
+    },
+
+    onShowAllocationScheduleNew: function (view) {
+        var me = this,
+            form = view.down('form'),
+            fields = [
+                'position',
+                'contractorunit'
+            ];
+
+        form.loadRecord(view.xdata);
+
+        Ext.each(fields,function (field) {
+            form.getForm().findField(field).setReadOnlyColor(true);
+        });
+
+        form.down('hiddenfield[name=id]').setValue(null);
+        form.down('hiddenfield[name=releasetype]').setValue('M');
+
     },
 
     onCellClick: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {
@@ -219,7 +250,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             return false;
         }
 
-        if(cellIndex < 2) {
+        if((cellIndex < 2) && (cellIndex != 0)) {
             return false;
         }
 
@@ -228,31 +259,43 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
 
         if (e.ctrlKey === true) {
-            Ext.Msg.show({
-                title:'Removendo Socio agendado!',
-                message: 'Confirma a remocao deste socio agendado?',
-                buttons: Ext.Msg.YESNO,
-                icon: Ext.Msg.QUESTION,
-                fn: function(btn) {
-                    if (btn === 'yes') {
-                        viewTable.setLoading('Removendo o registro...');
-                        Ext.Ajax.request({
-                            scope: me,
-                            url: 'business/Class/tmp_turningmonthly.php',
-                            params: {
-                                action: 'select',
-                                method: 'updateNaruralPerson',
-                                query: record.get(dataIndex.replace("description",""))
-                            },
-                            callback: function(options, success, response) {
-                                viewTable.setLoading(false);
-                                record.set(dataIndex,'...');
-                                record.commit();
-                            }
-                        });
+
+            if(cellIndex != 0) {
+                Ext.Msg.show({
+                    title:'Removendo Socio agendado!',
+                    message: 'Confirma a remocao deste socio agendado?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.QUESTION,
+                    fn: function(btn) {
+                        if (btn === 'yes') {
+                            viewTable.setLoading('Removendo o registro...');
+                            Ext.Ajax.request({
+                                scope: me,
+                                url: 'business/Class/tmp_turningmonthly.php',
+                                params: {
+                                    action: 'select',
+                                    method: 'updateNaruralPerson',
+                                    query: record.get(dataIndex.replace("description",""))
+                                },
+                                callback: function(options, success, response) {
+                                    viewTable.setLoading(false);
+                                    record.set(dataIndex,'...');
+                                    record.commit();
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                Ext.widget('allocationschedulenew', {
+                    xdata: record,
+                    dataIndex: dataIndex
+                }).show(null, function() {
+                    this.down('datefield[name=dutydate]').setMinValue(period.foundRecord().get('periodof'));
+                    this.down('datefield[name=dutydate]').setMaxValue(period.foundRecord().get('periodto'));
+                });
+            }
+
         }
     },
 

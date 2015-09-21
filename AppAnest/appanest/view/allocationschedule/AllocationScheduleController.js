@@ -5,6 +5,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     alias: 'controller.allocationschedule',
 
     requires: [
+        'Smart.util.Message',
         'AppAnest.view.allocationschedule.*',
         'AppAnest.view.person.ContractorUnitSearch',
         'AppAnest.model.allocationschedule.TMP_TurningMonthly',
@@ -15,21 +16,29 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             view = me.getView(),
             form = btn.up('window').down('form'),
-            params = form.getValues();
+            params = form.getValues(),
+            warning = 'Todos os dados do processsamento anterior serao perdidos!';
 
-        params.action ='setPublishSchedule';
+        params.action ='select';
+        params.method ='setPublishSchedule';
 
-        view.setLoading('Publicando Escala Mensal ...');
+        Smart.Msg.question("Confirma a publicacao desta escala? <br/> <br/>" + warning, function(btn) {
+            if (btn === 'yes') {
 
-        Ext.Ajax.request({
-            timeout: (60000 * 10), // 10 minutos
-            url: 'business/Class/schema.php',
-            params: params,
-            success: function(response){
-                view.setLoading(false);
-                btn.up('window').close();
+                view.setLoading('Publicando Escala Mensal ...');
+
+                Ext.Ajax.request({
+                    timeout: (60000 * 10), // 10 minutos
+                    url: 'business/Class/schedulingmonthlypartners.php',
+                    params: params,
+                    success: function(response){
+                        view.setLoading(false);
+                        btn.up('window').close();
+                    }
+                });
             }
         });
+
     },
 
     onShowDirectorShip: function (win) {
@@ -63,6 +72,50 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             win.down('hiddenfield[name=periodid]').setValue(period.getValue());
             win.down('textfield[name=period]').setValue(period.getDisplayValue());
         },me);
+    },
+
+    startScheduleScore: function (btn) {
+        var me = this,
+            params = {},
+            view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
+            warning = 'A escala estara habilitada para Contagem somente apos esta confirmacao!';
+
+        if(status != 'P') {
+            Ext.Msg.show({
+                title:'Gerando Contagem!',
+                message: 'A escala atual nao esta no status de publicada!',
+                buttons: Ext.Msg.CANCEL,
+                icon: Ext.Msg.WARNING
+            });
+        } else {
+            params.action ='select';
+            params.method ='startScheduleScore';
+            params.periodid = period.getValue();
+
+            Smart.Msg.question("Confirma o processamento da Contagem desta escala? <br/> <br/>" + warning, function(btn) {
+                if (btn === 'yes') {
+
+                    view.setLoading('Gerando Contagem da Escala Mensal ...');
+
+                    Ext.Ajax.request({
+                        url: 'business/Class/schedulingmonthlypartners.php',
+                        params: params,
+                        success: function(response){
+                            view.setLoading(false);
+                            view.down('gridpanel').status = 'C';
+                            period.foundRecord().set('status','C');
+                            view.down('button[name=statusP]').setDisabled(true);
+                            view.down('button[name=statusC]').setDisabled(true);
+                            view.down('button[name=statusE]').setDisabled(false);
+                            //view.down('button[name=statusE]').setPressed(true);
+                            Ext.getStore('allocationschedule').load();
+                        }
+                    });
+                }
+            });
+        }
     },
 
     showPublishSchedule: function () {
@@ -345,8 +398,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             return false;
         }
 
-        if(status == 'P') {
-            view.setLoading('Carregando edicao da escala ...');
+        if(status == 'C') {
+            view.setLoading('Carregando contagem da escala ...');
 
             param = {
                 query: record.get(dataIndex),
@@ -464,7 +517,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             dataIndex = me.getDataIndex(),
             store = Ext.getStore('allocationschedule'),
             period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             label = view.down('label[name=labelperiod]');
+
+        grid.status = status;
 
         param.status = period.status;
         param.action = 'select';
@@ -556,10 +612,14 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     onSelectPeriod: function ( combo, record, eOpts ) {
         var me = this,
             view = me.getView(),
+            status = record.get('status'),
             picker = view.down('datepicker'),
             periodof = record.toDate(record.get('periodof')),
             periodto = record.toDate(record.get('periodto')),
-            schedule = view.down('container[name=schedule]');
+            schedule = view.down('container[name=schedule]'),
+            buttonP = view.down('button[name=statusP]'),
+            buttonC = view.down('button[name=statusC]'),
+            buttonE = view.down('button[name=statusE]');
 
         picker.setValue(periodof);
         picker.setMinDate(periodof);
@@ -568,6 +628,15 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
         picker.setPickerView(picker.getPickerView());
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
+
+        buttonP.setDisabled(true);
+        buttonC.setDisabled(true);
+        buttonE.setDisabled(true);
+
+        if(status == 'A') buttonP.setDisabled(false);
+        if(status == 'P') buttonC.setDisabled(false);
+        if(status == 'C') buttonE.setDisabled(false);
+
     }
 
 });

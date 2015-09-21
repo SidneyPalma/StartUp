@@ -135,6 +135,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                     }, {
                                         margin: '0 0 5 0',
                                         xtype: 'segmentedbutton',
+                                        allowToggle: false,
                                         items: [
                                             {
                                                 scale: 'medium',
@@ -148,7 +149,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                         text: 'Gerar arquivo da Escala Mensal'
                                                     }
                                                 ]
-                                            },{
+                                            }, {
                                                 scale: 'medium',
                                                 glyph: 0xe898,
                                                 text: 'Diretoria',
@@ -156,12 +157,35 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             }
                                         ]
                                     }, {
-                                        xtype: 'button',
-                                        glyph: 0xec2b,
-                                        scale: 'large',
-                                        text: 'Publicar Escala',
-                                        showSmartTheme: 'red-dark',
-                                        handler: 'showPublishSchedule'
+                                        xtype: 'segmentedbutton',
+                                        vertical: true,
+                                        allowToggle: false,
+                                        items: [
+                                            {
+                                                disabled: true,
+                                                name: 'statusP',
+                                                glyph: 0xef67,
+                                                scale: 'medium',
+                                                text: 'Publicar Escala',
+                                                showSmartTheme: 'sky',
+                                                handler: 'showPublishSchedule'
+                                            }, {
+                                                disabled: true,
+                                                name: 'statusC',
+                                                glyph: 0xef17,
+                                                scale: 'medium',
+                                                text: 'Processar Contagem',
+                                                showSmartTheme: 'sky',
+                                                handler: 'startScheduleScore'
+                                            }, {
+                                                disabled: true,
+                                                name: 'statusE',
+                                                glyph: 0xef2a,
+                                                scale: 'medium',
+                                                text: 'Encerrar Contagem',
+                                                showSmartTheme: 'sky'
+                                            }
+                                        ]
                                     }
                                 ]
                             }

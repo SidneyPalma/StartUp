@@ -160,24 +160,6 @@ class schema extends \Smart\Data\Proxy {
         $this->setAllocationSchema();
     }
 
-    public function setPublishSchedule () {
-        $periodid = $this->post->periodid;
-        $username = Session::read('username');
-
-        $sql = "
-            set @periodid = :periodid;
-            set @username = :username;
-
-            call setPublishSchedule(@periodid,@username);";
-
-        $pdo = $this->prepare($sql);
-        $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
-        $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
-        $pdo->execute();
-
-        return self::getResultToJson();
-    }
-
     public function selectTurningSchema () {
         $this->setSchemaMonthly();
 

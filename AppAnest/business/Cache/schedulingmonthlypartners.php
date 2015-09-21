@@ -59,6 +59,44 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         return $days;
     }
 
+    public function startScheduleScore (array $data) {
+        $periodid = $data['periodid'];
+        $username = Session::read('username');
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            set @periodid = :periodid;
+            set @username = :username;
+
+            call setScheduleScore(@periodid,@username);";
+
+        $pdo = $proxy->prepare($sql);
+        $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
+        $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+        $pdo->execute();
+
+        return self::getResultToJson();
+    }
+
+    public function setPublishSchedule (array $data) {
+        $periodid = $data['periodid'];
+        $username = Session::read('username');
+        $proxy = $this->getStore()->getProxy();
+
+        $sql = "
+            set @periodid = :periodid;
+            set @username = :username;
+
+            call setPublishSchedule(@periodid,@username);";
+
+        $pdo = $proxy->prepare($sql);
+        $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
+        $pdo->bindValue(":username", $username, \PDO::PARAM_STR);
+        $pdo->execute();
+
+        return self::getResultToJson();
+    }
+
     public function selectCode(array $data) {
         $query = $data['query'];
         $dataIndex = $data['dataIndex'];
@@ -198,11 +236,13 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
             order by sm.dutydate, cu.position, sm.contractorunitid, tp.shift, tp.subunit, tp.position";
 
     private function setTableSchedule ($period, $sql) {
+        $list = array("P", "C", "E");
         $proxy = $this->getStore()->getProxy();
 
         $rows = $proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+        $status = $rows[0]['status'];
 
-        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+        $tablename = (in_array($status, $list)) ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }

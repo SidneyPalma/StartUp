@@ -6,6 +6,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
     cls: 'allocationweek',
 
+    status: 'A',
+
     initComponent: function () {
         var me = this;
         me.buildField();
@@ -32,6 +34,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
         var me = this,
             metaStyle = '',
+            status = me.status,
             valueDefault = value,
             shift = record.get('shift'),
             enumType = ['010','011','012','013'],
@@ -65,12 +68,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
         meta.style = metaStyle;
 
-        //return (valueDefault) ? valueDefault : '';
-        return (value !== '...') ? Ext.String.format(cell,valueDefault) : '';
+        if (status == 'A') {
+            return (value !== '...') ? Ext.String.format(cell,valueDefault) : '';
+        } else {
+            return (valueDefault) ? valueDefault : '';
+        }
     },
 
     _getGroup: function () {
-        var group = [
+        var me = this,
+            status = me.status,
+            group = [
                 {
                     cls: 'x-column-header-inner-dark',
                     width: 200,
@@ -108,8 +116,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
                         meta.style = metaStyle;
 
-                        //return first ? value : '';
-                        return (first) ? Ext.String.format(cell,value) : '';
+                        if (status == 'A') {
+                            return (first) ? Ext.String.format(cell,value) : '';
+                        } else {
+                            return first ? value : '';
+                        }
                     }
                 }, {
                     cls: 'x-column-header-inner-dark',

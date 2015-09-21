@@ -109,7 +109,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                             view.down('button[name=statusP]').setDisabled(true);
                             view.down('button[name=statusC]').setDisabled(true);
                             view.down('button[name=statusE]').setDisabled(false);
-                            //view.down('button[name=statusE]').setPressed(true);
                             Ext.getStore('allocationschedule').load();
                         }
                     });

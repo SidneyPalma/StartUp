@@ -1,12 +1,7 @@
 Ext.define( 'Ext.overrides.form.field.Number', {
     override: 'Ext.form.field.Number',
 
-    //currencyField: false,
-
-    afterRender: function() {
-        this.inputEl.setStyle('text-align', 'right');
-        this.callParent(arguments);
-    }
+    currencyField: false,
 
     //initComponent: function () {
     //    var me = this;

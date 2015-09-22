@@ -13,9 +13,12 @@ class DirectorShip extends Report {
     private $daysweek = array('mon'=>1,'tue'=>2,'wed'=>3,'thu'=>4,'fri'=>5,'sat'=>6,'sun'=>7);
 
     private function setTableSchedule ($period, $sql) {
-        $rows = $this->proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+        $list = array("P", "C", "E");
 
-        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+        $rows = $this->proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+        $status = $rows[0]['status'];
+
+        $tablename = (in_array($status, $list)) ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }

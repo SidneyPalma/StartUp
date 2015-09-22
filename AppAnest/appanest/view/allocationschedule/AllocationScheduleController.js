@@ -12,6 +12,87 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.store.allocationschedule.TMP_TurningMonthly'
     ],
 
+
+    onUpdateScore: function (btn) {
+        var me = this,
+            data = btn.up('window').xdata,
+            view = btn.up('container[name=containersubmit]'),
+            form = view.down('form'),
+            grid = view.down('gridpanel'),
+            schedulingmonthlypartnersid = form.down('hiddenfield[name=schedulingmonthlypartnersid]');
+
+        schedulingmonthlypartnersid.setValue(data.get('id'));
+
+        me._success = function (form, action) {
+            form.reset();
+            grid.store.load();
+        }
+
+        me._failure = function (form, action) {
+            grid.store.rejectChanges();
+        }
+
+        me.setModuleData(grid.store);
+        me.setModuleForm(form);
+        me.updateModule();
+    },
+
+    onInsertScore: function (btn) {
+        var view = btn.up('container[name=containersubmit]'),
+            form = view.down('form'),
+            grid = view.down('gridpanel');
+
+        form.reset();
+        grid.getSelectionModel().deselectAll();
+    },
+
+    onSelectShiftHours: function (combo, record, eOpts) {
+        var view = combo.up('window');
+
+        view.xdata.set('shifthours',combo.getValue());
+
+        view.xdata.store.sync({
+            success: function (batch, options) {
+                view.xdata.commit();
+            }
+        });
+    },
+
+    onCellClickScore: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {
+        var dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex,
+            warning = 'O Socio sera removido da presente lista!';
+
+        if(dataIndex != '') {
+            return false;
+        }
+
+        Smart.Msg.question("Confirma a remocao deste registro? <br/> <br/>" + warning, function(btn) {
+            if (btn === 'yes') {
+                viewTable.store.remove(record);
+                viewTable.store.sync({
+                    success: function (batch, options) {
+                        viewTable.store.load();
+                        viewTable.up('container[name=containersubmit]').down('form').reset();
+                    }
+                });
+            }
+        });
+    },
+
+    onSelectScoreR: function (rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=schedulingmonthlyscoreR]');
+        form.loadRecord(record);
+    },
+
+    onSelectScoreP: function (rowModel, record, index, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=schedulingmonthlyscoreP]');
+        form.loadRecord(record);
+    },
+
     startPublishSchedule: function (btn) {
         var me = this,
             view = me.getView(),
@@ -409,7 +490,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 rows: Ext.encode(record.data)
             };
 
-            var storeScore = Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyScore');
             var storePartners = Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyPartners');
 
             storePartners.setParams(param).load({
@@ -421,7 +501,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                         zdata: record,
                         dataIndex: dataIndex
                     }).show(null,function() {
-
+                        var storeR = this.down('gridpanel[name=schedulingmonthlyscoreR]').store;
+                        var storeP = this.down('gridpanel[name=schedulingmonthlyscoreP]').store;
+                        param.scoretype = 'R';
+                        storeR.setParams(param).load();
+                        param.scoretype = 'P';
+                        storeP.setParams(param).load();
                     });
                 }
             });

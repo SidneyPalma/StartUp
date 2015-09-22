@@ -16,7 +16,8 @@ Ext.define( 'AppAnest.model.allocationschedule.SchedulingMonthlyScore', {
             type: 'auto'
         }, {
             name: 'scoretype',
-            type: 'auto'
+            type: 'auto',
+            critical: true
         }, {
             name: 'changedate',
             type: 'auto'

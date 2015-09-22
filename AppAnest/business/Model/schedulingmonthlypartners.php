@@ -33,6 +33,12 @@ class schedulingmonthlypartners extends \Smart\Data\Model {
     private $position;
 
     /**
+     * @Policy {"nullable":false}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $shifthours;
+
+    /**
      * @Policy {"nullable":false, "length":1}
      * @Column {"description":"", "type":"string", "policy":true}
      */
@@ -129,6 +135,22 @@ class schedulingmonthlypartners extends \Smart\Data\Model {
      */
     public function setPosition($position) {
         $this->position = $position;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getShifthours() {
+        return $this->shifthours;
+    }
+
+    /**
+     * @param type $shifthours
+     * @return \AppAnest\Model\schedulingmonthlypartners
+     */
+    public function setShifthours($shifthours) {
+        $this->shifthours = $shifthours;
         return $this;
     }
 

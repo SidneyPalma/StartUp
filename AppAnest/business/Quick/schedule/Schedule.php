@@ -160,7 +160,7 @@ class Schedule extends \Smart\Data\Proxy {
                 @dutydate := concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dutydate,
                 SUBDATE(@dutydate, WEEKDAY(@dutydate)) as dateof,
                 DATE(SUBDATE(@dutydate, WEEKDAY(@dutydate)) + INTERVAL (8 - DAYOFWEEK(SUBDATE(@dutydate, WEEKDAY(@dutydate)))) DAY) as dateto,
-                if(sp.status = 'P', 'schedulingmonthlypartners', 'tmp_turningmonthly') as _tablename_
+                if(sp.status in ('P','C','E'), 'schedulingmonthlypartners', 'tmp_turningmonthly') as _tablename_
             from
                 ( select
                     @row := @row + 1 as row

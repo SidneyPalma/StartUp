@@ -14,10 +14,12 @@ class SheetFrequency extends Report {
     private $sizeColumns = array(30,30,4,30,30,30,4,30);
 
     private function setTableSchedule ($period, $sql) {
+        $list = array("P", "C", "E");
 
         $rows = $this->proxy->query("select status from schedulingperiod where id = $period")->fetchAll();
+        $status = $rows[0]['status'];
 
-        $tablename = ($rows[0]['status'] == 'P') ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
+        $tablename = (in_array($status, $list)) ? 'schedulingmonthlypartners' : 'tmp_turningmonthly';
 
         return str_replace("_tablename_", $tablename, $sql);
     }

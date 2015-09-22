@@ -20,7 +20,10 @@ Ext.define( 'AppAnest.model.allocationschedule.SchedulingMonthlyScore', {
             critical: true
         }, {
             name: 'changedate',
-            type: 'auto'
+            type: 'auto',
+            convert: function (value,record) {
+                return Ext.util.Format.dateRenderer('d/m/Y g:i:s A')(value);
+            }
         }, {
             name: 'dutyfraction',
             type: 'auto'

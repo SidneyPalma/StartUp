@@ -23,10 +23,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleScore', {
 
     buttons: [
         {
-        //    showSmartTheme: 'red-dark',
-        //    text: 'Salvar',
-        //    handler: 'updateAllocationSchedule'
-        //}, {
             text: 'Fechar',
             showSmartTheme: 'green',
             handler: function (btn) {

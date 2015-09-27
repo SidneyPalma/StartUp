@@ -193,8 +193,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleScore', {
                                 pack: 'center'
                             }
                         },
+                        listeners: {
+                            tabchange: 'onTabChange'
+                        },
                         items: [
                             {
+                                cardIndex: 0,
                                 glyph: 0xe953,
                                 title: 'Realizado por',
                                 xtype: 'container',
@@ -258,6 +262,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleScore', {
                                                 hiddenNameId: 'naturalpersonid',
                                                 xtype: 'naturalpersonsearch'
                                             }, {
+                                                allowBlank: true,
                                                 fieldLabel: 'Observacoes',
                                                 name: 'observation',
                                                 xtype: 'textareafield'
@@ -305,6 +310,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleScore', {
                                     }
                                 ]
                             }, {
+                                cardIndex: 1,
                                 glyph: 0xee03,
                                 title: 'Pagar para',
                                 xtype: 'container',
@@ -395,6 +401,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleScore', {
                                                     }
                                                 ]
                                             }, {
+                                                allowBlank: true,
                                                 fieldLabel: 'Observacoes',
                                                 name: 'observation',
                                                 xtype: 'textareafield'

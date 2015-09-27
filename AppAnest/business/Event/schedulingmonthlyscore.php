@@ -61,21 +61,51 @@ class schedulingmonthlyscore extends \Smart\Data\Event {
         $id =$model->getId();
         $scoretype = $model->getScoretype();
         $dutyfraction = floatval($model->getDutyfraction());
+        $naturalpersonid = intval($model->getNaturalpersonid());
         $schedulingmonthlypartnersid = $model->getSchedulingmonthlypartnersid();
 
-        $sql = "
+        $sqlP = "
             select
                 sum(coalesce(dutyfraction,0)) as dutyfraction
             from
                 schedulingmonthlyscore
             where schedulingmonthlypartnersid = :schedulingmonthlypartnersid
-              and scoretype = :scoretype
+              and scoretype = 'P'
               and id != :id";
 
-        if($scoretype == 'P') {
-            $pdo = $proxy->prepare($sql);
+        $sqlR = "
+            set SQL_SAFE_UPDATES = 0;
+
+            set @naturalpersonid = (
+                        select
+                            naturalpersonid
+                        from
+                            schedulingmonthlyscore
+                        where id = :id
+                          and scoretype = 'R'
+                        limit 1
+                );
+
+            update
+                schedulingmonthlyscore
+                set naturalpersonid = :naturalpersonid
+            where schedulingmonthlypartnersid = :schedulingmonthlypartnersid
+              and scoretype = 'P'
+              and naturalpersonid = @naturalpersonid;
+
+            set SQL_SAFE_UPDATES = 1;";
+
+        if($scoretype == 'R') {
+            $pdo = $proxy->prepare($sqlR);
             $pdo->bindValue(":schedulingmonthlypartnersid", $schedulingmonthlypartnersid, \PDO::PARAM_INT);
-            $pdo->bindValue(":scoretype", $scoretype, \PDO::PARAM_STR);
+            $pdo->bindValue(":naturalpersonid", $naturalpersonid, \PDO::PARAM_INT);
+            $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
+            $pdo->execute();
+        }
+
+        if($scoretype == 'P') {
+            $pdo = $proxy->prepare($sqlP);
+            $pdo->bindValue(":schedulingmonthlypartnersid", $schedulingmonthlypartnersid, \PDO::PARAM_INT);
             $pdo->bindValue(":id", $id, \PDO::PARAM_INT);
             $pdo->execute();
 

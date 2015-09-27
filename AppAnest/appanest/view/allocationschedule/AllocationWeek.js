@@ -78,6 +78,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
     _getGroup: function () {
         var me = this,
             status = me.status,
+            enumStatus = ['A','C'],
             group = [
                 {
                     cls: 'x-column-header-inner-dark',
@@ -92,7 +93,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                             metaStyle = (color) ? 'background-color: rgba(185, 233, 251, .8);' : 'background-color: rgba(185, 233, 251, .3);',
                             cell =  '<div>' +
                                         '<div style="float: left; width: 90%;">{0}</div>' +
-                                        '<div style="float: left; width: 10%;" class="insert-item">' +
+                                        '<div style="float: left; width: 10%; {1}" class="insert-item">' +
                                             '<i class="icon-plus-squared"></i>' +
                                         '</div>' +
                                     '</div>';
@@ -116,10 +117,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
                         meta.style = metaStyle;
 
-                        if (status == 'A') {
-                            return (first) ? Ext.String.format(cell,value) : '';
+                        if (enumStatus.indexOf(status) != -1 ) {
+                            return (first) ? ( status == 'A' ? Ext.String.format(cell,value) : Ext.String.format(cell,value,'color: rgba(250, 105, 0, .7);') ) : '';
                         } else {
-                            return first ? value : '';
+                            return (first) ? value : '';
                         }
                     }
                 }, {

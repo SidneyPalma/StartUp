@@ -26,7 +26,8 @@ class DirectorShip extends Report {
     public function preConstruct() {
         $this->post = (object) self::decodeUTF8($_REQUEST);
 
-        $status = $this->post->status;
+        set_time_limit(600); // 10 minutos
+
         $periodid = $this->post->periodid;
         $contractorunitlist = $this->post->contractorunitlist;
 

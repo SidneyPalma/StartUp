@@ -64,6 +64,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleNew', {
                         xtype: 'hiddenfield',
                         name: 'releasetype'
                     }, {
+                        xtype: 'hiddenfield',
+                        name: 'status'
+                    }, {
                         anchor: '',
                         width: 150,
                         useMondaFont: true,

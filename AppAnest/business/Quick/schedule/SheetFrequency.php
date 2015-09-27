@@ -80,7 +80,7 @@ class SheetFrequency extends Report {
     public function posConstruct() {
         $this->AliasNbPages();
         $this->AddPage();
-        $this->SetData();
+        $this->Detail();
         $this->AddPage();
         $this->SetObservation();
         $this->Output("SheetFrequency.pdf", "I");
@@ -226,7 +226,7 @@ class SheetFrequency extends Report {
         return self::uniqueArray($temp);
     }
 
-    function SetData() {
+    function Detail() {
         $data = $this->setDutyDateShift($this->rows);
 
         $this->configStyleDetail();

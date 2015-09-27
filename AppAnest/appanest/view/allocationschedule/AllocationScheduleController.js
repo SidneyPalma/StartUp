@@ -13,6 +13,20 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     ],
 
 
+    config: {
+        control: {
+            'allocationschedulescore form[name=schedulingmonthlyscoreR] naturalpersonsearch': {
+                select: 'onSelectNaturalPerson'
+            }
+        }
+    },
+
+    onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
+        if(newCard.cardIndex == 1) {
+            newCard.down('gridpanel').store.load();
+        }
+    },
+
     onUpdateScore: function (btn) {
         var me = this,
             data = btn.up('window').xdata,
@@ -56,6 +70,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 view.xdata.commit();
             }
         });
+    },
+
+    onSelectNaturalPerson: function (combo, record, eOpts) {
+        var me = this;
+        me.onUpdateScore(combo);
     },
 
     onCellClickScore: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {
@@ -320,7 +339,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         var me = this,
             view = btn.up('window'),
             form = view.down('form'),
-            store = Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly');
+            status = view.down('hiddenfield[name=status]').getValue(),
+            store = (status == 'A') ? Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly') : Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyPartners');
 
         me._success = function (batch, options) {
             view.close();
@@ -445,6 +465,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                         xdata: record,
                         dataIndex: dataIndex
                     }).show(null, function() {
+                        this.down('hiddenfield[name=status]').setValue(status);
                         this.down('datefield[name=dutydate]').setMinValue(period.foundRecord().get('periodof'));
                         this.down('datefield[name=dutydate]').setMaxValue(period.foundRecord().get('periodto'));
                     });

@@ -489,7 +489,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             view = me.getView(),
             period = view.down('schedulingperiodsearch'),
             status = period.foundRecord().get('status'),
-            dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex.replace("description","");
+            fieldName = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex,
+            dataIndex = fieldName.replace("description","");
 
         if(cellIndex < 2) {
             return false;
@@ -500,6 +501,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
 
         if(status == 'C') {
+
+            if(record.get(fieldName) == '...') {
+                return false;
+            }
+
             view.setLoading('Carregando contagem da escala ...');
 
             param = {

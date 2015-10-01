@@ -182,10 +182,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                             }, {
                                                 xtype: 'form',
                                                 name: 'schemaweekday',
-                                                layout: 'anchor',
                                                 defaults: {
                                                     anchor: '100%',
                                                     useMondaFont: true
+                                                },
+                                                autoScroll: true,
+                                                layout: {
+                                                    type: 'anchor',
+                                                    reserveScrollbar: true
                                                 },
                                                 items: [
                                                     {
@@ -284,8 +288,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                     }, {
                         region: 'center',
                         xtype: 'container',
-                        layout: 'card',
                         reference: 'allocationschemap',
+                        autoScroll: true,
+                        layout: {
+                            type: 'card',
+                            reserveScrollbar: true
+                        },
                         items: [
                             {
                                 title: 'Agenda Semanal',
@@ -392,10 +400,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                     }
 
                                                     return  '<div style="font-size: 15px;">' +
-                                                        returnPosition +
-                                                        returnShift +
-                                                        returnSubunit +
-                                                    '</div>';
+                                                                returnPosition +
+                                                                returnShift +
+                                                                returnSubunit +
+                                                            '</div>';
                                                 }
                                             }
                                         ]

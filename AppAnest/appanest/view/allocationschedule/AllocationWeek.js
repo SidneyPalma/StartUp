@@ -22,13 +22,20 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
 
     viewConfig: {
         loadMask: false,
-        loadingText: undefined
+        loadingText: undefined,
+        scroll:false,
+        style:{
+            overflow: 'auto',
+            overflowX: 'hidden'
+        }
     },
 
     listeners: {
         cellclick: 'onCellClick',
         cellkeydown: 'onCellKeyDown',
-        celldblclick: 'onScheduleCelldDlclick'
+        celldblclick: 'onScheduleCelldDlclick',
+        beforeitemclick: 'onBeforeItemKeyDown',
+        beforeitemkeydown: 'onBeforeItemKeyDown'
     },
 
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
@@ -269,9 +276,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
         var me = this,
             store = Ext.getStore('allocationschedule');
 
-        Ext.suspendLayouts();
         me.reconfigure(store, Ext.Array.merge(me._getGroup(),me._getField(dataIndex, pickerView)));
-        Ext.resumeLayouts(true);
+        me.getView().refresh();
     },
 
     buildField: function () {

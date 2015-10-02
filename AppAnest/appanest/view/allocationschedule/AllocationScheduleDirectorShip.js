@@ -7,8 +7,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleDirectorShip', {
     requires: [
         'Ext.selection.CheckboxModel',
         'Smart.form.field.ComboSearch',
-        'AppAnest.view.period.PeriodSearch',
-        'AppAnest.view.allocationschedule.AllocationWeek'
+        'AppAnest.view.period.PeriodSearch'
     ],
 
     controller: 'allocationschedule',

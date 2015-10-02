@@ -6,10 +6,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     requires: [
         'Smart.util.Message',
-        'AppAnest.view.allocationschedule.*',
-        'AppAnest.view.person.ContractorUnitSearch',
-        'AppAnest.model.allocationschedule.TMP_TurningMonthly',
-        'AppAnest.store.allocationschedule.TMP_TurningMonthly'
+        'AppAnest.view.person.*',
+        'AppAnest.view.allocationschedule.*'
     ],
 
 
@@ -21,16 +19,26 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-    onTabChange: function (tabPanel, newCard, oldCard, eOpts) {
-        if(newCard.cardIndex == 1) {
-            newCard.down('gridpanel').store.load();
-        }
+    onFilterScore: function (field, newValue, oldValue, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=selectscore]'),
+            layout = form.getLayout();
+
+        layout.setActiveItem(newValue.filterscore);
+        layout.getActiveItem().down('gridpanel').store.load();
+    },
+
+    onClosedScore: function () {
+        var me = this;
+        me.onChangeMonthlyScore(false);
     },
 
     onUpdateScore: function (btn) {
         var me = this,
+            view = me.getView(),
             data = btn.up('window').xdata,
-            view = btn.up('container[name=containersubmit]'),
+            //btn.up('container[name=containersubmit]'),
             form = view.down('form'),
             grid = view.down('gridpanel'),
             schedulingmonthlypartnersid = form.down('hiddenfield[name=schedulingmonthlypartnersid]');
@@ -52,8 +60,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onInsertScore: function (btn) {
-        var view = view = me.getView(),
-                //btn.up('container[name=containersubmit]'),
+        var view = me.getView(),
+            //btn.up('container[name=containersubmit]'),
             form = view.down('form'),
             grid = view.down('gridpanel');
 
@@ -539,9 +547,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                     //}).show(null,function() {
                         me.onChangeMonthlyScore(true);
                         var storeR = view.down('gridpanel[name=schedulingmonthlyscoreR]').store;
-                        var storeP = view.down('gridpanel[name=schedulingmonthlyscoreP]').store
-                        view.down('form[name=updateScore]').zdata = record;
-                        view.down('form[name=updateScore]').xdata = records[0];
+                        var storeP = view.down('gridpanel[name=schedulingmonthlyscoreP]').store;
+                        view.down('form[name=updatescore]').zdata = record;
+                        view.down('form[name=updatescore]').xdata = records[0];
                         param.scoretype = 'R';
                         storeR.setParams(param).load();
                         param.scoretype = 'P';
@@ -616,12 +624,13 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-    //onChangeMonthlyScore: function ( field, newValue, oldValue, eOpts ) {
+
+
     onChangeMonthlyScore: function ( newValue ) {
         var me = this,
             view = me.getView(),
-            form = view.down('form[name=updateScore]'),
-            bbar = view.down('toolbar[name=updateScore]'),
+            form = view.down('form[name=updatescore]'),
+            bbar = view.down('toolbar[name=updatescore]'),
             changestatus = view.down('segmentedbutton[name=changestatus]');
 
         form.reset();
@@ -633,23 +642,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         } else {
             form.hide();
             bbar.hide();
+            form.reset();
             changestatus.show();
         }
-    },
-
-    getDateFormated: function (date) {
-        var stringDate = '{0} de {1} de {2}',
-            monthNames = [
-                "Janeiro", "Fevereiro", "Março",
-                "Abril", "Maio", "Junho", "Julho",
-                "Agosto", "Setembro", "Outubro",
-                "Novembro", "Dezembro"
-            ],
-            day = date.getDate(),
-            monthIndex = date.getMonth(),
-            year = date.getFullYear();
-
-        return Ext.String.format(stringDate,day, monthNames[monthIndex], year);
     },
 
     selectSchedule: function (pickerView, periodView) {
@@ -657,8 +652,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             param = {},
             view = me.getView(),
             days = [0,1,2,3,4,5,6],
-            grid = view.down('allocationweek'),
             dataIndex = me.getDataIndex(),
+            grid = view.down('allocationscheduleweek'),
             store = Ext.getStore('allocationschedule'),
             period = view.down('schedulingperiodsearch'),
             status = period.foundRecord().get('status'),
@@ -697,6 +692,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                         d++;
                     }
                 }
+
+                Ext.suspendLayouts();
+                grid.getView().setScrollY(3000, true);
+                grid.getView().setScrollY(0, true);
+                Ext.resumeLayouts(true);
 
                 var dateOfstr = me.getDateFormated(Ext.Date.parse(periodView.dateOf, "Y-m-d"));
                 var dateTostr = me.getDateFormated(Ext.Date.parse(periodView.dateTo, "Y-m-d"));
@@ -766,13 +766,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             buttonP = view.down('button[name=statusP]'),
             buttonC = view.down('button[name=statusC]'),
             buttonE = view.down('button[name=statusE]');
-            //monthlyscore = view.down('checkboxfield[name=monthlyscore]');
 
         picker.setValue(periodof);
         picker.setMinDate(periodof);
         picker.setMaxDate(periodto);
         schedule.setDisabled(false);
-        //monthlyscore.setValue(false);
 
         picker.setPickerView(picker.getPickerView());
         me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
@@ -780,12 +778,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         buttonP.setDisabled(true);
         buttonC.setDisabled(true);
         buttonE.setDisabled(true);
-        //monthlyscore.setDisabled(true);
 
         if(status == 'A') buttonP.setDisabled(false);
         if(status == 'P') buttonC.setDisabled(false);
         if(status == 'C') buttonE.setDisabled(false);
-        //if(status == 'C') monthlyscore.setDisabled(false);
 
     }
 

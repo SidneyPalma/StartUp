@@ -100,18 +100,22 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         var me = this,
             param = {},
             view = me.getView(),
+            label = view.down('label[name=labelperiod]'),
             schema = view.down('container[name=schema]'),
             form = view.down('form[name=schemamonthly]'),
+            store = Ext.getStore('allocationschemamonthly'),
             periodid = form.down('hiddenfield[name=schedulingperiodid]'),
             allocationschema = Ext.getStore('allocationschema'),
-            schemamonthly = view.down('gridpanel[name=schemamonthly]');
+            //schemamonthly = view.down('gridpanel[name=schemamonthly]'),
+            //schemamonthly = view.down('allocationschemaweek'),
+            allocationschemap = me.lookupReference('allocationschemap');
 
         param.query = record.get('id');
         param.action = 'select';
         param.method = 'selectCode';
 
         form.reset();
-        schemamonthly.getStore().removeAll();
+        store.removeAll();
 
         view.down('radiogroup').down('#type1').setDisabled(true);
 
@@ -137,16 +141,26 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                 param.allocationschemaid = rec.get('id');
                 view.setLoading('Carregando esquema ...');
 
-                schemamonthly.getStore().setParams(param).load({
+                store.setParams(param).load({
                     scope: me,
                     callback: function(records, operation, success) {
                         view.setLoading(false);
                         if(records.length && success == true) {
+                            var grid = view.down('allocationschemaweek');
+                            Ext.suspendLayouts();
+                            grid.getView().setScrollY(3000, true);
+                            grid.getView().setScrollY(0, true);
+                            Ext.resumeLayouts(true);
                         }
                     }
                 });
             }
         });
+
+        var dateOfstr = me.getDateFormated(Ext.Date.parse(record.get('periodof'), "d/m/Y"));
+        var dateTostr = me.getDateFormated(Ext.Date.parse(record.get('periodto'), "d/m/Y"));
+
+        label.setText((dateOfstr != dateTostr) ? (dateOfstr +' - '+ dateTostr): dateOfstr);
     },
 
     onCreateSchemaMonthly: function () {
@@ -182,7 +196,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
             }
         });
-
     },
 
     onUpdateSchemaMonthly: function () {

@@ -1,8 +1,8 @@
 //@charset ISO-8859-1
-Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
+Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
     extend: 'Ext.grid.Panel',
 
-    xtype: 'allocationweek',
+    xtype: 'allocationscheduleweek',
 
     cls: 'allocationweek',
 
@@ -36,6 +36,16 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
         celldblclick: 'onScheduleCelldDlclick',
         beforeitemclick: 'onBeforeItemKeyDown',
         beforeitemkeydown: 'onBeforeItemKeyDown'
+    },
+
+    _columnText: {
+        sundescription: 'DOMINGO',
+        mondescription: 'SEGUNDA-FEIRA',
+        tuedescription: 'TERCA-FEIRA',
+        weddescription: 'QUARTA-FEIRA',
+        thudescription: 'QUINTA-FEIRA',
+        fridescription: 'SEXTA-FEIRA',
+        satdescription: 'SABADO'
     },
 
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
@@ -88,7 +98,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
             enumStatus = ['A','C'],
             group = [
                 {
-                    cls: 'x-column-header-inner-dark',
+                    cls: 'dark',
                     width: 200,
                     text: 'UNIDADE',
                     sortable: false,
@@ -121,7 +131,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                         }
 
                         metaStyle += ' font-size: 16px; line-height: 16px; font-family: Monda; border-left: 1px solid #cecece;';
-
                         meta.style = metaStyle;
 
                         if (enumStatus.indexOf(status) != -1 ) {
@@ -131,7 +140,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
                         }
                     }
                 }, {
-                    cls: 'x-column-header-inner-dark',
+                    cls: 'dark',
                     width: 74,
                     text: 'TURNOS',
                     sortable: false,
@@ -196,58 +205,53 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
         return group;
     },
 
-    _columnText: {
-        sundescription: 'DOMINGO',
-        mondescription: 'SEGUNDA-FEIRA',
-        tuedescription: 'TERCA-FEIRA',
-        weddescription: 'QUARTA-FEIRA',
-        thudescription: 'QUINTA-FEIRA',
-        fridescription: 'SEXTA-FEIRA',
-        satdescription: 'SABADO'
-    },
-
     _getField: function (dataIndex, pickerView) {
         var me = this,
             field = [
             {
+                cls: 'ligth',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['mondescription'],
                 dataIndex: 'mondescription',
                 renderer: me.columnsRenderer
             }, {
+                cls: 'ligth',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['tuedescription'],
                 dataIndex: 'tuedescription',
                 renderer: me.columnsRenderer
             }, {
+                cls: 'ligth',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['weddescription'],
                 dataIndex: 'weddescription',
                 renderer: me.columnsRenderer
             }, {
+                cls: 'ligth',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['thudescription'],
                 dataIndex: 'thudescription',
                 renderer: me.columnsRenderer
             }, {
+                cls: 'ligth',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['fridescription'],
                 dataIndex: 'fridescription',
                 renderer: me.columnsRenderer
             }, {
-                cls: 'x-column-header-inner-dark',
+                cls: 'dark',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['satdescription'],
                 dataIndex: 'satdescription',
                 renderer: me.columnsRenderer
             }, {
-                cls: 'x-column-header-inner-dark',
+                cls: 'dark',
                 flex: 1,
                 sortable: false,
                 text: me._columnText['sundescription'],
@@ -259,7 +263,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationWeek', {
         if(pickerView == 'vwDay') {
             field = [
                 {
-                    cls: 'x-column-header-inner-dark',
+                    cls: 'dark',
                     flex: 1,
                     sortable: false,
                     text: me._columnText[dataIndex],

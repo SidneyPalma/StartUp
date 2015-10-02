@@ -5,17 +5,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
     xtype: 'allocationschema',
 
     requires: [
-        'Ext.grid.feature.Summary',
         'Smart.form.field.*',
         'Ext.form.RadioGroup',
-        'Ext.grid.plugin.RowEditing',
-        'Ext.selection.CheckboxModel',
-        'AppAnest.view.planning.AllocationSchemaShift',
-        'AppAnest.store.allocationschema.AllocationSchema',
-        'AppAnest.store.allocationschema.AllocationSchemaMap',
-        'AppAnest.store.allocationschema.AllocationSchemaMonthly',
-        'AppAnest.store.allocationschema.AllocationSchemaWeekDay',
-        'AppAnest.view.allocationschedule.SchedulingPeriodSearch'
+        'AppAnest.view.planning.*',
+        'AppAnest.view.allocationschedule.*'
     ],
 
     controller: 'allocationschema',
@@ -37,16 +30,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
 
         Ext.create('AppAnest.store.allocationschema.AllocationSchema');
         Ext.create('AppAnest.store.allocationschema.AllocationSchemaMap');
-        Ext.create('AppAnest.store.allocationschema.AllocationSchemaMonthly');
-        Ext.create('AppAnest.store.allocationschema.AllocationSchemaWeekDay', {
-            constructor: function () {
-                var me = this, i;
-                for (i = 1; i < 100; i++) {
-                    me.fields.push('week' + Ext.String.leftPad(i, 2, '0'));
-                }
-                me.callParent();
-            }
-        });
 
         me.items = [
             {
@@ -77,12 +60,12 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                         xtype: 'panel',
                         items: [
                             {
-                                title: 'Esquemas de atribuição',
                                 xtype: 'form',
                                 layout: 'anchor',
                                 defaults: {
                                     anchor: '100%',
-                                    useMondaFont: true
+                                    useMondaFont: true,
+                                    labelStyle: 'color: blue; font-size: 14px;'
                                 },
                                 items: [
                                     {
@@ -103,7 +86,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         columns: 2,
                                         vertical: false,
                                         fieldLabel: 'Tipo',
-                                        labelStyle: 'color: blue; font-size: 14px;',
                                         items: [
                                             {
                                                 itemId: 'type0',
@@ -135,7 +117,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 defaults: {
                                                     anchor: '100%',
                                                     allowBlank: false,
-                                                    useMondaFont: true
+                                                    useMondaFont: true,
+                                                    labelStyle: 'color: blue; font-size: 14px;'
                                                 },
                                                 items: [
                                                     {
@@ -166,7 +149,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         xtype: 'textfield',
                                                         submitValue: false,
                                                         fieldLabel: 'Filtrar Unidade',
-                                                        labelStyle: 'color: blue; font-size: 14px;',
                                                         listeners: {
                                                             change: 'onChangeFilterMonthly'
                                                         }
@@ -189,7 +171,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                 autoScroll: true,
                                                 layout: {
                                                     type: 'anchor',
-                                                    reserveScrollbar: true
+                                                    reserveScrollbar: true,
+                                                    labelStyle: 'color: blue; font-size: 14px;'
                                                 },
                                                 items: [
                                                     {
@@ -199,7 +182,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                         showClear: true,
                                                         xtype: 'textfield',
                                                         submitValue: false,
-                                                        labelStyle: 'color: blue; font-size: 14px;',
                                                         fieldLabel: 'Filtrar Unidade',
                                                         listeners: {
                                                             change: 'onChangeFilterWeekly'
@@ -283,265 +265,41 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                             }
                         ]
                     }, {
-                        width: 30,
-                        region: 'west'
-                    }, {
                         region: 'center',
                         xtype: 'container',
-                        reference: 'allocationschemap',
-                        autoScroll: true,
-                        layout: {
-                            type: 'card',
-                            reserveScrollbar: true
-                        },
+                        layout: 'border',
                         items: [
                             {
-                                title: 'Agenda Semanal',
-                                xtype: 'gridpanel',
-                                name: 'schemamonthly',
-                                rowLines: false,
-                                columnLines: true,
-                                hideHeaders: false,
-                                store: 'allocationschemamonthly',
-                                viewConfig: {
-                                    loadMask: false,
-                                    loadingText: undefined
-                                },
-                                selModel: 'rowmodel',
-                                plugins: {
-                                    ptype: 'rowediting',
-                                    clicksToEdit: 2
-                                },
-                                listeners: {
-                                    beforeedit: 'onAllocationSchemaBeforeEdit'
-                                },
-                                columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
-                                    var metaStyle = '',
-                                        valueDefault = value,
-                                        enumType = ['001','002','011'],
-                                        shift = record.get('shift'),
-                                        color = parseInt(record.get('position')) % 2 == 0,
-                                        field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','');
-
-                                    if(shift == 'N') {
-                                        metaStyle = 'background-color: rgba(242, 243, 235, .9);';
-                                    }
-
-                                    if((colIndex >= 2)&&(enumType.indexOf(record.get(field)) == -1)) {
-                                        valueDefault = '<a style="color: red;">' +valueDefault+ '</a>';
-                                    }
-
-                                    meta.style = metaStyle + ' line-height: 16px; color: rgba(84, 86, 62, .9);';
-
-                                    return valueDefault;
-                                },
-                                columns: [
+                                height: 26,
+                                region: 'north',
+                                xtype: 'panel',
+                                items: [
                                     {
-                                        text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
-                                        columns: [
-                                            {
-                                                width: 200,
-                                                text: 'Unidade',
-                                                dataIndex: 'contractorunit',
-                                                renderer: function (value, meta, record, rowIndex, colIndex, store) {
-                                                    var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
-                                                        color = parseInt(record.get('rownumber')) % 2 == 0,
-                                                        metaStyle = (color) ? 'color: white; background-color: rgba(84, 86, 62, .9);' : 'background-color: rgba(84, 86, 62, .4);';
-
-                                                    meta.style = metaStyle + ' font-size: 16px; line-height: 16px; font-family: Monda;';
-
-                                                    if (first) {
-                                                        var i = rowIndex + 1;
-                                                        while (i < store.getCount() && value === store.getAt(i).get('contractorunit')) {
-                                                            i++;
-                                                        }
-                                                    }
-
-                                                    return first ? value : '';
-                                                }
-                                            }, {
-                                                width: 74,
-                                                text: 'Turnos',
-                                                dataIndex: 'shift',
-                                                renderer: function (value, meta, record, rowIndex, colIndex, store) {
-                                                    var returnShift = '',
-                                                        returnSubunit = '',
-                                                        subunit = record.get('subunit'),
-                                                        position = record.get('position'),
-                                                        returnPosition = Ext.String.format('<div style="float: left; width: 10px;">{0}. </div>',position);
-
-                                                    switch(value) {
-                                                        case 'D':
-                                                            meta.style = 'background-color: rgba(248, 202, 0, .5); line-height: 16px;';
-                                                            returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(255,160,17, 1);"><i class="icon-sun"></i></div>';
-                                                            break;
-                                                        case 'N':
-                                                            meta.style = 'background-color: rgba(248, 202, 0, .9); line-height: 16px;';
-                                                            returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-moon-inv"></i></div>';
-                                                            break;
-                                                    }
-
-                                                    switch(subunit) {
-                                                        case '003':
-                                                            returnSubunit = '<div style="float: right; width: 20px; color: rgb(252, 24, 36); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-heart"></i></div>';
-                                                            break;
-                                                        case '005':
-                                                            returnSubunit = '<div style="float: right; width: 20px; color: rgb(23, 153, 138); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-chat"></i></div>';
-                                                            break;
-                                                        case '004':
-                                                            returnSubunit = '<div style="float: right; width: 20px; color: rgb(0, 29, 196); text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-h-sigh"></i></div>';
-                                                            break;
-                                                        case '000':
-                                                            returnSubunit = '';
-                                                            break;
-                                                        default:
-                                                            returnSubunit = '<div style="float: right; width: 20px; text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-cogs"></i></div>';
-                                                            break;
-                                                    }
-
-                                                    return  '<div style="font-size: 15px;">' +
-                                                                returnPosition +
-                                                                returnShift +
-                                                                returnSubunit +
-                                                            '</div>';
-                                                }
-                                            }
-                                        ]
-                                    }, {
-                                        text: '<span style="color: blue; font-size: 18px; font-family: Monda;">DIAS DA SEMANA</span>',
-                                        columns: [
-                                            {
-                                                text: 'Segunda',
-                                                dataIndex: 'mondescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'mon',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }, {
-                                                text: 'Terça',
-                                                dataIndex: 'tuedescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'tue',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }, {
-                                                text: 'Quarta',
-                                                dataIndex: 'weddescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'wed',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }, {
-                                                text: 'Quinta',
-                                                dataIndex: 'thudescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'thu',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }, {
-                                                text: 'Sexta',
-                                                dataIndex: 'fridescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'fri',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }
-                                        ]
-                                    }, {
-                                        text: '<span style="color: blue; font-size: 18px; font-family: Monda;">FINAL DE SEMANA</span>',
-                                        columns: [
-                                            {
-                                                text: '<b>Sábado</b>',
-                                                dataIndex: 'satdescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'sat',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }, {
-                                                text: '<b>Domingo</b>',
-                                                dataIndex: 'sundescription',
-                                                width: 150,
-                                                editor: {
-                                                    updateField: 'sun',
-                                                    xtype: 'allocationschemasearchshift',
-                                                    name: 'allocationschemadescription'
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ],
-                                buttonAlign: 'center',
-                                buttons: [
-                                    {
-                                        glyph: 0xe86c,
-                                        scale: 'medium',
-                                        text: 'Salvar Escala',
-                                        showSmartTheme: 'red-dark',
-                                        handler: 'onUpdateSchemaMonthly'
-                                    }, {
-                                        glyph: 0xec9d,
-                                        scale: 'medium',
-                                        text: 'Limpar',
-                                        showSmartTheme: 'sky',
-                                        handler: 'onDeleteMonthly'
-                                    }, {
-                                        glyph: 0xe869,
-                                        scale: 'medium',
-                                        text: 'Voltar',
-                                        showSmartTheme: 'green',
-                                        handler: 'onHistoryBack'
+                                        margin: '10 0 0 10',
+                                        xtype: 'label',
+                                        text: '...',
+                                        name: 'labelperiod',
+                                        style: {
+                                            color: '#457EC5;',
+                                            fontSize: '24px;'
+                                        }
                                     }
                                 ]
                             }, {
-                                xtype: 'gridpanel',
-                                title: 'Mapeamento de Plantões Noturnos',
-                                name: 'schemaweekday',
-                                hideHeaders: false,
-                                rowLines: false,
-                                columnLines: true,
-                                store: 'allocationschemaweekday',
-                                //viewConfig: {
-                                //    loadMask: false,
-                                //    loadingText: undefined
-                                //},
-                                columns: [],
-                                buttonAlign: 'center',
-                                buttons: [
+                                region: 'center',
+                                xtype: 'panel',
+                                layout: 'card',
+                                reference: 'allocationschemap',
+                                bodyStyle: 'padding: 0 0 0 10px;',
+                                items: [
                                     {
-                                        glyph: 0xe86c,
-                                        scale: 'medium',
-                                        text: 'Salvar Mapa',
-                                        showSmartTheme: 'red-dark',
-                                        handler: 'onUpdateSchemaWeekDay'
+                                        id: 'cardIndex0',
+                                        xtype: 'allocationschemaweek'
                                     }, {
-                                        glyph: 0xec9d,
-                                        scale: 'medium',
-                                        text: 'Limpar',
-                                        showSmartTheme: 'sky',
-                                        handler: 'onDeleteWeekDay'
-                                    }, {
-                                        glyph: 0xe869,
-                                        scale: 'medium',
-                                        text: 'Voltar',
-                                        showSmartTheme: 'green',
-                                        handler: 'onHistoryBack'
+                                        id: 'cardIndex1',
+                                        xtype: 'allocationschemamap'
                                     }
-                                ],
-                                listeners: {
-                                    celldblclick: 'onCellDblClickWeekDay'
-                                }
+                                ]
                             }
                         ]
                     }

@@ -7,8 +7,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
     requires: [
         'Ext.picker.Date',
         'AppAnest.view.person.*',
-        'Ext.layout.container.SegmentedButton',
-        'AppAnest.view.allocationschedule.SchedulingPeriodSearch'
+        'Ext.layout.container.SegmentedButton'
     ],
 
     controller: 'allocationschedule',
@@ -54,7 +53,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                     {
                         dockedItems: [
                             {
-                                name: 'updateScore',
+                                name: 'updatescore',
                                 hidden: true,
                                 xtype: 'toolbar',
                                 dock: 'bottom',
@@ -70,20 +69,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                 items: [
                                                     {
                                                         scale: 'medium',
-                                                        //glyph: 0xe874,
                                                         text: 'Novo',
                                                         handler: 'onInsertScore',
-                                                        showSmartTheme: 'red-dark'
+                                                        showSmartTheme: 'red'
                                                     }, {
                                                         scale: 'medium',
-                                                        //glyph: 0xe86c,
                                                         text: 'Salvar',
                                                         handler: 'onUpdateScore',
-                                                        showSmartTheme: 'red-dark'
+                                                        showSmartTheme: 'red'
                                                     }, {
                                                         scale: 'medium',
                                                         text: 'Fechar',
-                                                        showSmartTheme: 'red-dark'
+                                                        handler: 'onClosedScore',
+                                                        showSmartTheme: 'green'
                                                     }
                                                 ]
                                             }
@@ -182,14 +180,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             change: 'onFilterSchedule'
                                         }
                                     }, {
-                                    //    disabled: true,
-                                    //    name: 'monthlyscore',
-                                    //    xtype: 'checkboxfield',
-                                    //    boxLabel: 'Habilitar Contagem',
-                                    //    listeners: {
-                                    //        change: 'onChangeMonthlyScore'
-                                    //    }
-                                    //}, {
                                         margin: '0 0 5 0',
                                         xtype: 'segmentedbutton',
                                         allowToggle: false,
@@ -245,7 +235,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                             }
                                         ]
                                     }, {
-                                        name: 'updateScore',
+                                        name: 'updatescore',
                                         hidden: true,
                                         xtype: 'form',
                                         layout: 'anchor',
@@ -254,6 +244,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         },
                                         items: [
                                             {
+                                                xtype: 'label',
+                                                text: 'Manutencao da Contagem',
+                                                style: 'color: blue; font-size: 14px;'
+                                            }, {
                                                 width: 90,
                                                 pageSize: 0,
                                                 xtype: 'combobox',
@@ -276,86 +270,83 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                     select: 'onSelectShiftHours'
                                                 }
                                             }, {
-                                                defaults: {
-                                                    flex: 1
-                                                },
-                                                height: 250,
-                                                xtype: 'tabpanel',
-                                                name: 'navigation-items',
-                                                ui: 'navigation-items',
-                                                tabBar: {
-                                                    layout: {
-                                                        pack: 'center'
-                                                    }
-                                                },
-                                                listeners: {
-                                                    tabchange: 'onTabChange'
-                                                },
+                                                xtype: 'radiogroup',
+                                                fieldLabel: 'Filtrar',
+                                                labelStyle: 'color: blue; font-size: 14px;',
+                                                columns: 2,
+                                                vertical: true,
                                                 items: [
                                                     {
-                                                        cardIndex: 0,
-                                                        glyph: 0xe953,
-                                                        title: 'Realizado por',
-                                                        xtype: 'container',
-                                                        name: 'containersubmit',
-                                                        layout: 'border',
+                                                        boxLabel: 'Realizado por',
+                                                        name: 'filterscore',
+                                                        inputValue: 0,
+                                                        checked: true
+                                                    }, {
+                                                        boxLabel: 'Pagar para',
+                                                        name: 'filterscore',
+                                                        inputValue: 1
+                                                    }
+                                                ],
+                                                listeners: {
+                                                    change: 'onFilterScore'
+                                                }
+                                            }, {
+                                                xtype: 'form',
+                                                layout: 'card',
+                                                name: 'selectscore',
+                                                items: [
+                                                    {
+                                                        xtype: 'form',
+                                                        name: 'schedulingmonthlyscoreR',
+                                                        layout: 'anchor',
+                                                        defaults: {
+                                                            allowBlank: false,
+                                                            anchor: '100%'
+                                                        },
                                                         items: [
                                                             {
-                                                                region: 'north',
-                                                                xtype: 'form',
-                                                                name: 'schedulingmonthlyscoreR',
-                                                                layout: 'anchor',
-                                                                defaults: {
-                                                                    allowBlank: false,
-                                                                    anchor: '100%'
-                                                                },
+                                                                allowBlank: true,
+                                                                xtype: 'hiddenfield',
+                                                                name: 'id'
+                                                            }, {
+                                                                xtype: 'hiddenfield',
+                                                                name: 'scoretype',
+                                                                value: 'R'
+                                                            }, {
+                                                                xtype: 'hiddenfield',
+                                                                name: 'schedulingmonthlypartnersid'
+                                                            }, {
+                                                                pageSize: 0,
+                                                                fieldLabel: 'Socio',
+                                                                name: 'naturalperson',
+                                                                hiddenNameId: 'naturalpersonid',
+                                                                xtype: 'naturalpersonsearch'
+                                                            }, {
+                                                                allowBlank: true,
+                                                                fieldLabel: 'Observacoes',
+                                                                name: 'observation',
+                                                                xtype: 'textfield'
+                                                            }, {
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
                                                                 items: [
                                                                     {
-                                                                        allowBlank: true,
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'id'
+                                                                        xtype: 'displayfield',
+                                                                        name: 'username'
                                                                     }, {
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'scoretype',
-                                                                        value: 'R'
+                                                                        xtype: 'splitter'
                                                                     }, {
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'schedulingmonthlypartnersid'
-                                                                    }, {
-                                                                        pageSize: 0,
-                                                                        fieldLabel: 'Socio',
-                                                                        name: 'naturalperson',
-                                                                        hiddenNameId: 'naturalpersonid',
-                                                                        xtype: 'naturalpersonsearch'
-                                                                    }, {
-                                                                        allowBlank: true,
-                                                                        fieldLabel: 'Observacoes',
-                                                                        name: 'observation',
-                                                                        xtype: 'textfield'
-                                                                    }, {
-                                                                        xtype: 'container',
-                                                                        layout: 'hbox',
-                                                                        items: [
-                                                                            {
-                                                                                xtype: 'displayfield',
-                                                                                name: 'username'
-                                                                            }, {
-                                                                                xtype: 'splitter'
-                                                                            }, {
-                                                                                xtype: 'displayfield',
-                                                                                name: 'changedate'
-                                                                            }
-                                                                        ]
+                                                                        xtype: 'displayfield',
+                                                                        name: 'changedate'
                                                                     }
                                                                 ]
                                                             }, {
-                                                                region: 'center',
                                                                 xtype: 'gridpanel',
+                                                                name: 'schedulingmonthlyscoreR',
                                                                 columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
                                                                     meta.style = "font-size: 16px; line-height: 18px; font-family: Monda; color: rgba(252, 24, 36,.6);";
                                                                     return value;
                                                                 },
-                                                                name: 'schedulingmonthlyscoreR',
                                                                 store: Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyScore'),
                                                                 columns: [
                                                                     {
@@ -378,21 +369,78 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                             }
                                                         ]
                                                     }, {
-                                                        cardIndex: 1,
-                                                        glyph: 0xee03,
-                                                        title: 'Pagar para',
-                                                        xtype: 'container',
-                                                        name: 'containersubmit',
-                                                        layout: 'border',
+                                                        xtype: 'form',
+                                                        name: 'schedulingmonthlyscoreP',
+                                                        layout: 'anchor',
+                                                        defaults: {
+                                                            allowBlank: false,
+                                                            anchor: '100%'
+                                                        },
                                                         items: [
                                                             {
-                                                                region: 'center',
+                                                                allowBlank: true,
+                                                                xtype: 'hiddenfield',
+                                                                name: 'id'
+                                                            }, {
+                                                                xtype: 'hiddenfield',
+                                                                name: 'scoretype',
+                                                                value: 'P'
+                                                            }, {
+                                                                xtype: 'hiddenfield',
+                                                                name: 'schedulingmonthlypartnersid'
+                                                            }, {
+                                                                xtype: 'fieldcontainer',
+                                                                layout: 'hbox',
+                                                                defaults: {
+                                                                    allowBlank: false
+                                                                },
+                                                                items: [
+                                                                    {
+                                                                        flex: 1,
+                                                                        pageSize: 0,
+                                                                        fieldLabel: 'Socio',
+                                                                        name: 'naturalperson',
+                                                                        hiddenNameId: 'naturalpersonid',
+                                                                        xtype: 'naturalpersonsearch'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        width: 70,
+                                                                        name: 'dutyfraction',
+                                                                        fieldLabel: 'Fracao',
+                                                                        xtype: 'textfield',
+                                                                        plugins: 'textmask',
+                                                                        money: true,
+                                                                        mask: '0,00',
+                                                                        value: 1
+                                                                    }
+                                                                ]
+                                                            }, {
+                                                                allowBlank: true,
+                                                                fieldLabel: 'Observacoes',
+                                                                name: 'observation',
+                                                                xtype: 'textfield'
+                                                            }, {
+                                                                xtype: 'container',
+                                                                layout: 'hbox',
+                                                                items: [
+                                                                    {
+                                                                        xtype: 'displayfield',
+                                                                        name: 'username'
+                                                                    }, {
+                                                                        xtype: 'splitter'
+                                                                    }, {
+                                                                        xtype: 'displayfield',
+                                                                        name: 'changedate'
+                                                                    }
+                                                                ]
+                                                            }, {
                                                                 xtype: 'gridpanel',
+                                                                name: 'schedulingmonthlyscoreP',
                                                                 columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
                                                                     meta.style = "font-size: 16px; line-height: 18px; font-family: Monda; color: rgba(3, 98, 253, 1);";
                                                                     return ( colIndex == 1 ) ? Smart.maskRenderer('0,00',true)(value) : value;
                                                                 },
-                                                                name: 'schedulingmonthlyscoreP',
                                                                 store: Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyScore'),
                                                                 columns: [
                                                                     {
@@ -417,75 +465,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                                                     select: 'onSelectScoreP',
                                                                     cellclick: 'onCellClickScore'
                                                                 }
-                                                            }, {
-                                                                region: 'north',
-                                                                xtype: 'form',
-                                                                name: 'schedulingmonthlyscoreP',
-                                                                layout: 'anchor',
-                                                                defaults: {
-                                                                    allowBlank: false,
-                                                                    anchor: '100%'
-                                                                },
-                                                                items: [
-                                                                    {
-                                                                        allowBlank: true,
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'id'
-                                                                    }, {
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'scoretype',
-                                                                        value: 'P'
-                                                                    }, {
-                                                                        xtype: 'hiddenfield',
-                                                                        name: 'schedulingmonthlypartnersid'
-                                                                    }, {
-                                                                        xtype: 'fieldcontainer',
-                                                                        layout: 'hbox',
-                                                                        defaults: {
-                                                                            allowBlank: false
-                                                                        },
-                                                                        items: [
-                                                                            {
-                                                                                flex: 1,
-                                                                                pageSize: 0,
-                                                                                fieldLabel: 'Socio',
-                                                                                name: 'naturalperson',
-                                                                                hiddenNameId: 'naturalpersonid',
-                                                                                xtype: 'naturalpersonsearch'
-                                                                            }, {
-                                                                                xtype: 'splitter'
-                                                                            }, {
-                                                                                width: 70,
-                                                                                name: 'dutyfraction',
-                                                                                fieldLabel: 'Fracao',
-                                                                                xtype: 'textfield',
-                                                                                plugins: 'textmask',
-                                                                                money: true,
-                                                                                mask: '0,00',
-                                                                                value: 1
-                                                                            }
-                                                                        ]
-                                                                    }, {
-                                                                        allowBlank: true,
-                                                                        fieldLabel: 'Observacoes',
-                                                                        name: 'observation',
-                                                                        xtype: 'textfield'
-                                                                    }, {
-                                                                        xtype: 'container',
-                                                                        layout: 'hbox',
-                                                                        items: [
-                                                                            {
-                                                                                xtype: 'displayfield',
-                                                                                name: 'username'
-                                                                            }, {
-                                                                                xtype: 'splitter'
-                                                                            }, {
-                                                                                xtype: 'displayfield',
-                                                                                name: 'changedate'
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
                                                             }
                                                         ]
                                                     }
@@ -520,16 +499,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                             }, {
                                 region: 'center',
                                 xtype: 'panel',
+                                layout: 'fit',
                                 name: 'schedulearea',
                                 bodyStyle: 'padding: 0 0 0 10px;',
-                                autoScroll: true,
-                                layout: {
-                                    type: 'anchor',
-                                    reserveScrollbar: true
-                                },
                                 items: [
                                     {
-                                        xtype: 'allocationweek'
+                                        xtype: 'allocationscheduleweek'
                                     }
                                 ]
                             }

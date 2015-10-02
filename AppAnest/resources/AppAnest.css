@@ -570,38 +570,38 @@
 
 .allocationweek-border-right {
     padding: 0px !important;
-    /*border-right: 1px solid #cecece !important;*/
 }
 
 .allocationweek-border-left {
     padding: 0px !important;
-    /*border-left: 1px solid #cecece !important;*/
 }
 
 .allocationweek .x-column-header {
     border-right: none !important;
 }
 
-.allocationweek .x-column-header-inner {
-    line-height: 15px;
+.allocationweek .ligth .x-column-header-inner {
     color: black !important;
     background-image: none;
-    /*border-top: 1px solid #cecece !important;*/
     background-color: rgba(185, 233, 251, .3) !important;
 }
 
-.allocationweek .x-column-header-inner-dark {
+.allocationweek .dark .x-column-header-inner {
     background-image: none;
     background-color: rgba(185, 233, 251, .8) !important;
 }
 
-/*.allocationweek .x-grid-with-col-lines .x-grid-cell {*/
-    /*border-left: 1px solid #cecece !important;*/
-/*}*/
+.allocationschemaweek .ligth .x-column-header-inner {
+    background-image: none;
+    color: black !important;
+    background-color: rgba(84, 86, 62, .5) !important;
+}
 
-/*.allocationweek .x-grid-with-col-lines .x-grid-cell {*/
-    /*border-right: none !important;*/
-/*}*/
+.allocationschemaweek .dark .x-column-header-inner {
+    background-image: none;
+    color: white !important;
+    background-color: rgba(84, 86, 62, .7) !important;
+}
 
 .allocationschedule-day {
     background: url(images/appanest/schedule-day.png) no-repeat left;

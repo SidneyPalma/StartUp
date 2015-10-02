@@ -206,6 +206,30 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
         ];
     },
 
+    buttonAlign: 'center',
+
+    buttons: [
+        {
+            glyph: 0xe86c,
+            scale: 'medium',
+            text: 'Salvar',
+            showSmartTheme: 'red-dark',
+            handler: 'onUpdateSchemaMonthly'
+        }, {
+            glyph: 0xec9d,
+            scale: 'medium',
+            text: 'Limpar',
+            showSmartTheme: 'sky',
+            handler: 'onDeleteMonthly'
+        }, {
+            glyph: 0xe869,
+            scale: 'medium',
+            text: 'Voltar',
+            showSmartTheme: 'green',
+            handler: 'onHistoryBack'
+        }
+    ],
+
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
         var metaStyle = '',
             valueDefault = value,
@@ -225,30 +249,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
         meta.style = metaStyle + ' line-height: 16px; color: rgba(84, 86, 62, .9);';
 
         return valueDefault;
-    },
-
-    buttonAlign: 'center',
-
-    buttons: [
-        {
-            glyph: 0xe86c,
-            scale: 'medium',
-            text: 'Salvar Escala',
-            showSmartTheme: 'red-dark',
-            handler: 'onUpdateSchemaMonthly'
-        }, {
-            glyph: 0xec9d,
-            scale: 'medium',
-            text: 'Limpar',
-            showSmartTheme: 'sky',
-            handler: 'onDeleteMonthly'
-        }, {
-            glyph: 0xe869,
-            scale: 'medium',
-            text: 'Voltar',
-            showSmartTheme: 'green',
-            handler: 'onHistoryBack'
-        }
-    ]
+    }
 
 });

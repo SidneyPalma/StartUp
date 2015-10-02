@@ -60,13 +60,13 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onInsertScore: function (btn) {
-        var view = me.getView(),
-            //btn.up('container[name=containersubmit]'),
-            form = view.down('form'),
-            grid = view.down('gridpanel');
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=updatescore]'),
+            card = form.down('form[name=selectscore]');
 
-        form.reset();
-        grid.getSelectionModel().deselectAll();
+        card.reset();
+        card.getLayout().getActiveItem().down('gridpanel').getSelectionModel().deselectAll();
     },
 
     onSelectShiftHours: function (combo, record, eOpts) {

@@ -65,6 +65,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         items: [
                                             {
                                                 anchor: '100%',
+                                                allowToggle: false,
                                                 xtype: 'segmentedbutton',
                                                 items: [
                                                     {

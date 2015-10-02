@@ -472,7 +472,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
                 for (i = 1; i <= dutyamount; i++) {
                     fields.push({
-                        text: '<a style="color: blue;">' + i + '</a>',
+                        text: i,
                         align: 'center',
                         dataIndex: 'week' + Ext.String.leftPad(i, 2, '0'),
                         width: 30,
@@ -511,7 +511,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
         schemaweekday.reconfigure(store, [
             {
-                text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
+                cls: 'dark',
+                text: '<a style="font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
                 align: 'center',
                 columns: [
                     {
@@ -522,9 +523,10 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                         renderer: function (value, meta, record, rowIndex, colIndex, store) {
                             var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
                                 color = parseInt(record.get('position')) % 2 == 0,
-                                metaStyle = (color) ? 'color: white; background-color: rgba(84, 86, 62, .9);' : 'background-color: rgba(84, 86, 62, .4);';
+                                metaStyle = (color) ? 'background-color: rgba(84, 86, 62, .35);' : 'background-color: rgba(84, 86, 62, .2);';
 
-                            meta.style = metaStyle + ' font-family: Monda;';
+                            metaStyle += 'font-family: Monda; border-left: 1px solid #cecece;';
+                            meta.style = metaStyle;
 
                             if (first) {
                                 var i = rowIndex + 1;
@@ -561,8 +563,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
                     }
                 ]
             }, {
+                cls: 'ligth',
                 align: 'center',
-                text: '<a style="color: blue; font-size: 18px; font-family: Monda;">' + 'S E M A N A S' + '</a>',
+                text: '<a style="font-size: 18px; font-family: Monda;">' + 'S E M A N A S' + '</a>',
                 columns: getFields()
             }
         ]);

@@ -4,6 +4,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaMap', {
 
     xtype: 'allocationschemamap',
 
+    cls: 'allocationschemaweek',
+
     name: 'schemaweekday',
 
     rowLines: false,
@@ -47,7 +49,7 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaMap', {
         {
             glyph: 0xe86c,
             scale: 'medium',
-            text: 'Salvar Mapa',
+            text: 'Salvar',
             showSmartTheme: 'red-dark',
             handler: 'onUpdateSchemaWeekDay'
         }, {

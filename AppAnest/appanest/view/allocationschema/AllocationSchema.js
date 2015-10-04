@@ -281,7 +281,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                         name: 'labelperiod',
                                         style: {
                                             color: '#457EC5;',
-                                            fontSize: '24px;'
+                                            fontSize: '24px;',
+                                            fontFamily: 'Open Sans'
                                         }
                                     }
                                 ]

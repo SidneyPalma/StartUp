@@ -42,10 +42,111 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
         beforeedit: 'onAllocationSchemaBeforeEdit'
     },
 
+    _columnText: {
+        sundescription: 'Domingo',
+        mondescription: 'Segunda',
+        tuedescription: 'Terca',
+        weddescription: 'Quarta',
+        thudescription: 'Quinta',
+        fridescription: 'Sexta',
+        satdescription: 'Sabado'
+    },
+
     initComponent: function () {
         var me = this;
         me.buildField();
         me.callParent();
+    },
+
+    _buildDays: function (daysOfWeek) {
+        var me = this,
+            build = [],
+            field = [
+                {
+                    sortable: false,
+                    text: me._columnText['mondescription'],
+                    dataIndex: 'mondescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'mon',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['tuedescription'],
+                    dataIndex: 'tuedescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'tue',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['weddescription'],
+                    dataIndex: 'weddescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'wed',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['thudescription'],
+                    dataIndex: 'thudescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'thu',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['fridescription'],
+                    dataIndex: 'fridescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'fri',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['satdescription'],
+                    dataIndex: 'satdescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'sat',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['sundescription'],
+                    dataIndex: 'sundescription',
+                    width: 150,
+                    editor: {
+                        updateField: 'sun',
+                        xtype: 'allocationschemasearchshift',
+                        name: 'allocationschemadescription'
+                    },
+                    renderer: me.columnsRenderer
+                }
+            ];
+
+        for (i = daysOfWeek[0]; i <= daysOfWeek[1]; i++) {
+            build.push(field[i]);
+        }
+
+        return build;
     },
 
     buildField: function () {
@@ -63,9 +164,18 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
                         text: 'Unidade',
                         dataIndex: 'contractorunit',
                         renderer: function (value, meta, record, rowIndex, colIndex, store) {
-                            var first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
+                            var bordertop = parseInt(record.get('bordertop')),
+                                first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
                                 color = parseInt(record.get('rownumber')) % 2 == 0,
                                 metaStyle = (color) ? 'background-color: rgba(84, 86, 62, .35);' : 'background-color: rgba(84, 86, 62, .2);';
+
+                            if ((bordertop == 1) && (rowIndex != 0)) {
+                                metaStyle += 'border-top: 1px solid #cecece;';
+                            }
+
+                            if ((bordertop == 0) && (rowIndex != 0)) {
+                                metaStyle += 'border-top: 1px dashed rgba(111, 145, 61, .08);';
+                            }
 
                             metaStyle += ' font-size: 16px; line-height: 16px; font-family: Monda; border-left: 1px solid #cecece;';
                             meta.style = metaStyle;
@@ -84,22 +194,34 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
                         text: 'Turnos',
                         dataIndex: 'shift',
                         renderer: function (value, meta, record, rowIndex, colIndex, store) {
-                            var returnShift = '',
+                            var metaStyle = '',
+                                returnShift = '',
                                 returnSubunit = '',
                                 subunit = record.get('subunit'),
                                 position = record.get('position'),
+                                bordertop = parseInt(record.get('bordertop')),
                                 returnPosition = Ext.String.format('<div style="float: left; width: 10px;">{0}. </div>',position);
+
+                            if ((bordertop == 1) && (rowIndex != 0)) {
+                                metaStyle += 'border-top: 1px solid #cecece;';
+                            }
 
                             switch(value) {
                                 case 'D':
-                                    meta.style = 'background-color: rgba(248, 202, 0, .5); line-height: 16px;';
+                                    metaStyle += 'background-color: rgba(248, 202, 0, .5); line-height: 16px;';
                                     returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(255,160,17, 1);"><i class="icon-sun"></i></div>';
                                     break;
                                 case 'N':
-                                    meta.style = 'background-color: rgba(248, 202, 0, .9); line-height: 16px;';
+                                    metaStyle += 'background-color: rgba(248, 202, 0, .9); line-height: 16px;';
                                     returnShift = '<div style="float: left; width: 20px; text-shadow: 1px 1px 2px rgba(150, 150, 150, 1);"><i class="icon-moon-inv"></i></div>';
                                     break;
                             }
+
+                            if ((bordertop == 0) && (rowIndex != 0)) {
+                                metaStyle += 'border-top: 1px dashed rgba(248, 202, 0, .6);';
+                            }
+
+                            meta.style = metaStyle;
 
                             switch(subunit) {
                                 case '003':
@@ -130,78 +252,11 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
             }, {
                 cls: 'ligth',
                 text: '<span style="font-size: 18px; font-family: Monda;">DIAS DA SEMANA</span>',
-                columns: [
-                    {
-                        text: 'Segunda',
-                        dataIndex: 'mondescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'mon',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }, {
-                        text: 'Terca',
-                        dataIndex: 'tuedescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'tue',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }, {
-                        text: 'Quarta',
-                        dataIndex: 'weddescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'wed',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }, {
-                        text: 'Quinta',
-                        dataIndex: 'thudescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'thu',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }, {
-                        text: 'Sexta',
-                        dataIndex: 'fridescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'fri',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }
-                ]
+                columns: me._buildDays([0,4])
             }, {
                 cls: 'dark',
                 text: '<span style="font-size: 18px; font-family: Monda;">FINAL DE SEMANA</span>',
-                columns: [
-                    {
-                        text: '<b>Sabado</b>',
-                        dataIndex: 'satdescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'sat',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }, {
-                        text: '<b>Domingo</b>',
-                        dataIndex: 'sundescription',
-                        width: 150,
-                        editor: {
-                            updateField: 'sun',
-                            xtype: 'allocationschemasearchshift',
-                            name: 'allocationschemadescription'
-                        }
-                    }
-                ]
+                columns: me._buildDays([5,6])
             }
         ];
     },
@@ -233,8 +288,9 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
         var metaStyle = '',
             valueDefault = value,
-            enumType = ['001','002','011'],
             shift = record.get('shift'),
+            enumType = ['001','002','011'],
+            bordertop = parseInt(record.get('bordertop')),
             color = parseInt(record.get('position')) % 2 == 0,
             field = this.getColumnManager().columns[colIndex].dataIndex.replace('description','');
 
@@ -244,6 +300,14 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
 
         if((colIndex >= 2)&&(enumType.indexOf(record.get(field)) == -1)) {
             valueDefault = '<a style="color: red;">' +valueDefault+ '</a>';
+        }
+
+        if ((bordertop == 1) && (rowIndex != 0)) {
+            metaStyle += 'border-top: 1px solid #cecece;';
+        }
+
+        if ((bordertop == 0) && (rowIndex != 0)) {
+            metaStyle += 'border-top: 1px dashed rgba(206, 206, 206, .7);';
         }
 
         meta.style = metaStyle + ' line-height: 16px; color: rgba(84, 86, 62, .9);';

@@ -24,6 +24,9 @@ Ext.define( 'AppAnest.store.allocationschema.AllocationSchemaMonthly', {
             name: 'contractorunit',
             type: 'auto'
         }, {
+            name: 'bordertop',
+            type: 'int'
+        }, {
             name: 'greatest',
             type: 'int'
         }, {

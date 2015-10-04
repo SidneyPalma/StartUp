@@ -106,8 +106,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             store = Ext.getStore('allocationschemamonthly'),
             periodid = form.down('hiddenfield[name=schedulingperiodid]'),
             allocationschema = Ext.getStore('allocationschema'),
-            //schemamonthly = view.down('gridpanel[name=schemamonthly]'),
-            //schemamonthly = view.down('allocationschemaweek'),
             allocationschemap = me.lookupReference('allocationschemap');
 
         param.query = record.get('id');
@@ -172,8 +170,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             id = view.down('hiddenfield[name=id]').getValue(),
             warning = 'Todos os dados do processsamento anterior serao perdidos!';
 
-        if(status == 'P') {
-            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+        if(status != 'A') {
+            Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
 
@@ -210,8 +208,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             schemamonthly = Ext.getStore('allocationschemamonthly'),
             information = 'Este planejamento sera usado no processamento da escala!';
 
-        if(status == 'P') {
-            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+        if(status != 'A') {
+            Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
 
@@ -257,8 +255,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             store = Ext.getStore('allocationschemaweekday'),
             information = 'Este planejamento sera usado no processamento da escala!';
 
-        if(status == 'P') {
-            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+        if(status != 'A') {
+            Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
 
@@ -331,12 +329,15 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
 
     onAllocationSchemaBeforeEdit: function (editor, context, eOpts) {
         var me = this,
+            view = me.getView(),
             fixed = [2, 3, 4, 5, 6, 7, 8],
             items = editor.getEditor().items,
+            period = view.down('schedulingperiodsearch'),
+            status = period.foundRecord().get('status'),
             field = context.field.replace('description',''),
             lists = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-
+        if(status != 'A') return false;
 
         Ext.each(fixed, function (value, index) {
             var weekday = parseInt(context.record.get(lists[index]));
@@ -357,8 +358,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             schemamonthly = Ext.getStore('allocationschemamonthly'),
             warning = 'Todos os MAPAS criados serao perdidos!';
 
-        if(status == 'P') {
-            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+        if(status != 'A') {
+            Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
 
@@ -390,8 +391,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
             weekdayStore = view.down('gridpanel[name=schemaweekday]').getStore(),
             warning = 'Todos os dados criados deste MAPA serao perdidos!';
 
-        if(status == 'P') {
-            Smart.Msg.attention("A escala para este periodo ja foi publicada!");
+        if(status != 'A') {
+            Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
 

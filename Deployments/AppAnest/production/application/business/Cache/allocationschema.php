@@ -143,6 +143,7 @@ class allocationschema extends \Smart\Data\Cache {
             $rows = self::encodeUTF8($proxy->query($sql)->fetchAll());
 
             $i++;
+            $contractorunitid = '';
 
             // Construindo a Lista de Unidades
             foreach ($rows as $record) {
@@ -158,9 +159,17 @@ class allocationschema extends \Smart\Data\Cache {
                 $sun = intval($record['sun']);
 
                 while ($rownumber <= $greatest) {
-
+                    $b = 0;
                     $record['id'] = $i;
                     $record['position'] = $rownumber;
+
+                    if($contractorunitid != $record['contractorunitid']) {
+                        $b = 1;
+                    }
+
+                    $record['bordertop'] = $b;
+
+                    $contractorunitid = $record['contractorunitid'];
 
                     $record['mondescription'] = ($mon >= $rownumber) ? $record['mondescription'] : '...';
                     $record['tuedescription'] = ($tue >= $rownumber) ? $record['tuedescription'] : '...';

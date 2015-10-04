@@ -127,27 +127,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                 },
                                 items: [
                                     {
-                                        margin: '0 0 5 0',
-                                        xtype: 'segmentedbutton',
-                                        defaults: {
-                                            scale: 'large',
-                                            showSmartTheme: 'lemon',
-                                            handler: 'getCardIndex'
-                                        },
-                                        items: [
-                                            {
-                                                iconCls: 'allocationschedule-day',
-                                                cardIndex: 0
-                                            }, {
-                                                iconCls: 'allocationschedule-week',
-                                                cardIndex: 1,
-                                                pressed: true
-                                            //}, {
-                                            //    iconCls: 'allocationschedule-month',
-                                            //    cardIndex: 2
-                                            }
-                                        ]
-                                    }, {
                                         cls: 'smart',
                                         xtype: 'datepicker',
                                         showToday: false,
@@ -493,7 +472,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                         name: 'labelperiod',
                                         style: {
                                             color: '#457EC5;',
-                                            fontSize: '24px;'
+                                            fontSize: '24px;',
+                                            fontFamily: 'Open Sans'
                                         }
                                     }
                                 ]

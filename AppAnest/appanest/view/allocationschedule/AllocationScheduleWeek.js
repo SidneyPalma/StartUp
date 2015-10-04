@@ -4,7 +4,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
 
     xtype: 'allocationscheduleweek',
 
-    cls: 'allocationweek',
+    cls: 'allocationscheduleweek',
 
     status: 'A',
 
@@ -15,6 +15,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
     },
 
     rowLines: false,
+    autoScroll: true,
     columnLines: true,
     hideHeaders: false,
 
@@ -39,13 +40,13 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
     },
 
     _columnText: {
-        sundescription: 'DOMINGO',
-        mondescription: 'SEGUNDA-FEIRA',
-        tuedescription: 'TERCA-FEIRA',
-        weddescription: 'QUARTA-FEIRA',
-        thudescription: 'QUINTA-FEIRA',
-        fridescription: 'SEXTA-FEIRA',
-        satdescription: 'SABADO'
+        sundescription: 'Domingo',
+        mondescription: 'Segunda',
+        tuedescription: 'Terca',
+        weddescription: 'Quarta',
+        thudescription: 'Quinta',
+        fridescription: 'Sexta',
+        satdescription: 'Sabado'
     },
 
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
@@ -98,22 +99,31 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
             enumStatus = ['A','C'],
             group = [
                 {
-                    cls: 'dark',
                     width: 200,
-                    text: 'UNIDADE',
-                    sortable: false,
+                    text: 'Unidade',
                     dataIndex: 'contractorunit',
                     renderer: function (value, meta, record, rowIndex, colIndex, store) {
                         var bordertop = parseInt(record.get('bordertop')),
-                            color = parseInt(record.get('rownumber')) % 2 == 0,
                             first = !rowIndex || value !== store.getAt(rowIndex - 1).get('contractorunit'),
-                            metaStyle = (color) ? 'background-color: rgba(185, 233, 251, .8);' : 'background-color: rgba(185, 233, 251, .3);',
+                            color = parseInt(record.get('rownumber')) % 2 == 0,
+                            metaStyle = (color) ? 'background-color: rgba(111, 145, 61, .35);' : 'background-color: rgba(111, 145, 61, .2);',
                             cell =  '<div>' +
                                         '<div style="float: left; width: 90%;">{0}</div>' +
                                         '<div style="float: left; width: 10%; {1}" class="insert-item">' +
                                             '<i class="icon-plus-squared"></i>' +
                                         '</div>' +
                                     '</div>';
+
+                        if ((bordertop == 1) && (rowIndex != 0)) {
+                            metaStyle += 'border-top: 1px solid #cecece;';
+                        }
+
+                        if ((bordertop == 0) && (rowIndex != 0)) {
+                            metaStyle += 'border-top: 1px dashed rgba(111, 145, 61, .08);';
+                        }
+
+                        metaStyle += ' font-size: 16px; line-height: 16px; font-family: Monda; border-left: 1px solid #cecece;';
+                        meta.style = metaStyle;
 
                         if (first) {
                             var i = rowIndex + 1;
@@ -122,17 +132,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
                             }
                         }
 
-                        if ((bordertop == 1) && (rowIndex != 0)) {
-                            metaStyle += 'border-top: 1px solid #cecece;';
-                        }
-
-                        if ((bordertop == 0) && (rowIndex != 0)) {
-                            metaStyle += 'border-top: 1px dashed rgba(185, 233, 251, .3);';
-                        }
-
-                        metaStyle += ' font-size: 16px; line-height: 16px; font-family: Monda; border-left: 1px solid #cecece;';
-                        meta.style = metaStyle;
-
                         if (enumStatus.indexOf(status) != -1 ) {
                             return (first) ? ( status == 'A' ? Ext.String.format(cell,value) : Ext.String.format(cell,value,'color: rgba(250, 105, 0, .7);') ) : '';
                         } else {
@@ -140,9 +139,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
                         }
                     }
                 }, {
-                    cls: 'dark',
                     width: 74,
-                    text: 'TURNOS',
+                    text: 'Turnos',
                     sortable: false,
                     dataIndex: 'shift',
                     renderer: function (value, meta, record, rowIndex, colIndex, store) {
@@ -205,63 +203,63 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
         return group;
     },
 
-    _getField: function (dataIndex, pickerView) {
+    _buildDays: function (daysOfWeek,pickerView,dataIndex) {
         var me = this,
+            build = [],
             field = [
-            {
-                cls: 'ligth',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['mondescription'],
-                dataIndex: 'mondescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'ligth',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['tuedescription'],
-                dataIndex: 'tuedescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'ligth',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['weddescription'],
-                dataIndex: 'weddescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'ligth',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['thudescription'],
-                dataIndex: 'thudescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'ligth',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['fridescription'],
-                dataIndex: 'fridescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'dark',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['satdescription'],
-                dataIndex: 'satdescription',
-                renderer: me.columnsRenderer
-            }, {
-                cls: 'dark',
-                flex: 1,
-                sortable: false,
-                text: me._columnText['sundescription'],
-                dataIndex: 'sundescription',
-                renderer: me.columnsRenderer
+                {
+                    sortable: false,
+                    text: me._columnText['mondescription'],
+                    dataIndex: 'mondescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['tuedescription'],
+                    dataIndex: 'tuedescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['weddescription'],
+                    dataIndex: 'weddescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['thudescription'],
+                    dataIndex: 'thudescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: me._columnText['fridescription'],
+                    dataIndex: 'fridescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: '<b>' + me._columnText['satdescription'] + '</b>',
+                    dataIndex: 'satdescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }, {
+                    sortable: false,
+                    text: '<b>' + me._columnText['sundescription'] + '</b>',
+                    dataIndex: 'sundescription',
+                    width: 150,
+                    renderer: me.columnsRenderer
+                }
+            ];
+
+        if(daysOfWeek) {
+            for (i = daysOfWeek[0]; i <= daysOfWeek[1]; i++) {
+                build.push(field[i]);
             }
-        ];
+        }
 
         if(pickerView == 'vwDay') {
-            field = [
+            build = [
                 {
                     cls: 'dark',
                     flex: 1,
@@ -273,15 +271,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
             ]
         }
 
-        return field;
-    },
-
-    buildModel: function (dataIndex, pickerView) {
-        var me = this,
-            store = Ext.getStore('allocationschedule');
-
-        me.reconfigure(store, Ext.Array.merge(me._getGroup(),me._getField(dataIndex, pickerView)));
-        me.getView().refresh();
+        return build;
     },
 
     buildField: function () {
@@ -289,7 +279,21 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
 
         Ext.create('AppAnest.store.allocationschedule.AllocationSchedule');
 
-        me.columns = Ext.Array.merge(me._getGroup(),me._getField(null, 'vwWeek'));
+        me.columns = [
+            {
+                cls: 'dark',
+                text: '<a style="font-size: 18px; font-family: Monda;">' + 'U N I D A D E S' + '</a>',
+                columns: me._getGroup()
+            }, {
+                cls: 'ligth',
+                text: '<span style="font-size: 18px; font-family: Monda;">DIAS DA SEMANA</span>',
+                columns: me._buildDays([0,4])
+            }, {
+                cls: 'dark',
+                text: '<span style="font-size: 18px; font-family: Monda;">FINAL DE SEMANA</span>',
+                columns: me._buildDays([5,6])
+            }
+        ];
     }
 
 });

@@ -576,19 +576,26 @@
     padding: 0px !important;
 }
 
-.allocationweek .x-column-header {
-    border-right: none !important;
+.allocationscheduleweek .x-column-header {
+    border-top-color: white !important;
+    border-right-color: white !important;
 }
 
-.allocationweek .ligth .x-column-header-inner {
+.allocationscheduleweek .ligth .x-column-header-inner {
     color: black !important;
     background-image: none;
-    background-color: rgba(185, 233, 251, .3) !important;
+    background-color: rgba(111, 145, 61, .5) !important;
 }
 
-.allocationweek .dark .x-column-header-inner {
+.allocationscheduleweek .dark .x-column-header-inner {
     background-image: none;
-    background-color: rgba(185, 233, 251, .8) !important;
+    color: white !important;
+    background-color: rgba(111, 145, 61, .8) !important;
+}
+
+.allocationschemaweek .x-column-header {
+    border-top-color: white !important;
+    border-right-color: white !important;
 }
 
 .allocationschemaweek .ligth .x-column-header-inner {
@@ -601,16 +608,4 @@
     background-image: none;
     color: white !important;
     background-color: rgba(84, 86, 62, .7) !important;
-}
-
-.allocationschedule-day {
-    background: url(images/appanest/schedule-day.png) no-repeat left;
-}
-
-.allocationschedule-week {
-    background: url(images/appanest/schedule-week.png) no-repeat left;
-}
-
-.allocationschedule-month {
-    background: url(images/appanest/schedule-month.png) no-repeat left;
 }

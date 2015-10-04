@@ -677,26 +677,19 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             scope: me,
             callback: function(records, operation, success) {
                 view.setLoading(false);
-                grid.buildModel(dataIndex,pickerView);
-                var columns = grid.getColumnManager().getColumns(),
+                var d = 0,
+                    columns = grid.getColumnManager().getColumns(),
                     dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
 
-                if(pickerView == 'vwDay') {
-                    columns[2].setText(grid._columnText[columns[2].dataIndex] + '<br/><span style="font-size: 18px; line-height: 24px;">' + dateOf.getDate() + '</span>');
-                } else {
-                    var d = 0;
-                    for (i = 2; i < days.length +2; i++) {
-                        dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
-                        dateOf.setDate(dateOf.getDate() + d);
-                        columns[i].setText(grid._columnText[columns[i].dataIndex] + '<br/><span style="font-size: 18px; line-height: 24px;">' + dateOf.getDate() + '</span>');
-                        d++;
-                    }
+                for (i = 2; i < days.length +2; i++) {
+                    dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
+                    dateOf.setDate(dateOf.getDate() + d);
+                    columns[i].setText(grid._columnText[columns[i].dataIndex] + ' ' + dateOf.getDate()+'/'+ (parseInt(dateOf.getMonth())+1));
+                    d++;
                 }
 
-                Ext.suspendLayouts();
                 grid.getView().setScrollY(3000, true);
                 grid.getView().setScrollY(0, true);
-                Ext.resumeLayouts(true);
 
                 var dateOfstr = me.getDateFormated(Ext.Date.parse(periodView.dateOf, "Y-m-d"));
                 var dateTostr = me.getDateFormated(Ext.Date.parse(periodView.dateTo, "Y-m-d"));

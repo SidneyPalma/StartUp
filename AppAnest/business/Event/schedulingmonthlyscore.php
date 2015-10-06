@@ -37,7 +37,7 @@ class schedulingmonthlyscore extends \Smart\Data\Event {
             $dutyfraction += floatval($rows[0]['dutyfraction']);
 
             if($dutyfraction > 1) {
-                throw new \PDOException('O valor total da fracao nao pode ser maior que 1!');
+//                throw new \PDOException('O valor total da fracao nao pode ser maior que 1!');
             }
         }
 
@@ -113,7 +113,7 @@ class schedulingmonthlyscore extends \Smart\Data\Event {
             $dutyfraction += floatval($rows[0]['dutyfraction']);
 
             if($dutyfraction > 1) {
-                throw new \PDOException('O valor total da fracao nao pode ser maior que 1!');
+//                throw new \PDOException('O valor total da fracao nao pode ser maior que 1!');
             }
         }
     }

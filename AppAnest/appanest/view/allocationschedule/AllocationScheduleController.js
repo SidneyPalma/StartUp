@@ -10,7 +10,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         'AppAnest.view.allocationschedule.*'
     ],
 
-
     config: {
         control: {
             'allocationschedulescore form[name=schedulingmonthlyscoreR] naturalpersonsearch': {
@@ -21,7 +20,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     onFilterScore: function (field, newValue, oldValue, eOpts) {
         var me = this,
-            view = me.getView(),
+            view = me.getView().down('allocationschedulescore'),
             form = view.down('form[name=selectscore]'),
             layout = form.getLayout();
 
@@ -36,10 +35,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     onUpdateScore: function (btn) {
         var me = this,
-            view = me.getView(),
+            view = me.getView().down('allocationschedulescore'),
             data = view.xdata,
-            form = view.down('form'),
-            grid = view.down('gridpanel'),
+            form = view.getActiveItem(),
+            grid = form.down('gridpanel'),
             schedulingmonthlypartnersid = form.down('hiddenfield[name=schedulingmonthlypartnersid]');
 
         schedulingmonthlypartnersid.setValue(data.get('id'));
@@ -86,7 +85,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onCellClickScore: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {
-        var dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex,
+        var me = this,
+            view = me.getView().down('allocationschedulescore'),
+            form = view.getActiveItem(),
+            dataIndex = viewTable.getColumnManager().getHeaderAtIndex(cellIndex).dataIndex,
             warning = 'O Socio sera removido da presente lista!';
 
         if(dataIndex != '') {
@@ -99,24 +101,17 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 viewTable.store.sync({
                     success: function (batch, options) {
                         viewTable.store.load();
-                        viewTable.up('container[name=containersubmit]').down('form').reset();
+                        form.reset();
                     }
                 });
             }
         });
     },
 
-    onSelectScoreR: function (rowModel, record, index, eOpts) {
+    onSelectScore: function (rowModel, record, index, eOpts) {
         var me = this,
-            view = me.getView(),
-            form = view.down('form[name=schedulingmonthlyscoreR]');
-        form.loadRecord(record);
-    },
-
-    onSelectScoreP: function (rowModel, record, index, eOpts) {
-        var me = this,
-            view = me.getView(),
-            form = view.down('form[name=schedulingmonthlyscoreP]');
+            view = me.getView().down('allocationschedulescore'),
+            form = view.getActiveItem();
         form.loadRecord(record);
     },
 
@@ -307,9 +302,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     showReportSheetFrequency: function (btn) {
         var me = this,
             view = me.getView(),
-            form = btn.up('window').down('form'),
+            form = view.down('form'),
             data = form.getValues(),
-            period = view.down('schedulingperiodsearch'),
             url = 'business/Class/Report/SheetFrequency.php?',
             qrp = 'periodid={0}&contractorunitid={1}&subunit={2}&subunittext={3}&dateof={4}&dateto={5}&status={2}';
 
@@ -328,7 +322,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     updateAllocationSchedule: function (btn) {
         var me = this,
-            view = btn.up('window'),
+            view = me.getView(),
             form = view.down('form');
 
         me._success = function (batch, options) {
@@ -345,7 +339,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
     insertAllocationSchedule: function (btn) {
         var me = this,
-            view = btn.up('window'),
+            view = me.getView(),
             form = view.down('form'),
             status = view.down('hiddenfield[name=status]').getValue(),
             store = (status == 'A') ? Ext.create('AppAnest.store.allocationschedule.TMP_TurningMonthly') : Ext.create('AppAnest.store.allocationschedule.SchedulingMonthlyPartners');
@@ -380,26 +374,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         form.down('hiddenfield[name=releasetype]').setValue('M');
     },
 
-    onShowAllocationScheduleScore: function (view) {
-        var me = this,
-            form = view.down('form'),
-            fields = [
-                'dutydate',
-                'position',
-                'naturalperson',
-                'contractorunit',
-                'shiftdescription',
-                'subunitdescription',
-                'allocationschemadescription'
-            ];
-
-        form.loadRecord(view.xdata);
-
-        Ext.each(fields,function (field) {
-            form.getForm().findField(field).setReadOnlyColor(true);
-        });
-    },
-
     onShowAllocationScheduleNew: function (view) {
         var me = this,
             form = view.down('form'),
@@ -416,7 +390,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
 
         form.down('hiddenfield[name=id]').setValue(null);
         form.down('hiddenfield[name=releasetype]').setValue('M');
-
     },
 
     onBeforeItemKeyDown: function ( rowModel, record, index, eOpts ) {
@@ -485,7 +458,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                     });
                 }
             }
-
         }
     },
 
@@ -538,24 +510,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             storePartners.setParams(param).load({
                 scope: me,
                 callback: function(records, operation, success) {
+                    var record = records[0];
                     view.setLoading(false);
-                    //Ext.widget('allocationschedulescore', {
-                    //    xdata: records[0],
-                    //    zdata: record,
-                    //    dataIndex: dataIndex
-                    //}).show(null,function() {
-                        me.onChangeMonthlyScore(true);
-                        var storeR = view.down('gridpanel[name=schedulingmonthlyscoreR]').store;
-                        var storeP = view.down('gridpanel[name=schedulingmonthlyscoreP]').store;
-                        view.down('form[name=updatescore]').zdata = record;
-                        view.down('form[name=updatescore]').xdata = records[0];
-                        param.scoretype = 'R';
-                        storeR.setParams(param).load();
-                        param.scoretype = 'P';
-                        storeP.setParams(param).load();
-                    //});
+                    me.onChangeMonthlyScore(true,record,param);
                 }
             });
+
         }
 
         if(status == 'A') {
@@ -616,7 +576,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-    onChangeMonthlyScore: function ( newValue ) {
+    onChangeMonthlyScore: function ( newValue, record, param ) {
         var me = this,
             view = me.getView(),
             form = view.down('form[name=updatescore]'),
@@ -629,6 +589,16 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             form.show();
             bbar.show();
             changestatus.hide();
+
+            var storeR = view.down('gridpanel[name=schedulingmonthlyscoreR]').store;
+            var storeP = view.down('gridpanel[name=schedulingmonthlyscoreP]').store;
+
+            view.down('allocationschedulescore').xdata = record;
+            param.scoretype = 'R';
+            storeR.setParams(param).load();
+            param.scoretype = 'P';
+            storeP.setParams(param).load();
+
         } else {
             form.hide();
             bbar.hide();
@@ -736,8 +706,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 picker.getSelectionModel().select(0);
             }
         });
-
-
     }
 
 });

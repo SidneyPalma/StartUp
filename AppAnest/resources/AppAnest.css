@@ -609,3 +609,27 @@
     color: white !important;
     background-color: rgba(84, 86, 62, .7) !important;
 }
+
+.allocationschedulepicker .x-column-header {
+    border-right-color: white !important;
+}
+
+.allocationschedulepicker .x-grid-with-col-lines .x-grid-cell {
+    border-right: 1px solid white;
+}
+
+.allocationschedulepicker .ligth .x-column-header-inner {
+    background-image: none;
+    color: black !important;
+    background-color: rgba(84, 86, 62, .5) !important;
+}
+
+.allocationschedulepicker .dark .x-column-header-inner {
+    background-image: none;
+    color: white !important;
+    background-color: rgba(84, 86, 62, .7) !important;
+}
+
+.allocationschedulepicker .x-grid-item-selected {
+    background-color: rgba(111, 145, 61, .4) !important;
+}

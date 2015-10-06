@@ -127,12 +127,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedule', {
                                 },
                                 items: [
                                     {
-                                        cls: 'smart',
-                                        xtype: 'datepicker',
-                                        showToday: false,
-                                        listeners: {
-                                            select: 'startDatePicker'
-                                        }
+                                        height: 180,
+                                        xtype: 'allocationschedulepicker'
                                     }, {
                                         xtype: 'radiogroup',
                                         name: 'filter',

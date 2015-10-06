@@ -36,6 +36,7 @@ $include-appanest-person-personlist: true;
 $include-appanest-person-personphone: true;
 $include-appanest-person-personview: true;
 $include-appanest-store-allocationschedule-allocationschedule: true;
+$include-appanest-store-allocationschedule-allocationschedulepicker: true;
 $include-appanest-store-allocationschedule-schedulingmonthlypartners: true;
 $include-appanest-store-allocationschedule-schedulingmonthlyscore: true;
 $include-appanest-store-allocationschedule-schedulingperiod: true;
@@ -73,6 +74,7 @@ $include-appanest-view-allocationschedule-allocationscheduledirectorship: true;
 $include-appanest-view-allocationschedule-allocationscheduleedit: true;
 $include-appanest-view-allocationschedule-allocationschedulefrequencysheet: true;
 $include-appanest-view-allocationschedule-allocationschedulenew: true;
+$include-appanest-view-allocationschedule-allocationschedulepicker: true;
 $include-appanest-view-allocationschedule-allocationschedulescore: true;
 $include-appanest-view-allocationschedule-allocationscheduleweek: true;
 $include-appanest-view-allocationschedule-publishschedule: true;
@@ -1127,15 +1129,51 @@ $include-smart-ux-buttonexporter: true;
 $include-smart-ux-textmaskcore: true;
 $include-smart-ux-treecombo: true;
 $include-smartcombostore: true;
+
+
+/* ======================== ETC ======================== */
+
 /* including package ext-theme-base */
+$ext-theme-base-resource-root: '' !default;
+$ext-theme-base-resource-path: 'images' !default;
+$current-package: 'ext-theme-base';
+$current-resource-root: $ext-theme-base-resource-root;
+$relative-image-path-for-uis: $ext-theme-base-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/etc/all';
+
 /* including package ext-theme-neutral */
+$ext-theme-neutral-resource-root: '' !default;
+$ext-theme-neutral-resource-path: 'images' !default;
+$current-package: 'ext-theme-neutral';
+$current-resource-root: $ext-theme-neutral-resource-root;
+$relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/etc/all';
+
 /* including package ext-theme-neptune */
+$ext-theme-neptune-resource-root: '' !default;
+$ext-theme-neptune-resource-path: 'images' !default;
+$current-package: 'ext-theme-neptune';
+$current-resource-root: $ext-theme-neptune-resource-root;
+$relative-image-path-for-uis: $ext-theme-neptune-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/etc/all';
+
 /* including package ext-theme-crisp */
+$ext-theme-crisp-resource-root: '' !default;
+$ext-theme-crisp-resource-path: 'images' !default;
+$current-package: 'ext-theme-crisp';
+$current-resource-root: $ext-theme-crisp-resource-root;
+$relative-image-path-for-uis: $ext-theme-crisp-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/etc/all';
+
+
+/* ======================== VAR ======================== */
+
 /* including package ext-theme-crisp */
+$ext-theme-crisp-resource-root: '' !default;
+$ext-theme-crisp-resource-path: 'images' !default;
+$current-package: 'ext-theme-crisp';
+$current-resource-root: $ext-theme-crisp-resource-root;
+$relative-image-path-for-uis: $ext-theme-crisp-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/Component';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/form/Labelable';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/form/field/Base';
@@ -1159,7 +1197,13 @@ $include-smartcombostore: true;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/layout/container/Accordion';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/resizer/Resizer';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-crisp/sass/var/window/Toast';
+
 /* including package ext-theme-neptune */
+$ext-theme-neptune-resource-root: '' !default;
+$ext-theme-neptune-resource-path: 'images' !default;
+$current-package: 'ext-theme-neptune';
+$current-resource-root: $ext-theme-neptune-resource-root;
+$relative-image-path-for-uis: $ext-theme-neptune-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/Component';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/form/Labelable';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/form/field/Base';
@@ -1200,7 +1244,13 @@ $include-smartcombostore: true;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/selection/CheckboxModel';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/toolbar/Breadcrumb';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/var/window/Toast';
+
 /* including package ext-theme-neutral */
+$ext-theme-neutral-resource-root: '' !default;
+$ext-theme-neutral-resource-path: 'images' !default;
+$current-package: 'ext-theme-neutral';
+$current-resource-root: $ext-theme-neutral-resource-root;
+$relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/scroll/Indicator';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/Component';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/form/field/Base';
@@ -1253,10 +1303,23 @@ $include-smartcombostore: true;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/ux/dashboard/GoogleRssView';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/view/MultiSelector';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/var/window/Toast';
+
 /* including package ext-theme-base */
-@import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/var/Component';
-/* including package ext-theme-base */
+$ext-theme-base-resource-root: '' !default;
 $ext-theme-base-resource-path: 'images' !default;
+$current-package: 'ext-theme-base';
+$current-resource-root: $ext-theme-base-resource-root;
+$relative-image-path-for-uis: $ext-theme-base-resource-path;
+@import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/var/Component';
+
+
+/* ======================== RULE ======================== */
+
+/* including package ext-theme-base */
+$ext-theme-base-resource-root: '' !default;
+$ext-theme-base-resource-path: 'images' !default;
+$current-package: 'ext-theme-base';
+$current-resource-root: $ext-theme-base-resource-root;
 $relative-image-path-for-uis: $ext-theme-base-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/scroll/TouchScroller';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/rtl/util/Renderable';
@@ -1323,8 +1386,12 @@ $relative-image-path-for-uis: $ext-theme-base-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/selection/CheckboxModel';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/slider/Multi';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/toolbar/Breadcrumb';
+
 /* including package ext-theme-neutral */
+$ext-theme-neutral-resource-root: '' !default;
 $ext-theme-neutral-resource-path: 'images' !default;
+$current-package: 'ext-theme-neutral';
+$current-resource-root: $ext-theme-neutral-resource-root;
 $relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/scroll/Indicator';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/Component';
@@ -1394,8 +1461,12 @@ $relative-image-path-for-uis: $ext-theme-neutral-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/ux/grid/SubTable';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/view/MultiSelector';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neutral/sass/src/window/Toast';
+
 /* including package ext-theme-neptune */
+$ext-theme-neptune-resource-root: '' !default;
 $ext-theme-neptune-resource-path: 'images' !default;
+$current-package: 'ext-theme-neptune';
+$current-resource-root: $ext-theme-neptune-resource-root;
 $relative-image-path-for-uis: $ext-theme-neptune-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/dd/StatusProxy';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/panel/Panel';
@@ -1405,7 +1476,11 @@ $relative-image-path-for-uis: $ext-theme-neptune-resource-path;
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/grid/column/Column';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/form/field/File';
 @import '../../../../../../AppAnest/ext/packages/ext-theme-neptune/sass/src/resizer/Resizer';
+
 /* including package AppAnest */
+$AppAnest-resource-root: '' !default;
 $AppAnest-resource-path: 'images' !default;
+$current-package: false;
+$current-resource-root: $AppAnest-resource-root;
 $relative-image-path-for-uis: $AppAnest-resource-path;
 @import '../../../../../../AppAnest/sass/src/view/person/NaturalPersonView';

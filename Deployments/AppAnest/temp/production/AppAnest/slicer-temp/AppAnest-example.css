@@ -1,3 +1,4 @@
+/* ======================== ETC ======================== */
 /* including package ext-theme-base */
 /**
  * Creates a background gradient.
@@ -82,6 +83,7 @@
 /* including package ext-theme-neutral */
 /* including package ext-theme-neptune */
 /* including package ext-theme-crisp */
+/* ======================== VAR ======================== */
 /* including package ext-theme-crisp */
 /** @class Ext.resizer.Resizer */
 /* including package ext-theme-neptune */
@@ -7491,6 +7493,7 @@
  * @private
  * Flag to ensure GridField rules only get set once
  */
+/* ======================== RULE ======================== */
 /* including package ext-theme-base */
 /* line 1, ../../../../../../AppAnest/ext/packages/ext-theme-base/sass/src/scroll/TouchScroller.scss */
 .x-scroll-container {

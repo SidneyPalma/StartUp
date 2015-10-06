@@ -37,8 +37,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     onUpdateScore: function (btn) {
         var me = this,
             view = me.getView(),
-            data = btn.up('window').xdata,
-            //btn.up('container[name=containersubmit]'),
+            data = view.xdata,
             form = view.down('form'),
             grid = view.down('gridpanel'),
             schedulingmonthlypartnersid = form.down('hiddenfield[name=schedulingmonthlypartnersid]');
@@ -121,12 +120,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         form.loadRecord(record);
     },
 
-    startPublishSchedule: function (btn) {
+    startPublishSchedule: function () {
         var me = this,
             view = me.getView(),
-            form = btn.up('window').down('form'),
+            form = view.down('form'),
             params = form.getValues(),
-            warning = 'Todos os dados do processsamento anterior serao perdidos!';
+            warning = 'Apos a confirmacao os dados da Escala nao poderao mais ser editados!';
 
         params.action ='select';
         params.method ='setPublishSchedule';
@@ -142,7 +141,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                     params: params,
                     success: function(response){
                         view.setLoading(false);
-                        btn.up('window').close();
+                        view.close();
                     }
                 });
             }
@@ -587,13 +586,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-    startDatePicker: function(picker, date) {
-        var me = this;
-
-        picker.setPickerView(picker.getPickerView());
-        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
-    },
-
     onFilterSchedule: function ( field, newValue, oldValue, eOpts ) {
         var me = this,
             view = me.getView(),
@@ -647,12 +639,26 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-    selectSchedule: function (pickerView, periodView) {
+    onBeforeQuery: function ( queryPlan, eOpts ) {
+        var combo = queryPlan.combo,
+            store = combo.store;
+
+        store.setParams({
+            status: combo.status,
+            params: combo.params
+        });
+    },
+
+    startDatePicker: function(rowModel, record, index, eOpts) {
+        var me = this;
+        me.selectSchedule(record);
+    },
+
+    selectSchedule: function (record) {
         var me = this,
             param = {},
             view = me.getView(),
             days = [0,1,2,3,4,5,6],
-            dataIndex = me.getDataIndex(),
             grid = view.down('allocationscheduleweek'),
             store = Ext.getStore('allocationschedule'),
             period = view.down('schedulingperiodsearch'),
@@ -664,10 +670,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         param.status = period.status;
         param.action = 'select';
         param.method = 'selectSchedule';
-        param.pickerView = pickerView;
-        param.dateOf = periodView.dateOf;
-        param.dateTo = periodView.dateTo;
         param.period = period.getValue();
+        param.dateOf = record.get('dateof');
+        param.dateTo = record.get('dateto');
 
         me.onChangeMonthlyScore(false);
 
@@ -679,10 +684,10 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 view.setLoading(false);
                 var d = 0,
                     columns = grid.getColumnManager().getColumns(),
-                    dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
+                    dateOf = Ext.Date.parse(record.get('dateof'), "Y-m-d");
 
                 for (i = 2; i < days.length +2; i++) {
-                    dateOf = Ext.Date.parse(periodView.dateOf, "Y-m-d");
+                    dateOf = Ext.Date.parse(record.get('dateof'), "Y-m-d");
                     dateOf.setDate(dateOf.getDate() + d);
                     columns[i].setText(grid._columnText[columns[i].dataIndex] + ' ' + dateOf.getDate()+'/'+ (parseInt(dateOf.getMonth())+1));
                     d++;
@@ -691,82 +696,26 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 grid.getView().setScrollY(3000, true);
                 grid.getView().setScrollY(0, true);
 
-                var dateOfstr = me.getDateFormated(Ext.Date.parse(periodView.dateOf, "Y-m-d"));
-                var dateTostr = me.getDateFormated(Ext.Date.parse(periodView.dateTo, "Y-m-d"));
+                var dateOfstr = me.getDateFormated(Ext.Date.parse(record.get('dateof'), "Y-m-d"));
+                var dateTostr = me.getDateFormated(Ext.Date.parse(record.get('dateto'), "Y-m-d"));
 
                 label.setText((dateOfstr != dateTostr) ? (dateOfstr +' - '+ dateTostr): dateOfstr);
             }
         });
     },
 
-    getDataIndex: function () {
-        var me = this,
-            dataIndex = null,
-            view = me.getView(),
-            picker = view.down('datepicker'),
-            weekdata = [
-                'sundescription',
-                'mondescription',
-                'tuedescription',
-                'weddescription',
-                'thudescription',
-                'fridescription',
-                'satdescription'
-            ];
-
-        if(picker.getPickerView() == 'vwDay') {
-            dataIndex = weekdata[picker.getValue().getDay()];
-        }
-
-        return dataIndex;
-    },
-
-    getCardIndex: function (btn) {
-        var me = this,
-            view = me.getView(),
-            picker = view.down('datepicker');
-
-        switch (btn.cardIndex) {
-            case 0:
-                picker.setPickerView('vwDay');
-                break;
-            case 1:
-                picker.setPickerView('vwWeek');
-                break;
-        }
-
-        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
-    },
-
-    onBeforeQuery: function ( queryPlan, eOpts ) {
-        var combo = queryPlan.combo,
-            store = combo.store;
-
-        store.setParams({
-            status: combo.status,
-            params: combo.params
-        });
-    },
-
     onSelectPeriod: function ( combo, record, eOpts ) {
         var me = this,
+            param = {},
             view = me.getView(),
             status = record.get('status'),
-            picker = view.down('datepicker'),
-            periodof = record.toDate(record.get('periodof')),
-            periodto = record.toDate(record.get('periodto')),
+            picker = view.down('allocationschedulepicker'),
             schedule = view.down('container[name=schedule]'),
             buttonP = view.down('button[name=statusP]'),
             buttonC = view.down('button[name=statusC]'),
             buttonE = view.down('button[name=statusE]');
 
-        picker.setValue(periodof);
-        picker.setMinDate(periodof);
-        picker.setMaxDate(periodto);
         schedule.setDisabled(false);
-
-        picker.setPickerView(picker.getPickerView());
-        me.selectSchedule(picker.getPickerView(), picker.getPickerPeriod());
 
         buttonP.setDisabled(true);
         buttonC.setDisabled(true);
@@ -775,6 +724,21 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         if(status == 'A') buttonP.setDisabled(false);
         if(status == 'P') buttonC.setDisabled(false);
         if(status == 'C') buttonE.setDisabled(false);
+
+        param.action = 'select';
+        param.method = 'selectSchedulePicker';
+        param.period = record.get('id');
+
+        view.setLoading('Carregando semanas do periodo ...');
+
+        picker.store.setParams(param).load({
+            scope: me,
+            callback: function(records, operation, success) {
+                view.setLoading(false);
+                picker.getSelectionModel().select(0);
+            }
+        });
+
 
     }
 

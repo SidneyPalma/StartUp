@@ -64,11 +64,12 @@ class schema extends \Smart\Data\Proxy {
 
             insert into
                 tmp_turningmonthly
-                    ( schedulingmonthlyid, position, shift, subunit, allocationschema, username )
+                    ( schedulingmonthlyid, position, shift, shifthours, subunit, allocationschema, username )
             select
                 id,
                 @position as position,
                 shift,
+                12 as shifthours,
                 @subunit as subunit,
                 @allocationschema as allocationschema,
                 @username as username
@@ -195,8 +196,9 @@ class schema extends \Smart\Data\Proxy {
             select
                 asm.schemamap,
                 etl.code as weekday,
-                asm.weekold
-                asm.weeknew
+                asm.weekold,
+                asm.weeknew,
+                asm.weekmax
             from
                 enumtype et
                 inner join enumtypelist etl on ( etl.enumtypeid = et.id )

@@ -178,20 +178,6 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         return self::getResultToJson();
     }
 
-    private $sqlMonthly = "
-            select
-                sm.dutydate,
-                sm.contractorunitid,
-                c.shortname as contractorunit,
-                substring(lower(dayname(sm.dutydate)),1,3) as dutyname
-            from
-                schedulingmonthly sm
-                inner join schedulingperiod sp on ( sp.id = sm.schedulingperiodid )
-                inner join _tablename_ tp on ( tp.schedulingmonthlyid = sm.id )
-                inner join person c on ( c.id = sm.contractorunitid )
-            where sp.id = :period
-            group by sm.dutydate, sm.contractorunitid";
-
     private $sqlUnique = "
         select
             sm.contractorunitid,
@@ -332,42 +318,95 @@ class schedulingmonthlypartners extends \Smart\Data\Cache {
         $dateOf = $data['dateOf'];
         $dateTo = $data['dateTo'];
         $period = $data['period'];
-        $picker = $data['pickerView'];
         $proxy = $this->getStore()->getProxy();
 
-        if($picker == 'vwMonth') {
-            $sqlMonthly = $this->setTableSchedule($period,$this->sqlMonthly);
-            $pdo = $proxy->prepare($sqlMonthly);
-            $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
-            $pdo->execute();
-            $result = $pdo->fetchAll();
-            $return = $this->selectMonth($result,$data);
-        } else {
+        $sqlUnique = $this->setTableSchedule($period,$this->sqlUnique);
+        $pdo = $proxy->prepare($sqlUnique);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
+        $pdo->execute();
+        $unique = self::encodeUTF8($pdo->fetchAll());
 
-            $sqlUnique = $this->setTableSchedule($period,$this->sqlUnique);
-            $pdo = $proxy->prepare($sqlUnique);
-            $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
-            $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
-            $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
-            $pdo->execute();
-            $unique = self::encodeUTF8($pdo->fetchAll());
+        $sqlSelect = $this->setTableSchedule($period,$this->sqlSelect);
+        $pdo = $proxy->prepare($sqlSelect);
+        $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
+        $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
+        $pdo->execute();
+        $select = self::encodeUTF8($pdo->fetchAll());
 
-            $sqlSelect = $this->setTableSchedule($period,$this->sqlSelect);
-            $pdo = $proxy->prepare($sqlSelect);
-            $pdo->bindValue(":dateof", $dateOf, \PDO::PARAM_STR);
-            $pdo->bindValue(":dateto", $dateTo, \PDO::PARAM_STR);
-            $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
-            $pdo->execute();
-            $select = self::encodeUTF8($pdo->fetchAll());
-
-            $return = $this->selectView($unique,$select);
-        }
+        $return = $this->selectView($unique,$select);
 
         unset($pdo);
         unset($proxy);
 
         try {
             self::_setRows($return);
+        } catch ( \PDOException $e ) {
+            self::_setSuccess(false);
+            self::_setText($e->getMessage());
+        }
+
+        return self::getResultToJson();
+    }
+
+    public function selectSchedulePicker(array $data) {
+        $result = array();
+        $period = $data['period'];
+        $proxy = $this->getStore()->getProxy();
+
+        $sqlPicker = "
+            select
+                @dutydate := concat(lpad(year(sp.periodof),4,'0'),'-',lpad(month(sp.periodof),2,'0'),'-',lpad(row+1,2,'0')) as dutydate,
+                SUBDATE(@dutydate, WEEKDAY(@dutydate)) as dateof,
+                DATE(SUBDATE(@dutydate, WEEKDAY(@dutydate)) + INTERVAL (8 - DAYOFWEEK(SUBDATE(@dutydate, WEEKDAY(@dutydate)))) DAY) as dateto,
+                sp.periodof,
+                sp.periodto
+            from
+                ( select
+                    @row := @row + 1 as row
+                  from
+                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t1,
+                    ( select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 ) t2,
+                    ( select @row:=-1 ) t3 limit 31
+                ) b,
+                schedulingperiod sp
+            where sp.id = :period
+              and date_add(sp.periodof, interval row day) between sp.periodof and sp.periodto
+            group by dateof, dateto";
+
+        $pdo = $proxy->prepare($sqlPicker);
+        $pdo->bindValue(":period", $period, \PDO::PARAM_INT);
+        $pdo->execute();
+        $picker = $pdo->fetchAll();
+
+        $id = 0;
+
+        foreach($picker as $record) {
+            $dateof = $record['dateof'];
+            $dateto = $record['dateto'];
+
+            $day = 0;
+            $date = new \DateTime($dateof);
+
+            while ($date->format('Y-m-d') != $dateto) {
+                $date->modify("+ $day days");
+                $record[strtolower($date->format("D"))] = $date->format('Y-m-d');
+                $day = 1;
+            }
+
+            $id++;
+            $record['id'] = $id;
+            $result[] = $record;
+        }
+
+
+        unset($pdo);
+        unset($proxy);
+
+        try {
+            self::_setRows($result);
         } catch ( \PDOException $e ) {
             self::_setSuccess(false);
             self::_setText($e->getMessage());

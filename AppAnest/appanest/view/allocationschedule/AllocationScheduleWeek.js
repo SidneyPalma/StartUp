@@ -49,6 +49,12 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
         satdescription: 'Sabado'
     },
 
+    _monthList: [
+        'Janeiro','Fevereiro','Marco','Abril',
+        'Maio','Junho','Julho','Agosto',
+        'Setembro','Outubro','Novembro','Dezembro'
+    ],
+
     columnsRenderer: function (value, meta, record, rowIndex, colIndex, store) {
         var me = this,
             metaStyle = '',

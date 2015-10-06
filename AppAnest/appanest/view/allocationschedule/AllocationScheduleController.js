@@ -616,8 +616,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
         }
     },
 
-
-
     onChangeMonthlyScore: function ( newValue ) {
         var me = this,
             view = me.getView(),
@@ -647,11 +645,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             status: combo.status,
             params: combo.params
         });
-    },
-
-    startDatePicker: function(rowModel, record, index, eOpts) {
-        var me = this;
-        me.selectSchedule(record);
     },
 
     selectSchedule: function (record) {
@@ -689,7 +682,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 for (i = 2; i < days.length +2; i++) {
                     dateOf = Ext.Date.parse(record.get('dateof'), "Y-m-d");
                     dateOf.setDate(dateOf.getDate() + d);
-                    columns[i].setText(grid._columnText[columns[i].dataIndex] + ' ' + dateOf.getDate()+'/'+ (parseInt(dateOf.getMonth())+1));
+                    columns[i].setText(grid._columnText[columns[i].dataIndex] + ' ' + dateOf.getDate()+'/'+ grid._monthList[parseInt(dateOf.getMonth())]);
                     d++;
                 }
 
@@ -702,6 +695,11 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
                 label.setText((dateOfstr != dateTostr) ? (dateOfstr +' - '+ dateTostr): dateOfstr);
             }
         });
+    },
+
+    startDatePicker: function(rowModel, record, index, eOpts) {
+        var me = this;
+        me.selectSchedule(record);
     },
 
     onSelectPeriod: function ( combo, record, eOpts ) {

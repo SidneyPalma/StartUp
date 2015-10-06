@@ -38,7 +38,7 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationSchedulePicker', {
             periodof = Ext.Date.parse(record.get('periodof'), "Y-m-d"),
             periodto = Ext.Date.parse(record.get('periodto'), "Y-m-d");
 
-        meta.style = Ext.Date.between( fieldDate, periodof, periodto ) ? 'background: rgba(84, 86, 62, .1);' : 'color: rgba(84, 86, 62, .4);';
+        meta.style = Ext.Date.between( fieldDate, periodof, periodto ) ? '' : 'color: rgba(84, 86, 62, .4); background: rgba(84, 86, 62, .1);';
 
         return Ext.Date.format(fieldDate,'d');
     },

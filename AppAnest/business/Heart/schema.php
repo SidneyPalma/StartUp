@@ -326,8 +326,6 @@ class schema extends \Smart\Data\Proxy {
         $weekmax = intval($dayWeek['weekmax']);
         $weeknew = intval($dayWeek['weeknew']);
         $lastWeek = self::jsonToArray($dayWeek['schemamap']);
-//        $weekold = intval($dayWeek['weekold']);
-//        $weeks = (($weekold + $week) > count($lastWeek)) ? (($weekold + $week) - count($lastWeek)) : ($weekold + $week);
         $weeks = (($weeknew + $week) > $weekmax) ? 1 : ($weeknew + $week);
         $weeknew = 'week' . str_pad($weeks,2,"0",STR_PAD_LEFT);
 
@@ -389,6 +387,14 @@ class schema extends \Smart\Data\Proxy {
         return self::uniqueArray($tmpDaysOfWeek);
     }
 
+
+    /**
+     * Salto por unidade
+     *
+     * @param array $unit
+     * @param $dayofweek
+     * @return mixed
+     */
     private function setShiftUnit (array $unit, $dayofweek) {
         $daysname = $this->daysweek['daysname'][$dayofweek];
         $shift = $unit['shift'];
@@ -410,6 +416,12 @@ class schema extends \Smart\Data\Proxy {
         return $record[0]['naturalpersonid'];
     }
 
+
+    /**
+     * Importar Dados Periodo Anterior
+     *
+     * @param array $dayList
+     */
     private function setSchema000 (array $dayList) {
         $username = Session::read('username');
         $schemaweek = self::jsonToArray($this->schemamonthly[0]["schemaweek"]);
@@ -440,10 +452,12 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema001 (array $dayList, $dayofweek) {
+        $shiftdat = array('012','014');
         $shift001 = self::searchArray($this->schemaweekold,'allocationschema','001');
         $shift012 = self::searchArray($this->schemaweekold,'allocationschema','012');
+        $shift014 = self::searchArray($this->schemaweekold,'allocationschema','014');
 
-        $shiftDay = array_merge($shift001,$shift012);
+        $shiftDay = array_merge($shift001,$shift012,$shift014);
 
         $lastWeek = self::searchArray($shiftDay,'dayofweek',$dayofweek);
 
@@ -460,7 +474,7 @@ class schema extends \Smart\Data\Proxy {
                 $contractorunitid = $d['contractorunitid'];
                 $allocationschema = $d['allocationschema'];
 
-                if($allocationschema == '012') {
+                if (in_array($allocationschema, $shiftdat) == true) {
                     $naturalpersonid = $this->setShiftUnit($d,$dayofweek);
                 }
 

@@ -68,7 +68,8 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
     },
 
     onSelectShiftHours: function (combo, record, eOpts) {
-        var view = combo.up('window');
+        var me = this,
+            view = me.getView().down('allocationschedulescore');
 
         view.xdata.set('shifthours',combo.getValue());
 
@@ -594,6 +595,9 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleController', {
             var storeP = view.down('gridpanel[name=schedulingmonthlyscoreP]').store;
 
             view.down('allocationschedulescore').xdata = record;
+
+            view.down('combobox[name=shifthours]').setValue(record.get('shifthours'));
+
             param.scoretype = 'R';
             storeR.setParams(param).load();
             param.scoretype = 'P';

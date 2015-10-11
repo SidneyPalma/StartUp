@@ -237,17 +237,17 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                     }, {
                                                         xtype: 'splitter'
                                                     }, {
-                                                        flex: 1,
-                                                        fieldLabel: 'Dia',
-                                                        xtype: 'comboenum',
-                                                        name: 'weekdaydescription'
-                                                    }, {
-                                                        xtype: 'splitter'
-                                                    }, {
                                                         width: 80,
                                                         fieldLabel: 'Turno',
                                                         xtype: 'comboenum',
                                                         name: 'shiftdescription'
+                                                    }, {
+                                                        xtype: 'splitter'
+                                                    }, {
+                                                        flex: 1,
+                                                        fieldLabel: 'Dia',
+                                                        xtype: 'comboenum',
+                                                        name: 'weekdaydescription'
                                                     }, {
                                                         xtype: 'splitter'
                                                     }, {
@@ -395,14 +395,6 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                 },
                                                 items: [
                                                     {
-                                                        flex: 1,
-                                                        multiSelect: true,
-                                                        fieldLabel: 'Dia',
-                                                        xtype: 'comboenum',
-                                                        name: 'weekdaydescription'
-                                                    }, {
-                                                        xtype: 'splitter'
-                                                    }, {
                                                         width: 80,
                                                         fieldLabel: 'Turno',
                                                         xtype: 'comboenum',
@@ -410,10 +402,18 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                     }, {
                                                         xtype: 'splitter'
                                                     }, {
+                                                        flex: 2,
+                                                        multiSelect: true,
+                                                        fieldLabel: 'Dias da Semana',
+                                                        xtype: 'comboenum',
+                                                        name: 'weekdaydescription'
+                                                    }, {
+                                                        xtype: 'splitter'
+                                                    }, {
                                                         flex: 1,
                                                         pageSize: 0,
                                                         name: 'naturalpersonidof',
-                                                        fieldLabel: 'Plantonista: <b>DE</b>',
+                                                        fieldLabel: 'Plantonista: <b style="color: #0016b0;">DE</b>',
                                                         xtype: 'naturalpersonsearch'
                                                     }, {
                                                         xtype: 'splitter'
@@ -421,7 +421,7 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                         flex: 1,
                                                         pageSize: 0,
                                                         name: 'naturalpersonidto',
-                                                        fieldLabel: 'Plantonista: <b>PARA</b>',
+                                                        fieldLabel: 'Plantonista: <b style="color: #0016b0;">PARA</b>',
                                                         xtype: 'naturalpersonsearch'
                                                     }, {
                                                         xtype: 'splitter'

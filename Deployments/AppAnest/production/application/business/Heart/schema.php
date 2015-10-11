@@ -229,15 +229,18 @@ class schema extends \Smart\Data\Proxy {
 
         $sqlUnitDay = "
             select
-                contractorunitid,
-                naturalpersonid,
-                shift,
-                weekday,
-                position
+                csu.contractorunitid,
+                cus.naturalpersonid,
+                cus.shift,
+                cus.weekday,
+                cus.position,
+                cus.allocationtype
             from
-                contractorunitschema
+                contractorunitschema cus
+                inner join contractorsubunit csu on ( csu.id = cus.contractorsubunitid )
+            where schedulingperiodid = :periodid
             order by
-                contractorunitid, weekday, shift, position";
+                csu.contractorunitid, cus.weekday, cus.shift, cus.position";
 
         $sqlPartner = "
             select
@@ -266,7 +269,14 @@ class schema extends \Smart\Data\Proxy {
 
         $pdo->execute();
         $this->schemaweekold = self::encodeUTF8($pdo->fetchAll());
-        $this->schemaunitday = self::encodeUTF8($this->query($sqlUnitDay)->fetchAll());
+
+
+        $pdo = $this->prepare($sqlUnitDay);
+        $pdo->bindValue(":periodid", $periodid, \PDO::PARAM_INT);
+
+        $pdo->execute();
+        $this->schemaunitday = self::encodeUTF8($pdo->fetchAll());
+
         $this->naturalperson = self::encodeUTF8($this->query($sqlPartner)->fetchAll());
     }
 

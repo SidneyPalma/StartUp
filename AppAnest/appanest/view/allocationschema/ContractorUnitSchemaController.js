@@ -20,6 +20,12 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchemaController', {
 
     config: {
         control: {
+            'contractorunitschema comboenum[name=shiftdescription]': {
+                select: 'onSelectResetPosition'
+            },
+            'contractorunitschema comboenum[name=weekdaydescription]': {
+                select: 'onSelectResetPosition'
+            },
             'contractorunitschema comboenum[name=allocationtypedescription]': {
                 select: 'onSelectAllocationSchema',
                 beforequery: 'onBeforeQueryAllocationType'
@@ -43,6 +49,14 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchemaController', {
             callback: function(records, operation, success) {
             }
         });
+    },
+
+    onSelectResetPosition: function (combo, record, eOpts) {
+        var me = this,
+            view = me.getView(),
+            form = view.down('form[name=allocationtype]');
+
+        form.down('numberfield').setValue(1);
     },
 
     onCellClickAllocationType: function ( viewTable, td, cellIndex, record, tr, rowIndex, e ) {

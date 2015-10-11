@@ -264,19 +264,6 @@ Ext.define( 'AppAnest.view.allocationschedule.AllocationScheduleWeek', {
             }
         }
 
-        if(pickerView == 'vwDay') {
-            build = [
-                {
-                    cls: 'dark',
-                    flex: 1,
-                    sortable: false,
-                    text: me._columnText[dataIndex],
-                    dataIndex: dataIndex,
-                    renderer: me.columnsRenderer
-                }
-            ]
-        }
-
         return build;
     },
 

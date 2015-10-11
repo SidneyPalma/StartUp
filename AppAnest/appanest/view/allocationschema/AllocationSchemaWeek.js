@@ -2,7 +2,7 @@
 Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaWeek', {
     extend: 'Ext.grid.Panel',
 
-    xtype: 'allocationschemaweek',
+    alias: 'widget.allocationschemaweek',
 
     cls: 'allocationschemaweek',
 

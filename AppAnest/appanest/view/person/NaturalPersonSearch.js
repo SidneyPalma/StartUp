@@ -2,7 +2,7 @@
 Ext.define( 'AppAnest.view.person.NaturalPersonSearch', {
     extend: 'Smart.form.field.ComboSearch',
 
-    alias: 'widget.naturalpersonsearch',
+    xtype: 'naturalpersonsearch',
 
     requires: [
         'AppAnest.store.person.NaturalPerson',

@@ -1,4 +1,3 @@
-//@charset ISO-8859-1
 Ext.define( 'AppAnest.view.person.ContractorUnitView', {
     extend: 'Ext.container.Container',
 
@@ -34,8 +33,6 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
         var me = this;
 
         Ext.create('AppAnest.store.person.ContractorSubUnit');
-        Ext.create('AppAnest.store.person.ContractorUnitSchema');
-        Ext.create('AppAnest.store.person.ContractorUnitSchemaShow');
 
         me.items = [
             {
@@ -312,156 +309,6 @@ Ext.define( 'AppAnest.view.person.ContractorUnitView', {
                                                             {
                                                                 xtype: 'pagingtoolbar',
                                                                 store: 'contractorsubunit',
-                                                                dock: 'bottom',
-                                                                displayInfo: true
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }, {
-                                                glyph: 0xe953,
-                                                title: 'Plantões',
-
-                                                //disabled: true,
-
-                                                reference: 'shifts',
-
-                                                layout: 'border',
-
-                                                items: [
-                                                    {
-                                                        region: 'north',
-                                                        xtype: 'form',
-                                                        style: {
-                                                            borderBottom: 'solid 1px #cecece'
-                                                        },
-                                                        bodyStyle: 'padding-top: 10px',
-                                                        items: [
-                                                            {
-                                                                xtype: 'label',
-                                                                text: 'Esquema de processamento',
-                                                                style: {
-                                                                    color: 'blue;',
-                                                                    fontSize: '14px;'
-                                                                }
-                                                            }, {
-                                                                margin: '10 0 10 0',
-                                                                xtype: 'container',
-                                                                layout: 'hbox',
-                                                                defaults: {
-                                                                    //allowBlank: false
-                                                                },
-                                                                items: [
-                                                                    {
-                                                                        width: 80,
-                                                                        fieldLabel: 'Turno',
-                                                                        xtype: 'comboenum',
-                                                                        name: 'shiftdescription'
-                                                                    }, {
-                                                                        xtype: 'splitter'
-                                                                    }, {
-                                                                        width: 80,
-                                                                        minValue: 1,
-                                                                        maxValue: 10,
-                                                                        fieldLabel: 'Posição',
-                                                                        name: 'position',
-                                                                        xtype: 'numberfield'
-                                                                    }, {
-                                                                        xtype: 'splitter'
-                                                                    }, {
-                                                                        flex: 2,
-                                                                        fieldLabel: 'Dia',
-                                                                        xtype: 'comboenum',
-                                                                        name: 'weekdaydescription',
-                                                                        filterField: {
-                                                                            field: 'weekday',
-                                                                            regex: /(^mon)|(^tue)|(^wed)|(^thu)|(^fri)/
-                                                                        }
-                                                                    }, {
-                                                                        xtype: 'splitter'
-                                                                    }, {
-                                                                        flex: 2,
-                                                                        pageSize: 0,
-                                                                        name: 'naturalpersonid',
-                                                                        fieldLabel: 'Plantonista',
-                                                                        xtype: 'naturalpersonsearch'
-                                                                    }, {
-                                                                        xtype: 'splitter'
-                                                                    }, {
-                                                                        margin: '10 0 0 0',
-                                                                        scale: 'large',
-                                                                        width: 110,
-                                                                        xtype: 'button',
-                                                                        glyph: 0xec48,
-                                                                        text: 'Inserir',
-                                                                        showSmartTheme: 'blue',
-                                                                        handler: 'onUpdateShifts'
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }, {
-                                                        region: 'center',
-                                                        xtype: 'gridpanel',
-                                                        name: 'unitschema',
-                                                        hideHeaders: false,
-                                                        store: 'contractorunitschemashow',
-                                                        columnsRenderer: function (value, metaData, record, rowIndex, colIndex) {
-                                                            var me = this,
-                                                                cell =  '<div>' +
-                                                                            '<div style="float: left; width: 90%;">{0}</div>' +
-                                                                            '<div style="float: left; width: 10%;" class="show-item">' +
-                                                                                '<i class="icon-cancel-circled"></i>' +
-                                                                            '</div>' +
-                                                                        '</div>';
-
-                                                            return ((value) && (value.length != 0)) ? Ext.String.format(cell,value) : value;
-                                                        },
-                                                        listeners: {
-                                                            cellclick: 'onCellClick'
-                                                        },
-                                                        features: [
-                                                            {
-                                                                ftype:'grouping',
-                                                                collapsible: false,
-                                                                groupHeaderTpl: '<b style="color: #0000ff;">{name}</b>'
-                                                            }
-                                                        ],
-                                                        columns: [
-                                                            {
-                                                                width: 40,
-                                                                text: '##',
-                                                                align: 'center',
-                                                                dataIndex: 'position',
-                                                                renderer: function (value, metaData, record) {
-                                                                    return Ext.String.leftPad(value, 2, '0');
-                                                                }
-                                                            }, {
-                                                                flex: 1,
-                                                                text: 'Segunda',
-                                                                dataIndex: 'monperson'
-                                                            }, {
-                                                                flex: 1,
-                                                                text: 'Terça',
-                                                                dataIndex: 'tueperson'
-                                                            }, {
-                                                                flex: 1,
-                                                                text: 'Quarta',
-                                                                dataIndex: 'wedperson'
-                                                            }, {
-                                                                flex: 1,
-                                                                text: 'Quinta',
-                                                                dataIndex: 'thuperson'
-                                                            }, {
-                                                                flex: 1,
-                                                                text: 'Sexta',
-                                                                dataIndex: 'friperson'
-                                                            }
-                                                        ],
-                                                        dockedItems: [
-                                                            {
-                                                                xtype: 'pagingtoolbar',
-                                                                store: 'contractorunitschemashow',
                                                                 dock: 'bottom',
                                                                 displayInfo: true
                                                             }

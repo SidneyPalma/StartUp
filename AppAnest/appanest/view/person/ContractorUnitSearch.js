@@ -2,7 +2,7 @@
 Ext.define( 'AppAnest.view.person.ContractorUnitSearch', {
     extend: 'Smart.form.field.ComboSearch',
 
-    alias: 'widget.contractorunitsearch',
+    xtype: 'contractorunitsearch',
 
     store: 'AppAnest.store.person.ContractorUnit',
 

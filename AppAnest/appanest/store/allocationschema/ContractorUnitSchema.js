@@ -1,4 +1,4 @@
-Ext.define( 'AppAnest.store.person.ContractorUnitSchema', {
+Ext.define( 'AppAnest.store.allocationschema.ContractorUnitSchema', {
     extend: 'Smart.data.StoreBase',
 
     alias: 'store.ContractorUnitSchema',
@@ -7,8 +7,6 @@ Ext.define( 'AppAnest.store.person.ContractorUnitSchema', {
 
     url: 'business/Class/contractorunitschema.php',
 
-    model: 'AppAnest.model.person.ContractorUnitSchema',
-
-    groupField: 'shiftdescription'
+    model: 'AppAnest.model.allocationschema.ContractorUnitSchema'
 
 });

@@ -8,7 +8,8 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
         'Smart.form.field.*',
         'Ext.form.RadioGroup',
         'AppAnest.view.planning.*',
-        'AppAnest.view.allocationschedule.*'
+        'AppAnest.view.allocationschedule.*',
+        'Ext.layout.container.SegmentedButton'
     ],
 
     controller: 'allocationschema',
@@ -153,12 +154,25 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchema', {
                                                             change: 'onChangeFilterMonthly'
                                                         }
                                                     }, {
-                                                        xtype: 'button',
-                                                        glyph: 0xec2b,
-                                                        scale: 'medium',
-                                                        text: 'Processar Escala do Periodo',
-                                                        showSmartTheme: 'blue',
-                                                        handler: 'onCreateSchemaMonthly'
+                                                        anchor: '100%',
+                                                        vertical: true,
+                                                        allowToggle: false,
+                                                        xtype: 'segmentedbutton',
+                                                        items: [
+                                                            {
+                                                                scale: 'medium',
+                                                                glyph: 0xe899,
+                                                                //showSmartTheme: 'blue',
+                                                                text: 'Processar Escala do Periodo',
+                                                                handler: 'onCreateSchemaMonthly'
+                                                            }, {
+                                                                scale: 'medium',
+                                                                glyph: 0xe9eb,
+                                                                //showSmartTheme: 'blue',
+                                                                text: 'Ajustes do Periodo',
+                                                                handler: 'onUpdateSchemaSetting'
+                                                            }
+                                                        ]
                                                     }
                                                 ]
                                             }, {

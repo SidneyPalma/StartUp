@@ -161,16 +161,27 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
         label.setText((dateOfstr != dateTostr) ? (dateOfstr +' - '+ dateTostr): dateOfstr);
     },
 
+    onUpdateSchemaSetting: function () {
+        var me = this,
+            view = me.getView(),
+            period = view.down('schedulingperiodsearch'),
+            record = period.foundRecord();
+
+        Ext.widget('contractorunitschema').show(null,function() {
+            this.xdata = record;
+            this.down('hiddenfield[name=schedulingperiodid]').setValue(record.get('id'));
+        });
+    },
+
     onCreateSchemaMonthly: function () {
         var me = this,
             view = me.getView(),
             period = view.down('schedulingperiodsearch'),
-            status = period.foundRecord().get('status'),
-            win = Ext.widget('allocationschemaprocess'),
+            record = period.foundRecord(),
             id = view.down('hiddenfield[name=id]').getValue(),
             warning = 'Todos os dados do processsamento anterior serao perdidos!';
 
-        if(status != 'A') {
+        if(record.get('status') != 'A') {
             Smart.Msg.attention("A escala para este periodo nao esta mais aberta!");
             return false;
         }
@@ -197,7 +208,6 @@ Ext.define( 'AppAnest.view.allocationschema.AllocationSchemaController', {
     },
 
     onUpdateSchemaMonthly: function () {
-
         var me = this,
             list = [],
             view = me.getView(),

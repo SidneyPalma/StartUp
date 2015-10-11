@@ -15,10 +15,16 @@ class contractorunitschema extends \Smart\Data\Model {
     private $id;
 
     /**
-     * @Policy {"nullable":false}
+     * @Policy {"nullable":true}
      * @Column {"description":"", "type":"integer", "policy":true}
      */
-    private $contractorunitid;
+    private $contractorsubunitid;
+
+    /**
+     * @Policy {"nullable":true}
+     * @Column {"description":"", "type":"integer", "policy":true}
+     */
+    private $schedulingperiodid;
 
     /**
      * @Policy {"nullable":false}
@@ -27,19 +33,25 @@ class contractorunitschema extends \Smart\Data\Model {
     private $naturalpersonid;
 
     /**
-     * @Policy {"nullable":false, "length":3}
-     * @Column {"description":"", "type":"string", "policy":true}
-     */
-    private $weekday;
-
-    /**
      * @Policy {"nullable":false}
      * @Column {"description":"", "type":"integer", "policy":true}
      */
     private $position;
 
     /**
-     * @Policy {"nullable":false, "length":1}
+     * @Policy {"nullable":false, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $weekday;
+
+    /**
+     * @Policy {"nullable":true, "length":3}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $allocationtype;
+
+    /**
+     * @Policy {"nullable":true, "length":1}
      * @Column {"description":"", "type":"string", "policy":true}
      */
     private $shift;
@@ -63,16 +75,32 @@ class contractorunitschema extends \Smart\Data\Model {
     /**
      * @return type integer
      */
-    public function getContractorunitid() {
-        return $this->contractorunitid;
+    public function getContractorsubunitid() {
+        return $this->contractorsubunitid;
     }
 
     /**
-     * @param type $contractorunitid
+     * @param type $contractorsubunitid
      * @return \AppAnest\Model\contractorunitschema
      */
-    public function setContractorunitid($contractorunitid) {
-        $this->contractorunitid = $contractorunitid;
+    public function setContractorsubunitid($contractorsubunitid) {
+        $this->contractorsubunitid = $contractorsubunitid;
+        return $this;
+    }
+
+    /**
+     * @return type integer
+     */
+    public function getSchedulingperiodid() {
+        return $this->schedulingperiodid;
+    }
+
+    /**
+     * @param type $schedulingperiodid
+     * @return \AppAnest\Model\contractorunitschema
+     */
+    public function setSchedulingperiodid($schedulingperiodid) {
+        $this->schedulingperiodid = $schedulingperiodid;
         return $this;
     }
 
@@ -89,22 +117,6 @@ class contractorunitschema extends \Smart\Data\Model {
      */
     public function setNaturalpersonid($naturalpersonid) {
         $this->naturalpersonid = $naturalpersonid;
-        return $this;
-    }
-
-    /**
-     * @return type string
-     */
-    public function getWeekday() {
-        return $this->weekday;
-    }
-
-    /**
-     * @param type $weekday
-     * @return \AppAnest\Model\contractorunitschema
-     */
-    public function setWeekday($weekday) {
-        $this->weekday = $weekday;
         return $this;
     }
 
@@ -127,17 +139,49 @@ class contractorunitschema extends \Smart\Data\Model {
     /**
      * @return type string
      */
+    public function getWeekday() {
+        return $this->weekday;
+    }
+
+    /**
+     * @param type $weekday
+     * @return \AppAnest\Model\contractorunitschema
+     */
+    public function setWeekday($weekday) {
+        $this->weekday = $weekday;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getAllocationtype() {
+        return $this->allocationtype;
+    }
+
+    /**
+     * @param type $allocationtype
+     * @return \AppAnest\Model\contractorunitschema
+     */
+    public function setAllocationtype($allocationtype) {
+        $this->allocationtype = $allocationtype;
+        return $this;
+    }
+//
+
+    /**
+     * @return type string
+     */
     public function getShift() {
         return $this->shift;
     }
 
     /**
      * @param type $shift
-     * @return \AppAnest\Model\contractorunitschema
+     * @return \AppAnest\Model\shift
      */
     public function setShift($shift) {
         $this->shift = $shift;
         return $this;
     }
-
 }

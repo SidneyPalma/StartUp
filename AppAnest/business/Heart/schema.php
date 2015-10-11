@@ -99,7 +99,7 @@ class schema extends \Smart\Data\Proxy {
                     and sm.dutydate = @dutydate
                     and tp.shift = @shift
                     and tp.schedulingmonthlyid = sm.id
-                    and tp.allocationschema = @allocationschema
+                    -- and tp.allocationschema = @allocationschema
                     and tp.position = @position
                 )
             set tp.naturalpersonid = @naturalpersonid;
@@ -396,10 +396,10 @@ class schema extends \Smart\Data\Proxy {
      * @return mixed
      */
     private function setShiftUnit (array $unit, $dayofweek) {
-        $daysname = $this->daysweek['daysname'][$dayofweek];
         $shift = $unit['shift'];
         $naturalpersonid = $unit['naturalpersonid'];
         $contractorunitid = $unit['contractorunitid'];
+        $daysname = $this->daysweek['daysname'][$dayofweek];
 
         $unitSchema = self::searchArray($this->schemaunitday,'contractorunitid',$contractorunitid);
         $unitSchema = self::searchArray($unitSchema,'weekday',$daysname);
@@ -452,7 +452,7 @@ class schema extends \Smart\Data\Proxy {
     }
 
     private function setSchema001 (array $dayList, $dayofweek) {
-        $shiftdat = array('012','014');
+//        $shiftdat = array('012','014');
         $shift001 = self::searchArray($this->schemaweekold,'allocationschema','001');
         $shift012 = self::searchArray($this->schemaweekold,'allocationschema','012');
         $shift014 = self::searchArray($this->schemaweekold,'allocationschema','014');
@@ -463,7 +463,6 @@ class schema extends \Smart\Data\Proxy {
 
         foreach($dayList as $m) {
             $dutydate = $m['dutydate'];
-
             $schedulingperiodid = $m['schedulingperiodid'];
             $dayWeek = $this->setTurningV($lastWeek);
 
@@ -474,9 +473,13 @@ class schema extends \Smart\Data\Proxy {
                 $contractorunitid = $d['contractorunitid'];
                 $allocationschema = $d['allocationschema'];
 
-                if (in_array($allocationschema, $shiftdat) == true) {
+                if ($allocationschema == '012') {
                     $naturalpersonid = $this->setShiftUnit($d,$dayofweek);
                 }
+
+//                if (in_array($allocationschema, $shiftdat) == true) {
+//                    $naturalpersonid = $this->setShiftUnit($d,$dayofweek);
+//                }
 
                 $pdo = $this->prepare($this->sqlUpdate);
                 $pdo->bindValue(":schedulingperiodid", $schedulingperiodid, \PDO::PARAM_INT);
@@ -495,7 +498,6 @@ class schema extends \Smart\Data\Proxy {
 
     private function setSchema002 (array $dayList, $dayofweek) {
         $daysname = $this->daysweek['daysname'];
-
         $lastWeek = self::searchArray($this->schemaweekday,'weekday',$daysname[$dayofweek])[0];
         $partners = self::searchArray($this->naturalperson,'weekday',$daysname[$dayofweek]);
 

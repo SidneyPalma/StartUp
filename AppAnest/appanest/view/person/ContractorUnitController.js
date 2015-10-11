@@ -46,72 +46,6 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
 
     url: 'business/Class/contractorunit.php',
 
-    onCellClick: function ( viewTable, td, cellIndex, record ) {
-        var me = this,
-            field = ['mon','tue','wed','thu','fri'],
-            value = (cellIndex != 0) ? record.get(field[cellIndex-1]) : '';
-
-        if((value)&&(value.length != 0)) {
-            var store = Ext.getStore('contractorunitschema'),
-                model = Ext.create('AppAnest.model.person.ContractorUnitSchema');
-
-            Ext.Msg.show({
-                title:'Removendo número de Sócio da lista!',
-                message: 'Confirma a remoção deste Sócio?',
-                buttons: Ext.Msg.YESNO,
-                icon: Ext.Msg.QUESTION,
-                fn: function(btn) {
-                    if (btn === 'yes') {
-                        viewTable.setLoading('Removendo o registro...');
-                        Ext.Ajax.request({
-                            scope: me,
-                            url: store.getUrl(),
-                            params: {
-                                action: 'delete',
-                                rows: Ext.encode({id: record.get(field[cellIndex-1])})
-                            },
-                            callback: function(options, success, response) {
-                                viewTable.setLoading(false);
-                                record.store.load();
-                            }
-                        });
-                    }
-                }
-            });
-        }
-    },
-
-    onUpdateShifts: function () {
-        var me = this,
-            view = me.getView(),
-            shifts = me.lookupReference('shifts'),
-            values = shifts.down('form').getValues();
-
-        if(shifts.down('form').isValid()) {
-            var store = Ext.getStore('contractorunitschema'),
-                model = Ext.create('AppAnest.model.person.ContractorUnitSchema');
-
-            values.id = null;
-            values.contractorunitid = view.down('hiddenfield[name=id]').getValue();
-            Ext.suspendLayouts();
-
-            model.set(values);
-            store.add(model);
-            store.sync({
-                scope: me,
-                success: function ( batch, options ) {
-                    shifts.down('gridpanel').store.removeAll();
-                    shifts.down('gridpanel').store.load();
-                    shifts.down('form').down('naturalpersonsearch').reset();
-                    shifts.down('form').down('numberfield').onSpinnerUpClick();
-                    Ext.resumeLayouts(true);
-                },
-                failure: function ( batch, options ) {
-                }
-            });
-        }
-    },
-
     getUserCardIndex: function (btn) {
         var me = this,
             listViews = me.lookupReference('listViews');
@@ -354,7 +288,6 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
             portrait = form.down('portrait'),
             store = Ext.getStore('contractorunit'),
             storeSubUnit = Ext.getStore('contractorsubunit'),
-            storeUnitSchema = Ext.getStore('contractorunitschemashow'),
             id = form.down('hiddenfield[name=id]').getValue(),
             storePhone = container.down('gridpanel[name=phone]').store;
 
@@ -379,10 +312,6 @@ Ext.define(	'AppAnest.view.person.ContractorUnitController', {
                     method: 'selectCode'
                 }).load();
                 storeSubUnit.setParams({
-                    query: record.get('id'),
-                    method: 'selectCode'
-                }).load();
-                storeUnitSchema.setParams({
                     query: record.get('id'),
                     method: 'selectCode'
                 }).load();

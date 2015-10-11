@@ -1,4 +1,4 @@
-Ext.define( 'AppAnest.model.person.ContractorUnitSchema', {
+Ext.define( 'AppAnest.model.allocationschema.ContractorUnitSchema', {
     extend: 'Ext.data.Model',
 
     fields: [
@@ -6,19 +6,34 @@ Ext.define( 'AppAnest.model.person.ContractorUnitSchema', {
             name: 'id',
             type: 'int'
         }, {
-            name: 'contractorunitid',
+            name: 'contractorsubunitid',
+            type: 'int'
+        }, {
+            name: 'schedulingperiodid',
             type: 'int'
         }, {
             name: 'naturalpersonid',
             type: 'int'
         }, {
-            name: 'weekday',
-            type: 'auto'
-        }, {
             name: 'position',
             type: 'int'
         }, {
+            name: 'subunit',
+            type: 'auto'
+        }, {
             name: 'shift',
+            type: 'auto'
+        }, {
+            name: 'weekday',
+            type: 'auto'
+        }, {
+            name: 'allocationtype',
+            type: 'auto'
+        }, {
+            name: 'allocationtypedescription',
+            type: 'auto'
+        }, {
+            name: 'weekday',
             type: 'auto'
         }, {
             name: 'shiftdescription',
@@ -52,6 +67,18 @@ Ext.define( 'AppAnest.model.person.ContractorUnitSchema', {
             type: 'int'
         }, {
             name: 'friperson',
+            type: 'auto'
+        }, {
+            name: 'sat',
+            type: 'int'
+        }, {
+            name: 'satperson',
+            type: 'auto'
+        }, {
+            name: 'sun',
+            type: 'int'
+        }, {
+            name: 'sunperson',
             type: 'auto'
         }
     ]

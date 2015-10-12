@@ -105,6 +105,7 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                     {
                                                         flex: 3,
                                                         allowBlank: false,
+                                                        hideTrigger: true,
                                                         name: 'contractorunit',
                                                         fieldLabel: 'Unidade Contratante',
                                                         xtype: 'contractorunitschemasearch',
@@ -402,7 +403,8 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                     }, {
                                                         xtype: 'splitter'
                                                     }, {
-                                                        flex: 2,
+                                                        flex: 1,
+                                                        pageSize: 0,
                                                         multiSelect: true,
                                                         fieldLabel: 'Dias da Semana',
                                                         xtype: 'comboenum',
@@ -423,6 +425,14 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchema', {
                                                         name: 'naturalpersonidto',
                                                         fieldLabel: 'Plantonista: <b style="color: #0016b0;">PARA</b>',
                                                         xtype: 'naturalpersonsearch'
+                                                    }, {
+                                                        xtype: 'splitter'
+                                                    }, {
+                                                        flex: 1,
+                                                        allowBlank: true,
+                                                        fieldLabel: 'Observacao',
+                                                        xtype: 'textfield',
+                                                        name: 'observation'
                                                     }, {
                                                         xtype: 'splitter'
                                                     }, {

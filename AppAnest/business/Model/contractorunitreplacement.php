@@ -87,6 +87,12 @@ class contractorunitreplacement extends \Smart\Data\Model {
     private $sat;
 
     /**
+     * @Policy {"nullable":true, "length":65535}
+     * @Column {"description":"", "type":"string", "policy":true}
+     */
+    private $observation;
+
+    /**
      * @return type integer
      */
     public function getId() {
@@ -291,6 +297,22 @@ class contractorunitreplacement extends \Smart\Data\Model {
      */
     public function setSat($sat) {
         $this->sat = $sat;
+        return $this;
+    }
+
+    /**
+     * @return type string
+     */
+    public function getObservation() {
+        return $this->observation;
+    }
+
+    /**
+     * @param type $observation
+     * @return \AppAnest\Model\contractorunitreplacement
+     */
+    public function setObservation($observation) {
+        $this->observation = $observation;
         return $this;
     }
 

@@ -260,6 +260,7 @@ Ext.define( 'AppAnest.view.allocationschema.ContractorUnitSchemaController', {
                     view.down('gridpanel[name=replacement]').store.load();
                     form.down('naturalpersonsearch[name=naturalpersonidof]').reset();
                     form.down('naturalpersonsearch[name=naturalpersonidto]').reset();
+                    form.down('textfield[name=observation]').reset();
                 },
                 failure: function ( batch, options ) {
                 }

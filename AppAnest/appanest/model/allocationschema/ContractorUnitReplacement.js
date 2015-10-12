@@ -50,6 +50,9 @@ Ext.define( 'AppAnest.model.allocationschema.ContractorUnitReplacement', {
         }, {
             name: 'sat',
             type: 'bool'
+        }, {
+            name: 'observation',
+            type: 'auto'
         }
     ]
 
